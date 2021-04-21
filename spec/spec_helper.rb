@@ -12,6 +12,13 @@
 # the additional setup, and require it from the spec files that actually need
 # it.
 #
+
+# logger
+# require 'rails'
+# Rails.logger = Logger.new($stdout)
+# require 'active_record'
+# ActiveRecord::Base.logger = Logger.new($stdout)
+
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
