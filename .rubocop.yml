@@ -22,7 +22,7 @@ AllCops:
     - 'app/channels/**/*'
     - !ruby/regexp /old_and_unused\.rb$/
     - 'Guardfile'
-    - 'Gemfile'
+    # - 'Gemfile'
     - 'Rakefile'
 
 Style/FrozenStringLiteralComment:
