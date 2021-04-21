@@ -3,8 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let(:user) { FactoryBot.build(:user) }
-  subject { FactoryBot.build(:user) }
+  let(:user) { build(:user) }
+  subject { build(:user) }
+
+  it 'should be valid' do
+    is_expected.to be_valid
+  end
 
   describe 'name' do
     context 'validations' do
@@ -19,23 +23,14 @@ RSpec.describe User, type: :model do
       it { should validate_length_of(:email).is_at_most(255) }
       it { should validate_uniqueness_of(:email) }
 
-      it 'shoud accept valid addresses' do
-        valid_addresses = %w[user@example.com USER@foo.COM A_US-ER@foo.bar.org first.last@foo.jp alice+bob@baz.cn]
-        valid_addresses.each do |valid_address|
-          user.email = valid_address
-          user.valid?
-          expect(user).to be_valid
-        end
+      it do
+        should allow_values('user@example.com', 'USER@foo.COM', 'A_US-ER@foo.bar.org', 'first.last@foo.jp',
+                            'alice+bob@baz.c').for(:email)
       end
 
-      it 'should reject invalid adresses' do
-        invalid_addresses = %w[user@example,com user_at_foo.org user.name@example. foo@bar_baz.com foo@bar+baz.com
-                               foo@bar..com]
-        invalid_addresses.each do |invalid_address|
-          user.email = invalid_address
-          user.valid?
-          expect(user.errors).to be_of_kind(:email, :invalid)
-        end
+      it do
+        should_not allow_values('user@example,com', 'user_at_foo.org', 'user.name@example.', 'foo@bar_baz.com',
+                                'foo@bar+baz.com', 'foo@bar..com').for(:email)
       end
     end
 
@@ -52,6 +47,20 @@ RSpec.describe User, type: :model do
   describe 'profile' do
     context 'validations' do
       it { should validate_length_of(:profile).is_at_most(255) }
+    end
+  end
+
+  describe 'password' do
+    context 'validations' do
+      it { should have_secure_password }
+
+      it 'should be present(nonblank)' do
+        user = build(:user, password: ' ' * 6, password_confirmation: ' ' * 6)
+        user.valid?
+        expect(user.errors).to be_of_kind(:password, :blank)
+      end
+
+      it { should validate_length_of(:password).is_at_least(6) }
     end
   end
 end
