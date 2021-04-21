@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 # Specs in this file have access to a helper object that includes
@@ -11,19 +13,18 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe ApplicationHelper, type: :helper do
-  BASE_TITLE = '韻クイズ'
-
   describe '#full_title(page_title = \'\')' do
+    let(:base_title) { '韻クイズ' }
     context 'page_titleが空白の時' do
       it '|を含まないTitleをreturnする' do
-        expect(full_title).to eq BASE_TITLE
+        expect(full_title).to eq base_title
       end
     end
 
     context 'page_titleがAboutの時' do
       it '|を含むTitleをreturnする' do
-        expect(full_title('About')).to eq "About | #{BASE_TITLE}"
+        expect(full_title('About')).to eq "About | #{base_title}"
       end
     end
-  end  
+  end
 end
