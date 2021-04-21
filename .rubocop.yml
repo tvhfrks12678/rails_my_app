@@ -6,18 +6,38 @@ require:
 
 AllCops:
   # Rubyバージョン指定
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 2.7.2
+  # 新しい規則を受け入れる
+  NewCops: enable
   # 除外
   Exclude:
     - 'config.ru'
     - 'bin/**'
     - 'lib/**'
     - 'db/**/*'
+    - 'db/schema.rb'
     - 'config/**/*'
     - 'script/**/*'
     - 'node_modules/**/*'
+    - 'app/channels/**/*'
     - !ruby/regexp /old_and_unused\.rb$/
+    - 'Guardfile'
+    - 'Gemfile'
+    - 'Rakefile'
+
+# frozen_string_literal: true
+# をstringを使うとこには追加する
+Style/FrozenStringLiteralComment:
+  Enabled: false
 
 # 日本語でのコメントを許可
 AsciiComments:
+  Enabled: false
+
+# ドキュメントの無い public class を許可する
+Style/Documentation:
+  Enabled: false
+
+# 空のメソッドを許可する
+Style/EmptyMethod:
   Enabled: false
