@@ -17,6 +17,9 @@ RSpec.describe 'SiteLayouts', type: :system do
     click_link 'Help'
     expect(current_path).to eq help_path
     expect(page.title).to eq full_title('Help')
+    click_link 'Log in'
+    expect(current_path).to eq login_path
+    expect(page.title).to eq full_title('Log in')
     # Footer
     click_link 'Contact'
     expect(current_path).to eq contact_path
