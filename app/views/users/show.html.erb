@@ -1,1 +1,11 @@
-<%= @user.name %>, <%= @user.email %>
+<% provide(:title, @user.name) %>
+<div class="row">
+  <aside class="col-md-4">
+    <section class="user_info">
+      <h1>
+        <%= link_to image_tag("rhyme_quiz.png", alt: "Rhyme quiz logo", width: "50px"), '#' , class: "user_image"%>
+        <%= @user.name %>
+      </h1>
+    </section>
+  </aside>
+</div>
