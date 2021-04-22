@@ -1,11 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe 'UsersSignups', type: :system do
+  let(:valid_user) { build(:user) }
+  let(:all_items_invalid_user) do
+    build(:user, name: '', email: 'invalid@email', password: 'foo', password_confirmation: 'bar')
+  end
+
   scenario 'User perform sign-up' do
     # invalid signup informatio
     visit root_path
     expect do
-      all_items_invalid_user = User.new(name: '', email: 'invalid@email', password: 'foo', password_confirmation: 'bar')
       create_user_account(all_items_invalid_user)
       aggregate_failures do
         expect_signup_all_items_errors
@@ -14,8 +18,6 @@ RSpec.describe 'UsersSignups', type: :system do
 
     # valid signup information
     expect do
-      valid_user = User.new(name: 'tarou', email: 'tarou@example.com', password: 'foobar',
-                            password_confirmation: 'foobar')
       create_user_account(valid_user)
       aggregate_failures do
         expect_signup_success
