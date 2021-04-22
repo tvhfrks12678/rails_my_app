@@ -24,7 +24,7 @@ RSpec.describe 'UsersSignups', type: :system do
   end
 
   def create_user_account(user)
-    visit users_new_path
+    visit signup_path
     fill_in 'user_name',	with: user.name
     fill_in 'user_email', with: user.email
     fill_in 'user_password',	with: user.password
