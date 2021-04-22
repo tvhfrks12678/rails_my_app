@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe 'UsersSignups', type: :system do
   scenario 'invalid signup information' do
     visit root_path
-
     expect do
       all_items_invalid_user = User.new(name: '', email: 'invalid@email', password: 'foo', password_confirmation: 'bar')
       create_user_account(all_items_invalid_user)

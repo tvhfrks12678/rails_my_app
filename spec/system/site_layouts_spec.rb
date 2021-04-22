@@ -11,6 +11,9 @@ RSpec.describe 'SiteLayouts', type: :system do
     click_link 'Home'
     expect(current_path).to eq root_path
     expect(page.title).to eq full_title
+    click_link '韻とは？'
+    expect(current_path).to eq rhyme_path
+    expect(page.title).to eq full_title('韻とは？')
     click_link 'Help'
     expect(current_path).to eq help_path
     expect(page.title).to eq full_title('Help')
