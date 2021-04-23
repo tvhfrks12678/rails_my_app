@@ -13,6 +13,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     return render 'new' unless @user.save
 
+    log_in @user
     flash[:success] = MSG_SIGNUP_SUCCESS
     redirect_to @user
   end
