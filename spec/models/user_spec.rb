@@ -10,6 +10,8 @@ RSpec.describe User, type: :model do
     is_expected.to be_valid
   end
 
+  it { should have_many(:quizzes).dependent(:destroy) }
+
   describe 'name' do
     context 'validations' do
       it { should validate_presence_of(:name) }

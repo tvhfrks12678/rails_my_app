@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :quiz do
-    commentary { 'MyText' }
-    user { nil }
+    sequence(:commentary) { |n| "解説-#{n}" }
+    association :user
   end
 end
