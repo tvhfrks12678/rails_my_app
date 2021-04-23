@@ -78,6 +78,7 @@ RSpec.configure do |config|
   end
 
   config.include FactoryBot::Syntax::Methods
+  config.include(SystemHelpers, type: :system)
 end
 
 Shoulda::Matchers.configure do |config|

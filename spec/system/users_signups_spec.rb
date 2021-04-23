@@ -46,7 +46,9 @@ RSpec.describe 'UsersSignups', type: :system do
   end
 
   def expect_signup_success
-    expect(current_path).to eq user_path(User.last)
+    user = User.last
+    expect(current_path).to eq user_path(user)
     expect(page).to have_css '.alert-success'
+    expect_successfully_log_in_as(user)
   end
 end
