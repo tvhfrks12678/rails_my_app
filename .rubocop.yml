@@ -42,3 +42,7 @@ Style/EmptyMethod:
 
 Metrics/BlockLength:
   IgnoredMethods: ['describe', 'fdescribe']
+
+Rails/HelperInstanceVariable:
+  Exclude:
+    - 'app/helpers/sessions_helper.rb'
