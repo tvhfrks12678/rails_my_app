@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Quiz, type: :model do
   it { should belong_to(:user) }
-  it { should have_many(:quiz_choice).dependent(:destroy) }
+  it { should have_many(:choices).dependent(:destroy) }
   it { should validate_presence_of(:user_id) }
   it { should validate_length_of(:commentary).is_at_most(255) }
 
