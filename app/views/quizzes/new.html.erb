@@ -1,0 +1,60 @@
+<% provide(:title, '投稿') %>
+<h1><%= yield(:title) %></h1>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2 form_quiz_post">
+    <%= form_with(model: @quiz, local: true) do |f| %>
+      <table class="tbl_quiz_post">
+        <thead>
+          <tr>
+            <th colspan="2">回答</th>
+            <th colspan="2">正解の組合せ</th>
+          </tr>
+          <tr>
+            <th>番号</th>
+            <th>選択肢</th>
+            <th>母音-1</th>
+            <th>母音-2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <div class = "form-group form-group-lg">
+            <% 5.times do |n| %>
+              <tr>
+                <td class="tbl_quiz_post_no"><%= n+1 %></td>
+                <td>
+                  <%= f.text_field 'choices[]', class: "col-xs-12" %>
+                </td>
+                <td>
+                  <%= check_box_tag "chk_quiz_choice_#{n}", class: "form-check-label margin_tbl" %>
+                </td>
+                <td>
+                  <%= check_box_tag "chk_quiz_choice_#{n}", class: "form-check-label margin_tbl" %>
+                </td>
+              </tr>
+            <% end %>
+          </div>
+        </tbody>
+      </table>
+      <br>
+
+      <div class="form-group form-inline">
+        <label>母音-1</label>
+        <%= f.text_field 'answer[rhyme][]', class: 'form-control' %>
+      </div>
+
+      <div class="form-group form-inline">
+        <label>母音-2</label>
+        <%= f.text_field 'answer[rhyme][]', class: 'form-control' %>
+      </div>
+
+      <div class="form-group form-inline">
+        <%= f.label :commentary %>
+        <%= f.text_area :commentary, class: 'form-control' %>
+      </div>
+
+      <div class="btn_quiz_new">
+        <%= f.submit "投稿", class: "btn btn-primary btn_quiz_new" %>
+      </div>
+    <% end %>
+  </div>
+</div>

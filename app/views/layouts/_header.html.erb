@@ -8,7 +8,7 @@
         <li><%= link_to "韻とは？", rhyme_path %></li>
         <li><%= link_to "Help", help_path %></li>
         <% if logged_in? %>
-          <li><%= link_to "投稿", '#' %></li>
+          <li><%= link_to "投稿", new_quiz_path %></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Account <b class="caret"></b>

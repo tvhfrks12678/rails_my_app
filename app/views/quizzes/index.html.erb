@@ -14,7 +14,7 @@
           <% quiz.choices.each do |choice| %>
             <div class="form-check">
               <span class="choice">
-                <%= check_box_tag "chk_quiz_choice_#{choice.id}", class: "form-check-label"  %>
+                <%= check_box_tag "chk_quiz_choice_#{choice.id}", class: "form-check-label" %>
                 <%= label_tag "chk_quiz_choice_#{choice.id}", choice.content, class: "form-check-input" %>
               </span>
             </div>
