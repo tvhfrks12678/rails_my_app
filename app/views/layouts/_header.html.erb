@@ -1,9 +1,10 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="container">
-    <%= link_to "韻クイズ", '#', id: "logo" %>
+    <%= link_to "韻クイズ", root_path, id: "logo" %>
     <nav>
       <ul class="nav navbar-nav navbar-right">
         <li><%= link_to "Home", root_path %></li>
+        <li><%= link_to "新着", quizzes_path %></li>
         <li><%= link_to "韻とは？", rhyme_path %></li>
         <li><%= link_to "Help", help_path %></li>
         <% if logged_in? %>

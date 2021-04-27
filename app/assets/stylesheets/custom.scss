@@ -157,7 +157,7 @@ textarea,
 select,
 .uneditable-input {
   border: 1px solid #bbb;
-  width: 100%;
+  // width: 100%;
   margin-bottom: 15px;
   @include box_sizing;
 }
@@ -179,4 +179,47 @@ input {
   .form-control {
     color: $state-danger-text;
   }
+}
+
+/* Quiz Display */
+
+.quiz {
+  border: 1px solid $gray-lighter;
+  padding: 30px 30px;
+  text-align: center;
+}
+
+.form-check {
+  font-size: xx-large;
+  // display: inline-block;
+  text-align: left;
+  margin-left: 110px;
+  margin-bottom: 5px;
+}
+
+input[type='checkbox'] {
+  @include scale(1.8);
+  position: relative;
+  top: -5px;
+}
+
+.btn_quiz_answer {
+  font-size: xx-large;
+}
+
+.lbl_quiz_question {
+  font-size: 2.5em;
+  margin-bottom: 15px;
+}
+
+.btn_quiz_answer_position {
+  text-align: right;
+  margin-top: 15px;
+  margin-right: 60px;
+}
+
+.choice {
+  border: 1px solid $gray-lighter;
+  padding: 5px 20px;
+  border-radius: 0.2em;
 }
