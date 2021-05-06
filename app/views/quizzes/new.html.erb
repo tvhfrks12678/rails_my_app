@@ -1,63 +1,69 @@
 <% provide(:title, '投稿') %>
+<% rhyme_num = 3%>
 <h1><%= yield(:title) %></h1>
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2 form_quiz_post">
-    <% rhyme_num=2%>
-
     <%= form_with(model: @quiz, local: true) do |f| %>
-      <table class="tbl_quiz_post">
-        <thead>
-          <tr>
-            <th colspan="2">回答</th>
-            <th colspan="2">正解の組合せ</th>
-          </tr>
-          <tr>
-            <th>番号</th>
-            <th>選択肢</th>
-            <th>母音-1</th>
-            <th>母音-2</th>
-          </tr>
-        </thead>
-        <tbody>
-          <div class = "form-group form-group-lg">
-            <% 6.times do |n| %>
-              <tr>
-                <td class="tbl_quiz_post_no"><%= n+1 %></td>
-                <td>
-                  <%= text_field_tag 'choice[][content]', '', class: "col-xs-12" %>
-                </td>
-                <% rhyme_num.times do |x| %>
+      <div class="form_quiz_post_inline_block">
+        <table class="tbl_quiz_post">
+          <thead>
+            <tr>
+              <th colspan="2">回答</th>
+              <th colspan="3">正解の組合せ</th>
+            </tr>
+            <tr>
+              <th>番号</th>
+              <th>選択肢</th>
+              <% rhyme_num.times do |n| %>
+                <th>母音-<%= n+1 %></th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <div class = "form-group form-group-lg">
+              <% 6.times do |n| %>
+                <tr>
+                  <td class="tbl_quiz_post_no"><%= n+1 %></td>
                   <td>
-                    <% name_value = "answer[rhyme_0#{x}][]" %>
-                    <%= hidden_field_tag "#{name_value}[id]", n %>
-                    <%= check_box_tag "#{name_value}[check]", true, false, {class: "form-check-label margin_tbl"} %>
+                    <%= text_field_tag 'choice[][content]', '', class: "col-xs-12" %>
                   </td>
-                <% end %>
-              </tr>
-            <% end %>
-          </div> 
-        </tbody>
-      </table>
-      <br>
+                  <% rhyme_num.times do |x| %>
+                    <td>
+                      <% name_value = "answer[rhyme_0#{x}][]" %>
+                      <%= hidden_field_tag "#{name_value}[id]", n %>
+                      <%= check_box_tag "#{name_value}[check]", true, false, {class: "form-check-label margin_tbl"} %>
+                    </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </div> 
+          </tbody>
+        </table>
+        <br>
 
-      <% rhyme_num.times do |n| %>
-        <div class="form-group form-inline">
-          <label>母音-<%= n + 1 %></label>
-          <%= text_field_tag 'rhyme[][content]', '', class: 'form-control' %>
+        <div class="form_left">
+
+          <% rhyme_num.times do |n| %>
+            <div class="form-group form-inline row">
+              <label class="col-md-3">母音-<%= n + 1 %></label>
+              <%= text_field_tag 'rhyme[][content]', '', class: 'form-control col-md-9' %>
+            </div>
+          <% end %>
+
+          <div class="form-group form-inline row">
+            <%#= f.label :commentary %>
+            <label class="col-md-3">解説</label>
+            <%= f.text_area :commentary, class: 'form-control col-md-9' %>
+          </div>
         </div>
-      <% end %>
 
-      <div class="form-group form-inline">
-        <%#= f.label :commentary %>
-        <label>解説</label>
-        <%= f.text_area :commentary, class: 'form-control' %>
+        <div class="btn_quiz_new">
+          <%= f.submit "投稿", class: "btn btn-primary btn_quiz_new" %>
+        </div>
       </div>
-
-      <div class="btn_quiz_new">
-        <%= f.submit "投稿", class: "btn btn-primary btn_quiz_new" %>
-      </div>
-
     <% end %>
   </div>
 </div>
+
+

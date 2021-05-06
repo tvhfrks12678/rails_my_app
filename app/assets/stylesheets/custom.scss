@@ -252,16 +252,20 @@ select,
   @include scale(1.8);
 }
 
-// .tbl_quiz_post td input[type='text'] {
-//   margin-top: 10px;
-// }
-
 .form_quiz_post {
   text-align: center;
-  vertical-align: middle;
-}
+  // vertical-align: middle;
+  display: block;
 
-// .btn_quiz_new {
-//   text-align: right;
-//   margin-right: 20px;
-// }
+  .form_quiz_post_inline_block {
+    display: inline-block;
+
+    .form_left {
+      text-align: left;
+    }
+
+    .btn_quiz_new {
+      text-align: right;
+    }
+  }
+}
