@@ -16,10 +16,10 @@ class QuizzesController < ApplicationController
       choice.save
     end
 
-    # rhyme_params.each do |rhyme_param|
-    #   rhyme = @quiz.rhymes.build(rhyme_param)
-    #   rhyme.save
-    # end
+    rhyme_params.each do |rhyme_param|
+      rhyme = Rhyme.create(rhyme_param)
+      rhyme.save
+    end
   end
 
   private
