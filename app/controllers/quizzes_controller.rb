@@ -8,18 +8,45 @@ class QuizzesController < ApplicationController
   end
 
   def create
+    save_quiz(quiz_params)
+    rhyme_list = get_save_rhyme_list(rhyme_params)
+    save_choice(choice_params, rhyme_list)
+  end
+
+  def save_quiz(quiz_params)
     @quiz = current_user.quizzes.build(quiz_params)
     @quiz.save
+  end
 
-    choice_params.each do |choice_param|
-      choice = @quiz.choices.build(choice_param)
+  def get_save_rhyme_list(rhyme_params)
+    rhyme_list = []
+    rhyme_params.each do |rhyme_param|
+      rhyme = Rhyme.find_or_create_by(rhyme_param)
+      rhyme_list << rhyme unless rhyme.id.nil?
+    end
+    rhyme_list
+  end
+
+  def save_choice(choice_params, rhyme_list)
+    choice_params.each_with_index do |choice_param, idx|
+      next if choice_param[:content].empty?
+
+      choice_rhyme = get_rhyme(idx, rhyme_list)
+
+      choice = @quiz.choices.build(content: choice_param[:content], rhyme_id: choice_rhyme.id)
       choice.save
     end
+  end
 
-    rhyme_params.each do |rhyme_param|
-      rhyme = Rhyme.create(rhyme_param)
-      rhyme.save
+  def get_rhyme(idx, rhyme_list)
+    rhyme_content = Rhyme.new
+    params[:answer][:"rhyme_0#{idx}"].each_with_index do |rhyme, rhyme_idx|
+      if rhyme[:check].present?
+        rhyme_content = rhyme_list[rhyme_idx]
+        break
+      end
     end
+    rhyme_content
   end
 
   private
@@ -36,6 +63,5 @@ class QuizzesController < ApplicationController
     params.require(:rhyme).map do |rhyme|
       rhyme.permit(:content)
     end
-    # params.permit(rhyme: [:content])
   end
 end
