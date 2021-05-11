@@ -186,45 +186,47 @@ select,
 
 /* Quiz Display */
 
-.quiz {
-  border: 1px solid $gray-lighter;
-  padding: 30px 30px;
+.main_quiz_index {
   text-align: center;
-}
+  display: block;
+  .card_quiz {
+    display: inline-block;
+    border: 1px solid $gray-lighter;
+    padding: 30px 30px;
+    margin-bottom: 30px;
 
-.form-check {
-  font-size: xx-large;
-  // display: inline-block;
-  text-align: left;
-  margin-left: 110px;
-  margin-bottom: 5px;
-}
+    .lbl_quiz_question {
+      font-size: 2.5em;
+      margin-bottom: 15px;
+    }
 
-.choice input[type='checkbox'] {
-  @include scale(1.8);
-  position: relative;
-  top: -5px;
-}
+    .choices {
+      font-size: xx-large;
+      text-align: left;
+      margin-bottom: 5px;
 
-.btn_quiz_answer {
-  font-size: xx-large;
-}
+      .choice {
+        border: 1px solid $gray-lighter;
+        padding: 5px 20px;
+        border-radius: 0.2em;
 
-.lbl_quiz_question {
-  font-size: 2.5em;
-  margin-bottom: 15px;
-}
+        input[type='checkbox'] {
+          @include scale(1.8);
+          position: relative;
+          top: -5px;
+        }
+      }
+    }
 
-.btn_quiz_answer_position {
-  text-align: right;
-  margin-top: 15px;
-  margin-right: 60px;
-}
+    .btn_quiz_answer {
+      text-align: right;
+      margin-top: 15px;
 
-.choice {
-  border: 1px solid $gray-lighter;
-  padding: 5px 20px;
-  border-radius: 0.2em;
+      .btn_quiz_answer_font {
+        font-size: xx-large;
+      }
+    }
+  }
 }
 
 /* Quiz Post Page */
