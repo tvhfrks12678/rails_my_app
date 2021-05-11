@@ -9,16 +9,19 @@
 # メインのサンプルユーザーを一人作成する
 user = User.create!(name: 'q', email: 'q@q.q', password: 'foobar', password_confirmation: 'foobar')
 quiz = user.quizzes.create!(commentary: '西高東低で気圧とスキルでダブルミーングになっている')
+rhyme = Rhyme.create(content: 'えおおえ')
 quiz.choices.create!(content: '今日は')
 quiz.choices.create!(content: 'スキルも気圧も')
-quiz.choices.create!(content: '西高東低')
+quiz.choices.create!(content: '西高東低', rhyme_id: rhyme.id)
 quiz.choices.create!(content: 'また来いや')
 quiz.choices.create!(content: '誰かの')
-quiz.choices.create!(content: 'セコンドで')
+quiz.choices.create!(content: 'セコンドで', rhyme_id: rhyme.id)
 
+# その他のユーザーの作成
 other_user = User.create!(name: 'z', email: 'z@z.z', password: 'foobar', password_confirmation: 'foobar')
 other_quiz = other_user.quizzes.create!(commentary: '')
+other_rhyme = Rhyme.create(content: 'いいあいあお')
 other_quiz.choices.create!(content: '臭すぎる')
-other_quiz.choices.create!(content: 'ひきわり納豆')
+other_quiz.choices.create!(content: 'ひきわり納豆', rhyme_id: other_rhyme.id)
 other_quiz.choices.create!(content: 'こいつにくらわす')
-other_quiz.choices.create!(content: '右ラリアット')
+other_quiz.choices.create!(content: '右ラリアット', rhyme_id: other_rhyme.id)
