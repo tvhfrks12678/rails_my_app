@@ -1,27 +1,32 @@
 <% provide(:title, '新着') %>
+<% provide(:question_sentence, 'Q. 韻を踏んでいる正しい組み合わせは？') %>
 <h1>新着</h1>
 <div class="row">
-
   <div class="col-md-8 col-md-offset-2">
     <ul class="main_quiz_index">
       <% @quizzes.each do |quiz| %>
         <div class="card_quiz">
-          <label class="lbl_quiz_question">Q. 韻を踏んでいる正しい組み合わせは？</label>
+          <label class="lbl_quiz_question"><%= yield(:question_sentence) %></label>
+
+          <%= form_with(url: answer_judgements_path, scope: :answer_judgements,
+                      local: true) do |f| %>
+            <%= hidden_field_tag "quiz[id]", quiz.id %>
             <% quiz.choices.each do |choice| %>
-              <div class="row">
-                <b class="col-md-1"></b> 
-                <div class="choices col-md-11">
-                  <span class="choice">
-                    <%= check_box_tag "chk_quiz_choice_#{choice.id}", class: "form-check-label" %>
+                <div class="row">
+                  <b class="col-md-1"></b> 
+                  <div class="choices col-md-11">
+                    <span class="choice">
+                    <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
                     <%= label_tag "chk_quiz_choice_#{choice.id}", choice.content, class: "form-check-input" %>
-                  </span>
+                    </span>
+                  </div>
                 </div>
-              </div>
             <% end %>
 
-          <div class="btn_quiz_answer">
-            <%= button_tag "回答", type: 'button' , class: "btn btn-primary btn-lg btn_quiz_answer_font" %>
-          </div>
+            <div class="btn_quiz_answer">
+              <%= f.submit "回答", class: "btn btn-primary btn-lg btn_quiz_answer_font" %>
+            </div>
+          <% end %>
         </div>
       <% end %>
     </ul>
