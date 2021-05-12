@@ -17,6 +17,16 @@ quiz.choices.create!(content: 'また来いや')
 quiz.choices.create!(content: '誰かの')
 quiz.choices.create!(content: 'セコンドで', rhyme_id: rhyme.id)
 
+quiz_second = user.quizzes.create!(commentary: '正解が二つある')
+rhyme_second = Rhyme.create(content: 'あああ')
+rhyme_third = Rhyme.create(content: 'おい')
+quiz_second.choices.create!(content: '頭', rhyme_id: rhyme_second.id)
+quiz_second.choices.create!(content: 'より', rhyme_id: rhyme_third.id)
+quiz_second.choices.create!(content: '体', rhyme_id: rhyme_second.id)
+quiz_second.choices.create!(content: 'を')
+quiz_second.choices.create!(content: '使う')
+quiz_second.choices.create!(content: 'ゴリ', rhyme_id: rhyme_third.id)
+
 # その他のユーザーの作成
 other_user = User.create!(name: 'z', email: 'z@z.z', password: 'foobar', password_confirmation: 'foobar')
 other_quiz = other_user.quizzes.create!(commentary: '')
