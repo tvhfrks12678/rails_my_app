@@ -1,18 +1,24 @@
 document.getElementById("main_answer_quiz_id_<%= @answer.quiz.id %>").innerHTML = "<%= escape_javascript(render('answers/info')) %>"
 
-var LBL_CHOICE_BACKGROUND_COLOR=["#00FF00", "#FF00FF", "#FFFF00", "#00FFFF", "#FF0000"]
+var LBL_CHOICE_BACKGROUND_COLOR=["#66FFCC", "#FF99FF", "#FFFF99", "#66FFFF", "#FF3366"]
 var LBL_CHOICE_ID_PREFIX="lbl_choice_id_";
+var RHYME_CHOICE_ID_PREFIX="rhyme_choice_id_";
 
 <% @answer.combinations.each_with_index do |answer_combination, idx| %>
+    var rhymeWord = "<%= answer_combination.rhyme %>"
   <% answer_combination.choice_ids.each do |choice_id| %>
     
     var choiceId = <%= choice_id %>
 
-    var lblChoiceId=`${LBL_CHOICE_ID_PREFIX}${choiceId}`;
+    var lblChoiceId = `${LBL_CHOICE_ID_PREFIX}${choiceId}`;
     var element = document.getElementById(lblChoiceId);
     var elementStyle = element.style;
     var idx = <%= idx %>
     element.style.backgroundColor = LBL_CHOICE_BACKGROUND_COLOR[idx];
+    elementStyle.borderRadius="0.2em"
+
+    var rhymeChoiceId = `${RHYME_CHOICE_ID_PREFIX}${choiceId}`;
+    document.getElementById(rhymeChoiceId).innerText = rhymeWord 
   <% end %>
 <% end %>
 
@@ -28,5 +34,4 @@ chkElementList.forEach(chkElement => {
 
 var btnQuizId = `btn_quiz_id_${quizId}`;
 var btnAnswer = document.getElementById(btnQuizId);
-// btnAnswer.disabled = true
 btnAnswer.style.display = "none";

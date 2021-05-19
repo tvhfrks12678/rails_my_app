@@ -1,24 +1,4 @@
 <%= @answer.msg_result %>
-<table class="tbl_quiz_post">
-<thead>
-  <tr>
-    <th >配色</th>
-    <th >母音</th>
-  </tr>
-</thead>
-<% rhyme_colors=["#00FF00", "#FF00FF", "#FFFF00", "#00FFFF", "#FF0000"] %>
-<% color = "red" %>
-<tbody>
-  <div class="form-group form-group-lg">
-  <% @answer.combinations.each_with_index do |answer_combination, idx| %>
-    <tr>
-      <th><label  style="background:<%= rhyme_colors[idx] %>; color:<%= rhyme_colors[idx] %>;">配色</label></th>
-      <th><%= answer_combination.rhyme %></th>
-    </tr>
-  <% end %>
-  </div> 
-</tbody>
-</table>
 
 <% unless @answer.quiz.commentary.blank? %>
   解説: <%= @answer.quiz.commentary %>

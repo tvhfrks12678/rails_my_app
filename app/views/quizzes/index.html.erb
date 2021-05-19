@@ -10,27 +10,20 @@
         <div class="card_quiz" id="card_quiz_<%= quiz.id %>">
           <label class="lbl_quiz_question"><%= yield(:question_sentence) %></label>
 
-          <%= form_with(url: answers_path, scope: :answer,
-            local: false) do |f| %>
+          <%= form_with(url: answers_path, scope: :answer, local: false) do |f| %>
             <%= hidden_field_tag "quiz[id]", quiz.id %>
+
             <% quiz.choices.each do |choice| %>
               <div class="row">
                 <b class="col-md-1"></b> 
                 <div class="choices col-md-11">
-                  <span class="choice">
+                  <label class="choice">
                     <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
-                    <%= label_tag "chk_quiz_choice_#{choice.id}", choice.content, id:"lbl_choice_id_#{choice.id}", class: "form-check-input" %>
-                  </span>
+                    <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}" %>
+                    <%= content_tag :div, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
+                  </label>
                 </div>
               </div>
-<!--
-              <label>
-                <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
-                <span><%= choice.content %></span>
-                <br>
-                <div id="rhyme_word_choice_id_">aaa</div>
-              </label>
--->
             <% end %>
 
             <div class="btn_quiz_answer">
