@@ -1,0 +1,32 @@
+document.getElementById("main_answer_quiz_id_<%= @answer.quiz.id %>").innerHTML = "<%= escape_javascript(render('answers/info')) %>"
+
+var LBL_CHOICE_BACKGROUND_COLOR=["#00FF00", "#FF00FF", "#FFFF00", "#00FFFF", "#FF0000"]
+var LBL_CHOICE_ID_PREFIX="lbl_choice_id_";
+
+<% @answer.combinations.each_with_index do |answer_combination, idx| %>
+  <% answer_combination.choice_ids.each do |choice_id| %>
+    
+    var choiceId = <%= choice_id %>
+
+    var lblChoiceId=`${LBL_CHOICE_ID_PREFIX}${choiceId}`;
+    var element = document.getElementById(lblChoiceId);
+    var elementStyle = element.style;
+    var idx = <%= idx %>
+    element.style.backgroundColor = LBL_CHOICE_BACKGROUND_COLOR[idx];
+  <% end %>
+<% end %>
+
+var quizId = <%= @answer.quiz.id %>
+
+var cardQuizId = `card_quiz_${quizId}`;
+var container = document.querySelector(`#${cardQuizId}`);
+var chkElementList = container.querySelectorAll('input[type=checkbox]');
+chkElementList.forEach(chkElement => {
+  chkElement.disabled = true
+  chkElement.parentElement.style.backgroundColor = "#FFFFFF"
+})
+
+var btnQuizId = `btn_quiz_id_${quizId}`;
+var btnAnswer = document.getElementById(btnQuizId);
+// btnAnswer.disabled = true
+btnAnswer.style.display = "none";

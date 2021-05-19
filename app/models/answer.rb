@@ -1,22 +1,29 @@
 class Answer
   include ActiveModel::Model
 
-  attr_reader :quiz, :is_correct, :combinations
+  attr_reader :quiz, :combinations, :msg_result, :is_correct
 
   validates :quiz, presence: true
   validates :is_correct, inclusion: { in: [true, false] }
   validates :combinations, presence: true
+  validates :msg_result, presence: true
 
   # SQL
   SQL_COLUMS_GET = 'choices.id AS Choice_id, rhymes.content  AS rhyme_content'.freeze
 
+  # MSG
+  MSG_CORRECT_ANSWER = '○'.freeze
+  MSG_INCORRECT_ANSWER = '×'.freeze
+
   # @param [Quiz] quiz
   # @param [Boolean] is_correct
   # @param [Array<AnswerCombination>] combinations
-  def initialize(quiz:, is_correct:, combinations:)
+  # def initialize(quiz:, is_correct:, combinations:, msg_result:)
+  def initialize(quiz:, combinations:, is_correct:, msg_result:)
     @quiz = quiz
     @is_correct = is_correct
     @combinations = combinations
+    @msg_result = msg_result
   end
 
   class << self
@@ -28,9 +35,12 @@ class Answer
       quiz = Quiz.select(:id, :commentary).find(quiz_id)
 
       answer_combinations = get_answer_combinations(quiz)
+      is_correct = correct?(answer_combinations, select_choice_ids)
+
       Answer.new(quiz: quiz,
-                 is_correct: correct?(answer_combinations, select_choice_ids),
-                 combinations: answer_combinations)
+                 combinations: answer_combinations,
+                 is_correct: is_correct,
+                 msg_result: get_msg_answer_result(is_correct))
     end
 
     private
@@ -59,10 +69,20 @@ class Answer
     # @param [Array<String>] select_choice_ids ChoiceモデルのidのArray
     # @return [boolean] true:正解, false:不正解
     def correct?(answer_combinations, select_choice_ids)
+      return false if select_choice_ids.nil?
+
       answer_combinations.each do |answer_combination|
         return true if answer_combination.correct?(select_choice_ids)
       end
       false
+    end
+
+    # クイズの回答の結果のメッセージを取得する
+    #
+    # @param [Boolean] is_correct true:クイズの回答が正解, false:クイズの回答が不正解
+    # @return [String] クイズの回答結果のメッセージ
+    def get_msg_answer_result(is_correct)
+      is_correct ? MSG_CORRECT_ANSWER : MSG_INCORRECT_ANSWER
     end
   end
 end
