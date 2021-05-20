@@ -1,5 +1,5 @@
-<%= @answer.msg_result %>
-
+回答結果: <%= @answer.msg_result %>
+<br>
 <% unless @answer.quiz.commentary.blank? %>
-  解説: <%= @answer.quiz.commentary %>
+解説: <%= @answer.quiz.commentary %>
 <% end %>

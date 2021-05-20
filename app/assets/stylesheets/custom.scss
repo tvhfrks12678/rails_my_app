@@ -151,6 +151,7 @@ aside {
 }
 
 /* forms */
+
 input {
   border: 1px solid #bbb;
 }
@@ -160,7 +161,6 @@ textarea,
 select,
 .uneditable-input {
   border: 1px solid #bbb;
-  // width: 100%;
   margin-bottom: 15px;
   @include box_sizing;
 }
@@ -206,21 +206,21 @@ select,
       margin-bottom: 5px;
 
       .choice {
+        border-radius: 0.2em;
         border: 1px solid $gray-lighter;
         padding: 5px 20px;
-        border-radius: 0.2em;
+      }
 
-        input[type='checkbox'] {
-          @include scale(1.8);
-          position: relative;
-          top: -5px;
-        }
+      input[type='checkbox'] {
+        @include scale(1.8);
+        position: relative;
+        top: -5px;
+      }
 
-        .answer_rhyme_font {
-          color: red;
-          margin-left: 25px;
-          font-size: x-large;
-        }
+      .answer_rhyme_font {
+        color: red;
+        margin-left: 25px;
+        font-size: x-large;
       }
     }
 
@@ -236,6 +236,7 @@ select,
 }
 
 /* Quiz Post Page */
+
 .tbl_quiz_post {
   margin: auto;
 }
@@ -262,7 +263,6 @@ select,
 
 .form_quiz_post {
   text-align: center;
-  // vertical-align: middle;
   display: block;
 
   .form_quiz_post_inline_block {

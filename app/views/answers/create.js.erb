@@ -1,37 +1,68 @@
+var LBL_CHOICE_BACKGROUND_COLOR = ["#AEFFBD", "#DCC2FF", "#E9FFA5", "#BAD3FF", "#FFABCE"]
+var LBL_CHOICE_ID_PREFIX = "lbl_choice_id_";
+var RHYME_CHOICE_ID_PREFIX = "rhyme_choice_id_";
+
 document.getElementById("main_answer_quiz_id_<%= @answer.quiz.id %>").innerHTML = "<%= escape_javascript(render('answers/info')) %>"
 
-var LBL_CHOICE_BACKGROUND_COLOR=["#66FFCC", "#FF99FF", "#FFFF99", "#66FFFF", "#FF3366"]
-var LBL_CHOICE_ID_PREFIX="lbl_choice_id_";
-var RHYME_CHOICE_ID_PREFIX="rhyme_choice_id_";
-
 <% @answer.combinations.each_with_index do |answer_combination, idx| %>
-    var rhymeWord = "<%= answer_combination.rhyme %>"
+  var rhymeWord = "<%= answer_combination.rhyme %>"
+  var changeColorCode = LBL_CHOICE_BACKGROUND_COLOR[<%= idx %>];
+
   <% answer_combination.choice_ids.each do |choice_id| %>
-    
-    var choiceId = <%= choice_id %>
-
-    var lblChoiceId = `${LBL_CHOICE_ID_PREFIX}${choiceId}`;
-    var element = document.getElementById(lblChoiceId);
-    var elementStyle = element.style;
-    var idx = <%= idx %>
-    element.style.backgroundColor = LBL_CHOICE_BACKGROUND_COLOR[idx];
-    elementStyle.borderRadius="0.2em"
-
-    var rhymeChoiceId = `${RHYME_CHOICE_ID_PREFIX}${choiceId}`;
-    document.getElementById(rhymeChoiceId).innerText = rhymeWord 
+    var choiceId = <%= choice_id %>;
+    fillInChoiceLblColor(choiceId, changeColorCode);
+    displayRhyme(choiceId, rhymeWord);
   <% end %>
 <% end %>
 
-var quizId = <%= @answer.quiz.id %>
+var quizId = <%= @answer.quiz.id %>;
+changeChoicesDisplayForAnswer(quizId);
+hideBtnAnswer(quizId);
 
-var cardQuizId = `card_quiz_${quizId}`;
-var container = document.querySelector(`#${cardQuizId}`);
-var chkElementList = container.querySelectorAll('input[type=checkbox]');
-chkElementList.forEach(chkElement => {
-  chkElement.disabled = true
-  chkElement.parentElement.style.backgroundColor = "#FFFFFF"
-})
+/**
+ * 選択肢のテキスト部分を塗り潰す
+ * @param {number} choiceId 
+ * @param {string} changeColorCode
+ */
+function fillInChoiceLblColor(choiceId, changeColorCode) {
+  const lblChoiceId = `${LBL_CHOICE_ID_PREFIX}${choiceId}`;
+  const lblChoiceElementStyle = document.getElementById(lblChoiceId).style;
+  lblChoiceElementStyle.backgroundColor = changeColorCode;
+  lblChoiceElementStyle.borderRadius = "0.2em"
+}
 
-var btnQuizId = `btn_quiz_id_${quizId}`;
-var btnAnswer = document.getElementById(btnQuizId);
-btnAnswer.style.display = "none";
+/**
+ * 母音を選択肢の下に表示する
+ * @param {number} choiceId 
+ * @param {string} rhymeWord
+ */
+function displayRhyme(choiceId, rhymeWord) {
+  const rhymeChoiceId = `${RHYME_CHOICE_ID_PREFIX}${choiceId}`;
+  document.getElementById(rhymeChoiceId).innerText = rhymeWord;
+}
+
+/**
+ * 選択肢を不活性にし、回答表示用で表示する
+ * @param {number} quizId 
+ */
+function changeChoicesDisplayForAnswer(quizId) {
+  const cardQuizId = `card_quiz_${quizId}`;
+  const container = document.querySelector(`#${cardQuizId}`);
+  const chkElementList = container.querySelectorAll('input[type=checkbox]');
+  chkElementList.forEach(chkElement => {
+    chkElement.disabled = true
+    const choiceElement = chkElement.parentElement 
+    choiceElement.style.backgroundColor = "#FFFFFF"
+    choiceElement.classList.remove('choice')
+  })
+}
+
+/**
+ * 回答ボタンを非表示にする
+ * @param {number} quizId 
+ */
+function hideBtnAnswer(quizId) {
+  const btnQuizId = `btn_quiz_id_${quizId}`;
+  const btnAnswerElement = document.getElementById(btnQuizId);
+  btnAnswerElement.style.display = "none";  
+}

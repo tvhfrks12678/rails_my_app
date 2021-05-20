@@ -39,28 +39,25 @@
 </div>
 
 <script type="text/javascript">
+  const CHK_OFF_BACKGROUND_COLOR = "#FFFFFF"
+  const CHK_ON_BACKGROUND_COLOR = "#C6E5FF"
 
-  var quizChoiceCheckboxElementList = document.querySelectorAll('input[type=checkbox]');
+  const quizChoiceCheckboxElementList = document.querySelectorAll('input[type=checkbox]');
   quizChoiceCheckboxElementList.forEach(quizChoiceCheckboxElement => {
     quizChoiceCheckboxElement.addEventListener('change', event => {
-      changeCheckBoxBackgroundColor(event.target.id)
+      changeChoiceBackgroundColor(event.target.id)
     })
   })
 
-  var changeCheckBoxBackgroundColor = id => {
-    const CHK_OFF_BACKGROUND_COLOR = "#FFFFFF"
-    const CHK_ON_BACKGROUND_COLOR = "#C6E5FF"
-
-    const element = document.getElementById(id);
-    const elementStyle = element.parentNode.style
-    
-    if(element.checked === true){
-      elementStyle.backgroundColor = CHK_ON_BACKGROUND_COLOR;
-      return;
-    }
-
-    elementStyle.backgroundColor = CHK_OFF_BACKGROUND_COLOR;
+  /**
+   * 回答ボタンを非表示にする
+   * @param {string} checkboxId
+   */
+  const changeChoiceBackgroundColor = checkboxId => {
+    const checkboxElement = document.getElementById(checkboxId);
+    const choiceElementStyle = checkboxElement.parentNode.style
+  
+    choiceElementStyle.backgroundColor = checkboxElement.checked ? CHK_ON_BACKGROUND_COLOR : CHK_OFF_BACKGROUND_COLOR; 
   }
-
 </script>
 
