@@ -1,46 +1,43 @@
 <% provide(:title, '新着') %>
-<% provide(:question_sentence, 'Q. 韻を踏んでいる正しい組み合わせは？') %>
+<% question_sentence = '韻を踏んでいる組み合わせは？' %>
 
 <h1>新着</h1>
+<ul class="main_quiz_index">
+  <% @quizzes.each do |quiz| %>
+    <div class="row">
+      <div class="card_quiz col-md-8 col-md-offset-2" id="card_quiz_<%= quiz.id %>">
+        <div class="lbl_quiz_question text-left"><label class="mark_symbol">Q.</label><label class=lbl_question_sentence><%= question_sentence %></label></div>
+        <%= form_with(url: answers_path, scope: :answer, local: false) do |f| %>
+          <%= hidden_field_tag "quiz[id]", quiz.id %>
 
-<div class="row">
-  <div class="col-md-8 col-md-offset-2">
-    <ul class="main_quiz_index">
-      <% @quizzes.each do |quiz| %>
-        <div class="card_quiz" id="card_quiz_<%= quiz.id %>">
-          <label class="lbl_quiz_question"><%= yield(:question_sentence) %></label>
-
-          <%= form_with(url: answers_path, scope: :answer, local: false) do |f| %>
-            <%= hidden_field_tag "quiz[id]", quiz.id %>
-
-            <% quiz.choices.each do |choice| %>
-              <div class="row">
-                <b class="col-md-1"></b> 
-                <div class="choices col-md-11">
-                  <label class="choice">
-                    <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
-                    <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}" %>
-                    <%= content_tag :div, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
-                  </label>
-                </div>
+          <% quiz.choices.each do |choice| %>
+            <div class="row">
+              <b class="col-md-1"></b> 
+              <div class="choices col-md-11">
+                <label class="choice">
+                  <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
+                  <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}", class: "choice_sentence" %>
+                  <%= content_tag :div, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
+                </label>
               </div>
-            <% end %>
-
-            <div class="btn_quiz_answer">
-              <%= f.submit "回答", id:"btn_quiz_id_#{quiz.id}", class: "btn btn-primary btn-lg btn_quiz_answer_font" %>
             </div>
           <% end %>
 
-          <div id="main_answer_quiz_id_<%= quiz.id %>"></div>
-        </div>
-      <% end %>
-    </ul>
-  </div>
-</div>
+          <div class="btn_quiz_answer">
+            <%= f.submit "回答", id:"btn_quiz_id_#{quiz.id}", class: "btn btn-primary btn-lg btn_quiz_answer_font" %>
+          </div>
+        <% end %>
+
+        <div id="main_answer_quiz_id_<%= quiz.id %>"></div>
+      </div>
+    </div>
+  <% end %>
+</ul>
 
 <script type="text/javascript">
   const CHK_OFF_BACKGROUND_COLOR = "#FFFFFF"
-  const CHK_ON_BACKGROUND_COLOR = "#C6E5FF"
+  // const CHK_ON_BACKGROUND_COLOR = "#C6E5FF" 
+  const CHK_ON_BACKGROUND_COLOR = "#0175fe"
 
   const quizChoiceCheckboxElementList = document.querySelectorAll('input[type=checkbox]');
   quizChoiceCheckboxElementList.forEach(quizChoiceCheckboxElement => {
@@ -50,14 +47,21 @@
   })
 
   /**
-   * 回答ボタンを非表示にする
+   * 選択肢の背景色を変更する
    * @param {string} checkboxId
    */
   const changeChoiceBackgroundColor = checkboxId => {
     const checkboxElement = document.getElementById(checkboxId);
     const choiceElementStyle = checkboxElement.parentNode.style
-  
-    choiceElementStyle.backgroundColor = checkboxElement.checked ? CHK_ON_BACKGROUND_COLOR : CHK_OFF_BACKGROUND_COLOR; 
+    
+    if (checkboxElement.checked) {
+      choiceElementStyle.color = "white"
+      choiceElementStyle.backgroundColor = CHK_ON_BACKGROUND_COLOR;
+      return;
+    } 
+ 
+    choiceElementStyle.color = "black"
+    choiceElementStyle.backgroundColor = CHK_OFF_BACKGROUND_COLOR; 
   }
 </script>
 

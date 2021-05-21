@@ -1,6 +1,25 @@
-var LBL_CHOICE_BACKGROUND_COLOR = ["#AEFFBD", "#DCC2FF", "#E9FFA5", "#BAD3FF", "#FFABCE"]
+// 参考 http://clrs.cc/ ["#0074D9", "#FF851B", "#3D9970", "#FFDC00", "#F012BE"]
+// 参考 ["#67aeca", "#f78733", "#66ab8c", "#e5e338", "#94618e"]
+// 参考 https://flatuicolors.com/palette/defo ["#3498db", "#e67e22", "#27ae60", "#f1c40f", "#9b59b6"] 
+// 参考 https://htmlcolorcodes.com/color-chart/flat-design-color-chart/
+var LBL_CHOICE_BACKGROUND_COLOR = ["#2E86C1", "#138D75", "#D4AC0D", "#7D3C98", "#BA4A00"]
 var LBL_CHOICE_ID_PREFIX = "lbl_choice_id_";
 var RHYME_CHOICE_ID_PREFIX = "rhyme_choice_id_";
+
+var quizId = <%= @answer.quiz.id %>;
+changeChoicesDisplayForAnswer(quizId);
+hideBtnAnswer(quizId);
+displayAnswerResult(quizId, '<%= @answer.is_correct %>')
+
+moveQuizTop(quizId);
+
+function moveQuizTop(quizId) {
+  const marginTop = 70
+  const cardQuizId = `card_quiz_${quizId}`;
+  const cardQuizIdElement = document.getElementById(cardQuizId)
+  cardQuizIdElement.scrollIntoView(true)
+  window.scrollBy(0, marginTop * -1)
+}
 
 document.getElementById("main_answer_quiz_id_<%= @answer.quiz.id %>").innerHTML = "<%= escape_javascript(render('answers/info')) %>"
 
@@ -15,10 +34,6 @@ document.getElementById("main_answer_quiz_id_<%= @answer.quiz.id %>").innerHTML 
   <% end %>
 <% end %>
 
-var quizId = <%= @answer.quiz.id %>;
-changeChoicesDisplayForAnswer(quizId);
-hideBtnAnswer(quizId);
-
 /**
  * 選択肢のテキスト部分を塗り潰す
  * @param {number} choiceId 
@@ -28,7 +43,9 @@ function fillInChoiceLblColor(choiceId, changeColorCode) {
   const lblChoiceId = `${LBL_CHOICE_ID_PREFIX}${choiceId}`;
   const lblChoiceElementStyle = document.getElementById(lblChoiceId).style;
   lblChoiceElementStyle.backgroundColor = changeColorCode;
-  lblChoiceElementStyle.borderRadius = "0.2em"
+  lblChoiceElementStyle.borderRadius = "0.5em"
+  lblChoiceElementStyle.color = "white"
+  lblChoiceElementStyle.padding = "6px 20px"
 }
 
 /**
@@ -55,6 +72,16 @@ function changeChoicesDisplayForAnswer(quizId) {
     choiceElement.style.backgroundColor = "#FFFFFF"
     choiceElement.classList.remove('choice')
   })
+
+  const choiceSentenceElementList = container.querySelectorAll('.choice_sentence');
+  choiceSentenceElementList.forEach(choiceSentenceElement => {
+    const choiceSentenceElementStyle = choiceSentenceElement.style 
+    choiceSentenceElementStyle.backgroundColor = "#111111"
+    choiceSentenceElementStyle.color = "white"
+    choiceSentenceElementStyle.padding = "6px 20px"
+    choiceSentenceElementStyle.margin = "6px 0px"
+    choiceSentenceElementStyle.borderRadius = "0.5em"
+  })
 }
 
 /**
@@ -65,4 +92,21 @@ function hideBtnAnswer(quizId) {
   const btnQuizId = `btn_quiz_id_${quizId}`;
   const btnAnswerElement = document.getElementById(btnQuizId);
   btnAnswerElement.style.display = "none";  
+}
+
+
+function displayAnswerResult(quizId, is_correct) {
+  let resultSymbol = '❌';
+  let resultWord = '不正解';
+
+  if (is_correct === "true") {
+    resultSymbol = '⭕️';
+    resultWord = '正解!';
+  }
+  const cardQuizId = `card_quiz_${quizId}`;
+  const container = document.querySelector(`#${cardQuizId}`);
+
+  container.querySelector('.mark_symbol').textContent = resultSymbol 
+  container.querySelector('.lbl_question_sentence').textContent = resultWord;
+  container.querySelector('.lbl_question_sentence').style.color = "#FF4136"
 }

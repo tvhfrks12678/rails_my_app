@@ -17,6 +17,6 @@ class AnswerCombination
   # @param [Array<String>] select_choice_ids
   # @return [Boolean] true: 組み合わせが正しい, false: 組み合わせが正しくない
   def correct?(select_choice_ids)
-    (@choice_ids - select_choice_ids).empty?
+    @choice_ids.sort == select_choice_ids.sort
   end
 end
