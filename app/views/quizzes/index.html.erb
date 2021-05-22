@@ -17,11 +17,27 @@
                 <label class="choice">
                   <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
                   <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}", class: "choice_sentence" %>
-                  <%= content_tag :div, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
                 </label>
+                <%= content_tag :label, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
               </div>
             </div>
           <% end %>
+
+<!-- checkbox 横並び用 -->
+<!--
+          <div class="test_choice">
+          <% quiz.choices.each do |choice| %>
+              <div class="choices">
+                <label class="choice">
+                  <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
+                  <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}", class: "choice_sentence" %>
+                  
+                </label>
+                <%= content_tag :div, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
+              </div>
+          <% end %>
+          </div>
+-->
 
           <div class="btn_quiz_answer">
             <%= f.submit "回答", id:"btn_quiz_id_#{quiz.id}", class: "btn btn-primary btn-lg btn_quiz_answer_font" %>

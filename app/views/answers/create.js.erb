@@ -1,15 +1,15 @@
 // 参考 http://clrs.cc/ ["#0074D9", "#FF851B", "#3D9970", "#FFDC00", "#F012BE"]
 // 参考 ["#67aeca", "#f78733", "#66ab8c", "#e5e338", "#94618e"]
 // 参考 https://flatuicolors.com/palette/defo ["#3498db", "#e67e22", "#27ae60", "#f1c40f", "#9b59b6"] 
-// 参考 https://htmlcolorcodes.com/color-chart/flat-design-color-chart/
-var LBL_CHOICE_BACKGROUND_COLOR = ["#2E86C1", "#138D75", "#D4AC0D", "#7D3C98", "#BA4A00"]
+// 参考 https://htmlcolorcodes.com/color-chart/flat-design-color-chart/ ["#2E86C1", "#138D75", "#D4AC0D", "#7D3C98", "#BA4A00"]
+var LBL_CHOICE_BACKGROUND_COLOR = ["#0074D9", "#F012BE", "#2ECC40", "#FF851B", "#B10DC9"]
 var LBL_CHOICE_ID_PREFIX = "lbl_choice_id_";
 var RHYME_CHOICE_ID_PREFIX = "rhyme_choice_id_";
 
 var quizId = <%= @answer.quiz.id %>;
 changeChoicesDisplayForAnswer(quizId);
 hideBtnAnswer(quizId);
-displayAnswerResult(quizId, '<%= @answer.is_correct %>')
+displayAnswerResult(quizId, <%= @answer.is_correct %>)
 
 moveQuizTop(quizId);
 
@@ -41,11 +41,9 @@ document.getElementById("main_answer_quiz_id_<%= @answer.quiz.id %>").innerHTML 
  */
 function fillInChoiceLblColor(choiceId, changeColorCode) {
   const lblChoiceId = `${LBL_CHOICE_ID_PREFIX}${choiceId}`;
-  const lblChoiceElementStyle = document.getElementById(lblChoiceId).style;
-  lblChoiceElementStyle.backgroundColor = changeColorCode;
-  lblChoiceElementStyle.borderRadius = "0.5em"
-  lblChoiceElementStyle.color = "white"
-  lblChoiceElementStyle.padding = "6px 20px"
+  const lblChoiceElement = document.getElementById(lblChoiceId);
+  lblChoiceElement.parentNode.style.backgroundColor = changeColorCode;
+  lblChoiceElement.style.color = "white"
 }
 
 /**
@@ -69,18 +67,14 @@ function changeChoicesDisplayForAnswer(quizId) {
   chkElementList.forEach(chkElement => {
     chkElement.disabled = true
     const choiceElement = chkElement.parentElement 
-    choiceElement.style.backgroundColor = "#FFFFFF"
-    choiceElement.classList.remove('choice')
+    choiceElement.style.backgroundColor = "transparent"
   })
 
   const choiceSentenceElementList = container.querySelectorAll('.choice_sentence');
   choiceSentenceElementList.forEach(choiceSentenceElement => {
     const choiceSentenceElementStyle = choiceSentenceElement.style 
-    choiceSentenceElementStyle.backgroundColor = "#111111"
-    choiceSentenceElementStyle.color = "white"
-    choiceSentenceElementStyle.padding = "6px 20px"
+    choiceSentenceElementStyle.color = "#273746"
     choiceSentenceElementStyle.margin = "6px 0px"
-    choiceSentenceElementStyle.borderRadius = "0.5em"
   })
 }
 
@@ -94,12 +88,16 @@ function hideBtnAnswer(quizId) {
   btnAnswerElement.style.display = "none";  
 }
 
-
+/**
+ * 回答の結果と解説を表示する
+ * @param {number} quizId 
+ * @param {boolean} is_correct true:正解, ture:不正解
+ */
 function displayAnswerResult(quizId, is_correct) {
   let resultSymbol = '❌';
   let resultWord = '不正解';
 
-  if (is_correct === "true") {
+  if (is_correct === true) {
     resultSymbol = '⭕️';
     resultWord = '正解!';
   }

@@ -199,7 +199,6 @@ select,
     display: inline-block;
     border: 3px solid #273746;
     border-radius: 1.5em;
-    // padding: 30px 30px;
     margin-bottom: 30px;
 
     .lbl_quiz_question {
@@ -224,11 +223,16 @@ select,
       font-size: xx-large;
       text-align: left;
       margin-bottom: 10px;
+      white-space: nowrap;
 
       .choice {
         border-radius: 0.5em;
-        border: 2px solid #273746;
+        border: 2px solid #dddddd;
         padding: 5px 20px;
+
+        .choice_sentence {
+          font-weight: 100;
+        }
       }
 
       input[type='checkbox'] {
@@ -239,8 +243,8 @@ select,
 
       .answer_rhyme_font {
         color: #ff4136;
-        margin-left: 45px;
-        font-size: x-large;
+        // margin-left: 45px;
+        font-size: xx-large;
       }
     }
 
@@ -311,17 +315,6 @@ select,
   font-size: xxx-large;
 }
 
-// .form-check-label:checked {
-//   background-color: red;
-// }
-
-// .checkbox-teal [type='checkbox']:checked + label:before {
-//   border-color: transparent #009688 #009688 transparent;
-// }
-
-// .checkbox-warning-filled
-//   [type='checkbox'][class*='filled-in']:checked
-//   + label:after {
-//   border-color: #ff8800;
-//   background-color: #ff8800;
+// .test_choice {
+//   display: flex;
 // }
