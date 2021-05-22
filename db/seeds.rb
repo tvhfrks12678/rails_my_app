@@ -58,3 +58,18 @@ quiz_tird.choices.create!(content: '勉強し', rhyme_id: rhyme[4].id)
 quiz_tird.choices.create!(content: '充実', rhyme_id: rhyme[1].id)
 quiz_tird.choices.create!(content: 'enjoy', rhyme_id: rhyme[4].id)
 quiz_tird.choices.create!(content: 'にこり', rhyme_id: rhyme[3].id)
+
+# 選択肢: 6 母音: 3
+quizzes = []
+quizzes << user.quizzes.create!(commentary: '図書館のんは無声音と言って、無視していい。')
+rhyme_word_list = %w[ooa iio iai]
+rhymes = []
+rhyme_word_list.each do |rhyme_word|
+  rhymes << Rhyme.create!(content: rhyme_word)
+end
+words = %w[ここは 図書館 神秘の 真理を 理解 したい]
+words_rhyme = [rhymes[0], rhymes[0], rhymes[1], rhymes[1], rhymes[2], rhymes[2]]
+
+words.each_with_index do |word, idx|
+  quizzes[0].choices.create!(content: word, rhyme_id: words_rhyme[idx].id)
+end
