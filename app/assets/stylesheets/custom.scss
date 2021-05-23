@@ -227,8 +227,9 @@ select,
 
       .choice {
         border-radius: 0.5em;
-        border: 2px solid #dddddd;
+        border: 2px solid #0074d9;
         padding: 5px 20px;
+        color: #0074d9;
 
         .choice_sentence {
           font-weight: 100;
@@ -239,11 +240,11 @@ select,
         @include scale(1.8);
         position: relative;
         top: -5px;
+        display: none;
       }
 
       .answer_rhyme_font {
         color: #ff4136;
-        // margin-left: 45px;
         font-size: xx-large;
       }
     }
@@ -315,6 +316,6 @@ select,
   font-size: xxx-large;
 }
 
-// .test_choice {
-//   display: flex;
-// }
+.test_choice {
+  display: flex;
+}

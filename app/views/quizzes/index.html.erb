@@ -23,15 +23,13 @@
             </div>
           <% end %>
 
-<!-- checkbox 横並び用 -->
-<!--
+<!-- 
           <div class="test_choice">
           <% quiz.choices.each do |choice| %>
               <div class="choices">
                 <label class="choice">
                   <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
                   <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}", class: "choice_sentence" %>
-                  
                 </label>
                 <%= content_tag :div, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
               </div>
@@ -52,7 +50,6 @@
 
 <script type="text/javascript">
   const CHK_OFF_BACKGROUND_COLOR = "#FFFFFF"
-  // const CHK_ON_BACKGROUND_COLOR = "#C6E5FF" 
   const CHK_ON_BACKGROUND_COLOR = "#0175fe"
 
   const quizChoiceCheckboxElementList = document.querySelectorAll('input[type=checkbox]');
@@ -76,7 +73,7 @@
       return;
     } 
  
-    choiceElementStyle.color = "black"
+    choiceElementStyle.color = CHK_ON_BACKGROUND_COLOR
     choiceElementStyle.backgroundColor = CHK_OFF_BACKGROUND_COLOR; 
   }
 </script>
