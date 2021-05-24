@@ -9,7 +9,7 @@
         <div class="lbl_quiz_question text-left"><label class="mark_symbol">Q.</label><label class=lbl_question_sentence><%= question_sentence %></label></div>
         <%= form_with(url: answers_path, scope: :answer, local: false) do |f| %>
           <%= hidden_field_tag "quiz[id]", quiz.id %>
-
+ 
           <% quiz.choices.each do |choice| %>
             <div class="row">
               <b class="col-md-1"></b> 
@@ -18,21 +18,23 @@
                   <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
                   <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}", class: "choice_sentence" %>
                 </label>
-                <%= content_tag :label, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
+                <%= content_tag :p, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
               </div>
             </div>
           <% end %>
 
-<!-- 
-          <div class="test_choice">
+<!--
+          <div class="quiz_choices">
           <% quiz.choices.each do |choice| %>
               <div class="choices">
                 <label class="choice">
                   <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
                   <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}", class: "choice_sentence" %>
+                  
                 </label>
-                <%= content_tag :div, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
+                <%= content_tag :p, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
               </div>
+              
           <% end %>
           </div>
 -->

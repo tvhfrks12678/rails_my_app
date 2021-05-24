@@ -1,4 +1,5 @@
-var LBL_CHOICE_BACKGROUND_COLOR = ["#0074D9", "#F012BE", "#2ECC40", "#FF851B", "#B10DC9"]
+// var LBL_CHOICE_BACKGROUND_COLOR = ["#0074D9", "#F012BE", "#2ECC40", "#FF851B", "#B10DC9"]
+var LBL_CHOICE_BACKGROUND_COLOR = ['#D3EDFB', '#FADBDA', '#D5EAD8', '#FFF9C9', '#D2CCE6']
 var LBL_CHOICE_ID_PREFIX = "lbl_choice_id_";
 var RHYME_CHOICE_ID_PREFIX = "rhyme_choice_id_";
 
@@ -32,9 +33,17 @@ fadeinAnswerBy(quizId);
 function fillInChoiceLblColor(choiceId, changeColorCode) {
   const lblChoiceId = `${LBL_CHOICE_ID_PREFIX}${choiceId}`;
   const lblChoiceElement = document.getElementById(lblChoiceId);
-  lblChoiceElement.parentNode.style.backgroundColor = changeColorCode;
-  lblChoiceElement.parentNode.style.borderColor = changeColorCode; 
-  lblChoiceElement.style.color = "white"
+  // lblChoiceElement.style.background = changeColorCode 
+  lblChoiceElement.style.background = `linear-gradient(#fff 60%, ${changeColorCode} 0%)`
+  
+  // lblChoiceElement.parentNode.style.borderColor = changeColorCode;
+  // lblChoiceElement.style.color = changeColorCode;
+  // lblChoiceElement.parentNode.style.backgroundColor = "white";
+  
+  // lblChoiceElement.parentNode.style.border = `2px solid ${changeColorCode}`
+
+  // lblChoiceElement.style.backgroundColor = changeColorCode;
+  // lblChoiceElement.style.color = "white"
 }
 
 /**
@@ -45,6 +54,7 @@ function fillInChoiceLblColor(choiceId, changeColorCode) {
 function displayRhyme(choiceId, rhymeWord) {
   const rhymeChoiceId = `${RHYME_CHOICE_ID_PREFIX}${choiceId}`;
   document.getElementById(rhymeChoiceId).innerText = rhymeWord;
+  document.getElementById(rhymeChoiceId).style.margin ="0px 0px 12px 40px";
 }
 
 /**
@@ -60,17 +70,26 @@ function changeChoicesDisplayForAnswer(quizId) {
     
     const choiceElement = chkElement.parentElement 
     choiceElement.style.backgroundColor = "transparent"
+    choiceElement.style.color = "black"
+    choiceElement.style.boderColor = "white"
+    choiceElement.classList.remove('choice')
+    chkElement.style.display = "inline"
 
-    if (chkElement.checked === true) {
-      chkElement.style.display = "inline"
-    }
+    // if (chkElement.checked === true) {
+      //chkElement.style.display = "inline"
+      // chkElement.style.hidden = false
+    // }
+
+    if (chkElement.checked === false) {
+      chkElement.style.visibility="hidden"
+    } 
   })
 
   const choiceSentenceElementList = container.querySelectorAll('.choice_sentence');
   choiceSentenceElementList.forEach(choiceSentenceElement => {
     const choiceSentenceElementStyle = choiceSentenceElement.style 
-    choiceSentenceElementStyle.color = "#0175fe"
-    choiceSentenceElementStyle.margin = "6px 0px"
+    // choiceSentenceElementStyle.color = "#0175fe"
+    choiceSentenceElementStyle.margin = "6px 0px 6px 10px"
   })
 }
 

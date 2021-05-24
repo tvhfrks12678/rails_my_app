@@ -230,10 +230,10 @@ select,
         border: 2px solid #0074d9;
         padding: 5px 20px;
         color: #0074d9;
+      }
 
-        .choice_sentence {
-          font-weight: 100;
-        }
+      .choice_sentence {
+        font-weight: 100;
       }
 
       input[type='checkbox'] {
@@ -246,6 +246,9 @@ select,
       .answer_rhyme_font {
         color: #ff4136;
         font-size: xx-large;
+        font-weight: 200;
+        margin: 0px 6px;
+        line-height: 0;
       }
     }
 
@@ -316,6 +319,11 @@ select,
   font-size: xxx-large;
 }
 
-.test_choice {
+.quiz_choices {
   display: flex;
+}
+
+.select_answer {
+  font-weight: 100;
+  font-size: 20px;
 }
