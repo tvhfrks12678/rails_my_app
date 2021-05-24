@@ -52,15 +52,21 @@ class Answer
     def get_answer_combinations(quiz)
       choices = quiz.choices.joins(:rhyme).select(SQL_COLUMS_GET)
       rhyme_contents = choices.map(&:rhyme_content).uniq
-      answer_combinations = []
+      rhyme_contents.map do |rhyme_content|
+        choice_ids = choices.select { |choice| choice.rhyme_content == rhyme_content }
+                            .map { |item| item.choice_id.to_s }
 
-      rhyme_contents.each do |rhyme_content|
-        choice_ids = choices
-                     .select { |choice| choice.rhyme_content == rhyme_content }
-                     .map { |item| item.choice_id.to_s }
-        answer_combinations << AnswerCombination.new(rhyme: rhyme_content, choice_ids: choice_ids)
+        alphabet_rhyme_content = get_alphabet_rhyme(rhyme_content)
+        AnswerCombination.new(rhyme: alphabet_rhyme_content, choice_ids: choice_ids)
       end
-      answer_combinations
+    end
+
+    # 母音をローマ字にする
+    #
+    # @param [String] rhyme_content ひらがな、カタカナ、ローマ字混ざりの母音
+    # @return [String] ローマ字のみの母音
+    def get_alphabet_rhyme(rhyme_content)
+      rhyme_content.gsub(/[あア]/, 'a').gsub(/[いイ]/, 'i').gsub(/[うウ]/, 'u').gsub(/[えエ]/, 'e').gsub(/[おオ]/, 'o')
     end
 
     # クイズの回答が正解か判定する
