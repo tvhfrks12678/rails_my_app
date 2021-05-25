@@ -1,82 +1,21 @@
 <% provide(:title, '新着') %>
-<% question_sentence = '韻を踏んでいる組み合わせは？' %>
+<%= javascript_pack_tag 'quizzes/application' %>
 
 <h1>新着</h1>
 <ul class="main_quiz_index">
-  <% @quizzes.each do |quiz| %>
-    <div class="row">
-      <div class="card_quiz col-md-8 col-md-offset-2" id="card_quiz_<%= quiz.id %>">
-        <div class="lbl_quiz_question text-left"><label class="mark_symbol">Q.</label><label class=lbl_question_sentence><%= question_sentence %></label></div>
-        <%= form_with(url: answers_path, scope: :answer, local: false) do |f| %>
-          <%= hidden_field_tag "quiz[id]", quiz.id %>
- 
-          <% quiz.choices.each do |choice| %>
-            <div class="row">
-              <b class="col-md-1"></b> 
-              <div class="choices col-md-11">
-                <label class="choice">
-                  <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
-                  <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}", class: "choice_sentence" %>
-                </label>
-                <%= content_tag :p, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
-              </div>
-            </div>
-          <% end %>
-
-<!--
-          <div class="quiz_choices">
-          <% quiz.choices.each do |choice| %>
-              <div class="choices">
-                <label class="choice">
-                  <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
-                  <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}", class: "choice_sentence" %>
-                  
-                </label>
-                <%= content_tag :p, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
-              </div>
-              
-          <% end %>
-          </div>
--->
-
-          <div class="btn_quiz_answer">
-            <%= f.submit "回答", id:"btn_quiz_id_#{quiz.id}", class: "btn btn-primary btn-lg btn_quiz_answer_font" %>
-          </div>
-        <% end %>
-
-        <div id="main_answer_quiz_id_<%= quiz.id %>"></div>
-      </div>
-    </div>
-  <% end %>
+  <%= render @quizzes %>
 </ul>
 
-<script type="text/javascript">
-  const CHK_OFF_BACKGROUND_COLOR = "#FFFFFF"
-  const CHK_ON_BACKGROUND_COLOR = "#0175fe"
-
-  const quizChoiceCheckboxElementList = document.querySelectorAll('input[type=checkbox]');
-  quizChoiceCheckboxElementList.forEach(quizChoiceCheckboxElement => {
-    quizChoiceCheckboxElement.addEventListener('change', event => {
-      changeChoiceBackgroundColor(event.target.id)
-    })
-  })
-
-  /**
-   * 選択肢の背景色を変更する
-   * @param {string} checkboxId
-   */
-  const changeChoiceBackgroundColor = checkboxId => {
-    const checkboxElement = document.getElementById(checkboxId);
-    const choiceElementStyle = checkboxElement.parentNode.style
-    
-    if (checkboxElement.checked) {
-      choiceElementStyle.color = "white"
-      choiceElementStyle.backgroundColor = CHK_ON_BACKGROUND_COLOR;
-      return;
-    } 
- 
-    choiceElementStyle.color = CHK_ON_BACKGROUND_COLOR
-    choiceElementStyle.backgroundColor = CHK_OFF_BACKGROUND_COLOR; 
-  }
-</script>
-
+<!--
+<div class="row">
+  <div class="col-md-2">
+  </div>
+  <div class="col-md-8">
+    <ul class="main_quiz_index">
+      <%= render @quizzes %>
+    </ul>
+  </div>
+  <div class="col-md-2"></div>  
+</div>
+-->
+<!-- col-md-8 col-md-offset-2 -->

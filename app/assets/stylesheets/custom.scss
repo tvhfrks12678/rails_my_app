@@ -327,3 +327,12 @@ select,
   font-weight: 100;
   font-size: 20px;
 }
+
+.answer_result_display {
+  color: #ff4136;
+  font-size: 60px;
+  padding-left: 10px;
+  // text-shadow: 2px 2px 1px #ff4136, -2px 2px 1px #ff4136, 2px -2px 1px #ff4136,
+  //   -2px -2px 1px #ff4136, 2px 0px 1px #ff4136, 0px 2px 1px #ff4136,
+  //   -2px 0px 1px #ff4136, 0px -2px 1px #ff4136;
+}
