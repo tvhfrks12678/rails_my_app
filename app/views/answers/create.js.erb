@@ -60,7 +60,7 @@ function changeChoicesDisplayForAnswer(quizId) {
     const choiceElement = chkElement.parentElement;
     choiceElement.style.backgroundColor = 'transparent';
     choiceElement.style.color = 'black';
-    choiceElement.classList.remove('choice');
+    choiceElement.classList.remove('choice_border');
     chkElement.style.display = 'inline';
 
     if (chkElement.checked === false) {
@@ -103,10 +103,11 @@ function displayAnswerResult(quizId, is_correct) {
   const container = document.querySelector(`#${cardQuizId}`);
 
   container.querySelector('.mark_symbol').textContent = resultSymbol;
-  container.querySelector('.lbl_question_sentence').textContent = resultWord;
-  container
-    .querySelector('.lbl_question_sentence')
-    .classList.add('answer_result_display');
+
+  const lblQuestionSentenceElement = container.querySelector('.lbl_question_sentence');
+  lblQuestionSentenceElement.textContent = resultWord;
+  lblQuestionSentenceElement.style.fontSize = "60px"
+  lblQuestionSentenceElement.classList.add('answer_result_display');
 }
 
 /**

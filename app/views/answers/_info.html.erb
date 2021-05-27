@@ -1,7 +1,7 @@
 <div class="quiz_answer_info">
   <% unless @answer.quiz.commentary.blank? %>
-    <div class="answer-border-top text-left">
-      <label class="lbl_answer_item">解説</label>
+    <div class="answer_commentary text-left">
+      <label class="lbl_answer_commentary_title">解説</label>
       <br>
       <label><%= @answer.quiz.commentary %></label>
     </div>

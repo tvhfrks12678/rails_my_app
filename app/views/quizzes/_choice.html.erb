@@ -1,5 +1,7 @@
-<label class="choice">
-  <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
-  <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}", class: "choice_sentence" %>
-</label>
-<%= content_tag :p, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
+<li class="choice">
+  <label class="choice_border">
+    <%= check_box_tag "select_choices[]",choice.id, false, {id:"chk_quiz_choice_#{choice.id}" ,class: "form-check-label"} %>
+    <%= content_tag :span, choice.content, id: "lbl_choice_id_#{choice.id}", class: "choice_sentence" %>
+  </label>
+  <%= content_tag :p, "", id: "rhyme_choice_id_#{choice.id}", class: "answer_rhyme_font" %>
+</li>
