@@ -5,6 +5,7 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 memo.md
+temp.txt
 Document.drawio.png
 record.drawio.png
 
