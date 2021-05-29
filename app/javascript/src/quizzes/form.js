@@ -1,6 +1,6 @@
 const TEXTBOX_SELECTOR_RHYME = "input[name='rhyme[][content]']";
 const SELECTBOX_SELECTOR_CHOICE_RHYME = 'select[name="choice[][rhyme]"]';
-const SELECTBOX_OPTION_INIT_ITEM = '韻を踏んでいない';
+const SELECTBOX_OPTION_INIT_ITEM = '韻なし';
 const SELECTBOX_FADE_IN_TIME = '1500';
 
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -10,6 +10,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 const initializeQuizForm = () => {
   setRhymeTextBoxChangeEvent();
   setSelectBoxValueChoiceRhime();
+  setChoiceFormDragAndDrop();
 };
 
 /**
@@ -62,5 +63,32 @@ const setSelectBoxValueChoiceRhime = () => {
       [{ opacity: '0' }, { opacity: '1' }],
       SELECTBOX_FADE_IN_TIME
     );
+  });
+};
+
+/**
+ * 選択肢の入力欄をドラッグ＆ドロップできる設定にする
+ */
+const setChoiceFormDragAndDrop = () => {
+  document.querySelectorAll('.list_choice li').forEach((elm) => {
+    elm.ondragstart = function () {
+      event.dataTransfer.setData('text/plain', event.target.id);
+      this.style.opacity = '0.4';
+    };
+    elm.ondragover = function () {
+      event.preventDefault();
+      this.style.borderTop = '2px solid #0074D9';
+    };
+    elm.ondragleave = function () {
+      this.style.borderTop = '';
+    };
+    elm.ondrop = function () {
+      event.preventDefault();
+      let id = event.dataTransfer.getData('text/plain');
+      let elm_drag = document.getElementById(id);
+      this.parentNode.insertBefore(elm_drag, this);
+      this.style.borderTop = '';
+      elm_drag.style.opacity = '1';
+    };
   });
 };
