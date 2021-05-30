@@ -307,17 +307,27 @@ aside {
     font-size: xx-large;
   }
 
-  .list_choice {
+  #choice_input_field_list {
     list-style: none;
-    .unit_choice {
+    .choice_input_field {
       border-top: 1px solid #aaaaaa;
       display: flex;
       align-items: center;
       padding: 10px 0px;
     }
-    .unit_choice:last-child {
+    .choice_input_field:last-child {
       border-bottom: 1px solid #aaaaaa;
     }
+    .link_delete_choice {
+      font-size: x-large;
+      line-height: 0.5em;
+    }
+  }
+
+  #link_add_choice {
+    display: flex;
+    justify-content: flex-end;
+    font-size: x-large;
   }
 
   .drag_and_drop_mark::before {
@@ -326,6 +336,8 @@ aside {
     top: 0;
     // right: 15px;
     bottom: 0;
+    right: 0;
+    left: 0;
     // display: block;
     width: 15px;
     height: 10px;
@@ -359,4 +371,8 @@ aside {
     text-align: right;
     margin-top: 10px;
   }
+}
+
+.element_display_none {
+  display: none !important;
 }

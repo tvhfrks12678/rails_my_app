@@ -1,6 +1,6 @@
 <%= javascript_pack_tag 'quizzes/form' %>
 
-<% choice_num = 10 %>
+<% choice_num = 3 %>
 <% rhyme_word_num = 5 %>
 
 <%= form_with(model: @quiz, local: true) do |f| %>
@@ -9,16 +9,16 @@
     <span>クイズの選択肢</span>
   </div>
 
-  <ol class="list_choice">
-    <div class="row">
+  <ul id="choice_input_field_list">
+    <li class="row">
       <div class="col-md-1"></div>
       <div class="col-md-5 item_name">選択肢</div>
       <div class="col-md-5  item_name">母音</div>
       <div class="col-md-1"></div>
-    </div>
+    </li>
 
     <% choice_num.times do |n| %>
-      <li id="unit_choice_id_<%= n %>" class="row unit_choice" draggable="true">
+      <li id="choice_input_field_id_<%= n %>" class="row choice_input_field" draggable="true">
         <div class="col-md-1 drag_and_drop_mark"></div>
         <div class="col-md-5">
           <%= text_field_tag 'choice[][content]', '', id: "txt_choice_id_#{n}", class: "form-control" %>
@@ -26,10 +26,14 @@
         <div class="col-md-5">
           <%= select_tag "choice[][rhyme]", "", id: "select_choice_rhyme_id_#{n}", class: "form-control" %>
         </div>
-        <div class="col-md-1"></div>
+        <div class="col-md-1">
+          <%= link_to "×", "javascript:void(0);", onclick: "deleteChoiceField('choice_input_field_id_#{n}');", id: "link_delete_choice_#{n}", class: "link_delete_choice element_display_none" %> 
+        </div>
       </li>
     <% end %>
-  </ol>
+  </ul>
+
+  <%= link_to "＋選択肢の追加", "javascript:void(0);", id: "link_add_choice" %>
 
   <div class="item_title">
     <span>韻を踏んでいる母音</span>
@@ -64,3 +68,49 @@
     <%= f.button "投稿", type: 'button', onclick: 'submit();', class: "btn btn-primary btn-lg" %>
   </div>
 <% end %>
+
+<script>
+
+  const SELECTOR_QUIZ_FORM = '.quiz_form';
+  const TEXTBOX_SELECTOR_RHYME = "input[name='rhyme[][content]']";
+  const SELECTBOX_SELECTOR_CHOICE_RHYME = 'select[name="choice[][rhyme]"]';
+  const SELECTBOX_OPTION_INIT_ITEM = '韻なし';
+  const SELECTBOX_FADE_IN_TIME = '1500';
+
+  const SELECTOR_LINK_ADD_CHOICE_ID = 'link_add_choice';
+  const CLASS_ELEMENT_DISPLAY_NONE = 'element_display_none';
+
+  const CHOICE_INPUT_FIELD_MAX = 10;
+  const CHOICE_INPUT_FIELD_MIN = 3;
+
+  const deleteChoiceField = (id) => {
+    document.getElementById(id).remove();
+    showLinkChiceInputField();
+    switchDisplayOfLinkDeleteChoice();
+  };
+
+  /**
+  * 選択肢入力欄を表示する
+  */
+  const showLinkChiceInputField = () => {
+    document
+      .getElementById(SELECTOR_LINK_ADD_CHOICE_ID)
+      .classList.remove(CLASS_ELEMENT_DISPLAY_NONE);
+  };
+
+  const switchDisplayOfLinkDeleteChoice = () => {
+    const linkDeleteChoiceElementList = document.querySelectorAll(
+      '.link_delete_choice'
+    );
+    if (linkDeleteChoiceElementList.length <= CHOICE_INPUT_FIELD_MIN) {
+      linkDeleteChoiceElementList.forEach((linkDeleteChoiceElement) => {
+        linkDeleteChoiceElement.classList.add(CLASS_ELEMENT_DISPLAY_NONE);
+      });
+      return;
+    }
+
+    linkDeleteChoiceElementList.forEach((linkDeleteChoiceElement) => {
+      linkDeleteChoiceElement.classList.remove(CLASS_ELEMENT_DISPLAY_NONE);
+    });
+  };
+</script>
