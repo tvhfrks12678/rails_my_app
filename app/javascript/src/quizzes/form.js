@@ -131,7 +131,7 @@ const addChoiceInputField = () => {
     <select name="choice[][rhyme]" id="select_choice_rhyme_id_${num}" class="form-control">${selectBoxOptions}</select>
     </div>
     <div class="col-md-1">
-      <a onclick="deleteChoiceField('choice_input_field_id_${num}');" id="link_delete_choice_0" class="link_delete_choice" href="javascript:void(0);">×</a> 
+      <a onclick="deleteChoiceField('choice_input_field_id_${num}');" id="link_delete_choice_0" class="link_delete_choice link_delete" href="javascript:void(0);">×</a> 
     </div>
     </li>`;
 

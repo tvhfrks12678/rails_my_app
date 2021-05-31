@@ -294,17 +294,75 @@ aside {
 
 /* Quiz Post Page */
 .main_quiz_form {
-  .item_title {
-    margin-top: 20px;
-    margin-bottom: 30px;
-    span {
-      font-size: xxx-large;
-      background: linear-gradient(#fff 60%, #d3edfb 0%);
+  .input_item {
+    .item_title {
+      margin-top: 20px;
+      margin-bottom: 30px;
+      span {
+        font-size: xxx-large;
+        background: linear-gradient(#fff 60%, #d3edfb 0%);
+      }
     }
-  }
 
-  .item_name {
-    font-size: xx-large;
+    .item_name {
+      font-size: xx-large;
+    }
+
+    .drag_and_drop_mark::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      // right: 15px;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      // display: block;
+      width: 15px;
+      height: 10px;
+      margin: auto;
+      background: linear-gradient(
+        to bottom,
+        #aaaaaa 20%,
+        white 20%,
+        white 40%,
+        #aaaaaa 40%,
+        #aaaaaa 60%,
+        white 60%,
+        white 80%,
+        #aaaaaa 80%
+      );
+    }
+
+    .link_delete {
+      font-size: x-large;
+      line-height: 0.5em;
+      color: #ff4136;
+      text-decoration: none;
+    }
+
+    .link_add {
+      display: flex;
+      justify-content: flex-end;
+      text-decoration: none;
+    }
+
+    .link_add_mark {
+      font-size: x-large;
+      color: #0074d9;
+    }
+
+    .input_field_list {
+      list-style: none;
+      .input_field_row {
+        border-top: 1px solid #aaaaaa;
+        display: flex;
+        align-items: center;
+        padding: 10px 0px;
+      }
+      .input_field_row:last-child {
+        border-bottom: 1px solid #aaaaaa;
+      }
+    }
   }
 
   #choice_input_field_list {
@@ -318,10 +376,6 @@ aside {
     .choice_input_field:last-child {
       border-bottom: 1px solid #aaaaaa;
     }
-    .link_delete_choice {
-      font-size: x-large;
-      line-height: 0.5em;
-    }
   }
 
   #link_add_choice {
@@ -330,29 +384,8 @@ aside {
     font-size: x-large;
   }
 
-  .drag_and_drop_mark::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    // right: 15px;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    // display: block;
-    width: 15px;
-    height: 10px;
-    margin: auto;
-    background: linear-gradient(
-      to bottom,
-      #aaaaaa 20%,
-      white 20%,
-      white 40%,
-      #aaaaaa 40%,
-      #aaaaaa 60%,
-      white 60%,
-      white 80%,
-      #aaaaaa 80%
-    );
+  #rhyme_input_field_list {
+    list-style: none;
   }
 
   *[draggable='true'] {
@@ -360,7 +393,6 @@ aside {
   }
 
   .txt_rhyme {
-    margin-bottom: 10px;
   }
 
   .commentary {

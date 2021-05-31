@@ -5,67 +5,82 @@
 
 <%= form_with(model: @quiz, local: true) do |f| %>
 
-  <div class="item_title">
-    <span>クイズの選択肢</span>
-  </div>
+  <div class="input_item">
+    <div class="item_title">
+      <span>クイズの選択肢</span>
+    </div>
 
-  <ul id="choice_input_field_list">
-    <li class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-5 item_name">選択肢</div>
-      <div class="col-md-5  item_name">母音</div>
-      <div class="col-md-1"></div>
-    </li>
-
-    <% choice_num.times do |n| %>
-      <li id="choice_input_field_id_<%= n %>" class="row choice_input_field" draggable="true">
-        <div class="col-md-1 drag_and_drop_mark"></div>
-        <div class="col-md-5">
-          <%= text_field_tag 'choice[][content]', '', id: "txt_choice_id_#{n}", class: "form-control" %>
-        </div>
-        <div class="col-md-5">
-          <%= select_tag "choice[][rhyme]", "", id: "select_choice_rhyme_id_#{n}", class: "form-control" %>
-        </div>
-        <div class="col-md-1">
-          <%= link_to "×", "javascript:void(0);", onclick: "deleteChoiceField('choice_input_field_id_#{n}');", id: "link_delete_choice_#{n}", class: "link_delete_choice element_display_none" %> 
-        </div>
+    <ul id="choice_input_field_list">
+      <li class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-5 item_name">選択肢</div>
+        <div class="col-md-5  item_name">母音</div>
+        <div class="col-md-1"></div>
       </li>
-    <% end %>
-  </ul>
 
-  <%= link_to "＋選択肢の追加", "javascript:void(0);", id: "link_add_choice" %>
-
-  <div class="item_title">
-    <span>韻を踏んでいる母音</span>
+      <% choice_num.times do |n| %>
+        <li id="choice_input_field_id_<%= n %>" class="row choice_input_field" draggable="true">
+          <div class="col-md-1 drag_and_drop_mark"></div>
+          <div class="col-md-5">
+            <%= text_field_tag 'choice[][content]', '', id: "txt_choice_id_#{n}", class: "form-control" %>
+          </div>
+          <div class="col-md-5">
+            <%= select_tag "choice[][rhyme]", "", id: "select_choice_rhyme_id_#{n}", class: "form-control" %>
+          </div>
+          <div class="col-md-1">
+            <%= link_to "×", "javascript:void(0);", onclick: "deleteChoiceField('choice_input_field_id_#{n}');", id: "link_delete_choice_#{n}", class: "link_delete_choice element_display_none link_delete" %> 
+          </div>
+        </li>
+      <% end %>
+    </ul>
+    <%= link_to "＋選択肢の追加", "javascript:void(0);", id: "link_add_choice" %>
   </div>
 
-  <!-- 
-  <div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-5 item_name">母音</div>
-    <div class="col-md-1"></div>
-    <div class="col-md-5"></div>
-  </div>
-  -->
 
-  <% rhyme_word_num.times do |n| %>
+  <div class="input_item">
+    <div class="item_title">
+      <span>韻の母音</span>
+    </div>
+
+
     <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-5">
-        <%= text_field_tag 'rhyme[][content]', '', {id: "rhyme_id_#{n}", class: 'form-control txt_rhyme'} %>
+      <div class="col-md-7">
+        <ul id="rhyme_input_field_list" class="input_field_list">
+          <% rhyme_word_num.times do |n| %>
+            <li class="row input_field_row">
+              <div class="col-md-2 drag_and_drop_mark"></div>
+              <div class="col-md-8">
+                <%= text_field_tag 'rhyme[][content]', '', {id: "rhyme_id_#{n}", class: 'form-control txt_rhyme'} %>
+              </div>
+              <div class="col-md-2">
+                <%= link_to "×", "javascript:void(0);", id: "link_delete_rhyme_#{n}", class: "link_delete" %>
+              </div>
+            </li>
+          <% end %>
+        </ul>      
       </div>
-      <div class="col-md-1"></div>
       <div class="col-md-5"></div>
     </div>
-  <% end %>
 
-  <div class="item_title">
-    <span>解説</span>
+    <div class="row">
+      <div class="col-md-7">
+        <%= link_to "javascript:void(0);", id: "link_add_rhyme", class: "link_add" do %>
+          <span class="link_add_mark">＋母音の追加</span>
+        <% end %>
+      </div>
+      <div class="col-md-5"></div>
+    </div>
   </div>
-  <%= f.text_area :commentary, class: 'form-control commentary' %>
 
-  <div class="btn_quiz_post">
-    <%= f.button "投稿", type: 'button', onclick: 'submit();', class: "btn btn-primary btn-lg" %>
+  <div class="input_item">
+    <div class="item_title">
+      <span>解説</span>
+    </div>
+    <%= f.text_area :commentary, class: 'form-control commentary' %>
+
+    <div class="btn_quiz_post">
+      <%= f.button "投稿", type: 'button', onclick: 'submit();', class: "btn btn-primary btn-lg" %>
+    </div>
   </div>
 <% end %>
 
