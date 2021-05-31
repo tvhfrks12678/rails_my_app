@@ -1,9 +1,13 @@
 <% provide(:title, '新着') %>
 <%= javascript_pack_tag 'quizzes/application' %>
 
-<h1>新着</h1>
-<ol class="main_quiz_index">
-  <%= render @quizzes %>
-</ol>
-
-
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <h1>新着</h1>
+    <ol class="main_quiz_index">
+      <%= render @quizzes %>
+    </ol>
+  </div>
+  <div class="col-md-2"></div>  
+</div>
