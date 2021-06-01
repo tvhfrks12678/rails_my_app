@@ -42,18 +42,17 @@
       <span>韻の母音</span>
     </div>
 
-
     <div class="row">
       <div class="col-md-7">
         <ul id="rhyme_input_field_list" class="input_field_list">
           <% rhyme_word_num.times do |n| %>
-            <li class="row input_field_row">
+            <li id="rhyme_input_field_id_<%= n %>" class="row input_field_list_item" draggable="true">
               <div class="col-md-2 drag_and_drop_mark"></div>
               <div class="col-md-8">
-                <%= text_field_tag 'rhyme[][content]', '', {id: "rhyme_id_#{n}", class: 'form-control txt_rhyme'} %>
+                <%= text_field_tag 'rhyme[][content]', '', id: "rhyme_id_#{n}", class: 'form-control txt_rhyme', draggable: "false" %>
               </div>
               <div class="col-md-2">
-                <%= link_to "×", "javascript:void(0);", id: "link_delete_rhyme_#{n}", class: "link_delete" %>
+                <%= link_to "×", "javascript:void(0);", id: "link_delete_rhyme_#{n}", class: "link_delete", draggable: "false" %>
               </div>
             </li>
           <% end %>

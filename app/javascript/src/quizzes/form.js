@@ -1,3 +1,8 @@
+const INPUT_FIELD_LIST_ITEM_CLASS = 'input_field_list_item';
+const RHYME_INPUT_FIELD_LIST_CLASS = 'rhyme_input_field_list';
+const INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS = 'input_field_list_item_dragstart';
+const INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS = 'input_field_list_item_dragover';
+
 window.addEventListener('DOMContentLoaded', (event) => {
   initializeQuizForm();
 });
@@ -8,6 +13,7 @@ const initializeQuizForm = () => {
   setChoiceInputFieldListDragAndDropEvent();
   setLinkAddChoiceClickEvent();
   // setLinkDeleteChoiceClickEvent();
+  setRhymeInputFieldListDragAndDropEvent();
 };
 
 /**
@@ -181,4 +187,54 @@ const hideLinkAddChiceInputField = () => {
   document
     .getElementById(SELECTOR_LINK_ADD_CHOICE_ID)
     .classList.add(CLASS_ELEMENT_DISPLAY_NONE);
+};
+
+/**
+ * 母音の入力欄のListにドラッグ＆ドロップのEventを設定する
+ */
+const setRhymeInputFieldListDragAndDropEvent = () => {
+  const rhymeInputFieldListItems = document.querySelectorAll(
+    `#${RHYME_INPUT_FIELD_LIST_CLASS} .${INPUT_FIELD_LIST_ITEM_CLASS}`
+  );
+
+  rhymeInputFieldListItems.forEach((rhymeInputFieldListItem) => {
+    setInputFieldListItemDragAndDropEvent(rhymeInputFieldListItem.id);
+  });
+};
+
+/**
+ * 入力欄にドラッグ＆ドロップのEventを設定する
+ * @param {string} id 入力欄のID
+ */
+const setInputFieldListItemDragAndDropEvent = (id) => {
+  const element = document.getElementById(id);
+
+  element.addEventListener('dragstart', (ev) => {
+    ev.dataTransfer.setData('text/plain', ev.target.id);
+    element.classList.add(INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS);
+  });
+
+  element.addEventListener('dragover', (ev) => {
+    ev.preventDefault();
+    ev.currentTarget.classList.add(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
+  });
+
+  element.addEventListener('dragleave', (ev) => {
+    ev.currentTarget.classList.remove(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
+  });
+
+  element.addEventListener('drop', (ev) => {
+    ev.preventDefault();
+
+    const dragElementId = ev.dataTransfer.getData('text/plain');
+    const dragElement = document.getElementById(dragElementId);
+
+    const dropElement = ev.currentTarget;
+    dropElement.parentNode.insertBefore(dragElement, dropElement);
+    dropElement.classList.remove(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
+  });
+
+  element.addEventListener('dragend', () => {
+    element.classList.remove(INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS);
+  });
 };

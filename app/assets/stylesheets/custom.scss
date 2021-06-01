@@ -353,15 +353,23 @@ aside {
 
     .input_field_list {
       list-style: none;
-      .input_field_row {
+      .input_field_list_item {
         border-top: 1px solid #aaaaaa;
         display: flex;
         align-items: center;
         padding: 10px 0px;
       }
-      .input_field_row:last-child {
+      .input_field_list_item:last-child {
         border-bottom: 1px solid #aaaaaa;
       }
+    }
+
+    .input_field_list_item_dragstart {
+      opacity: 0.4;
+    }
+
+    .input_field_list_item_dragover {
+      border-top: 2px solid #0074d9 !important;
     }
   }
 
@@ -384,12 +392,12 @@ aside {
     font-size: x-large;
   }
 
-  #rhyme_input_field_list {
+  .input_field_list {
     list-style: none;
   }
 
   *[draggable='true'] {
-    cursor: pointer;
+    cursor: move;
   }
 
   .txt_rhyme {
