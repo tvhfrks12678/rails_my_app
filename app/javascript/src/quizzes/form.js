@@ -3,6 +3,9 @@ const RHYME_INPUT_FIELD_LIST_CLASS = 'rhyme_input_field_list';
 const INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS = 'input_field_list_item_dragstart';
 const INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS = 'input_field_list_item_dragover';
 
+const LINK_DELETE_CLASS = 'link_delete';
+const RHYME_INPUT_FIELD_LIST_ITEM_MIN = 1;
+
 window.addEventListener('DOMContentLoaded', (event) => {
   initializeQuizForm();
 });
@@ -12,8 +15,8 @@ const initializeQuizForm = () => {
   setSelectBoxValueChoiceRhime();
   setChoiceInputFieldListDragAndDropEvent();
   setLinkAddChoiceClickEvent();
-  // setLinkDeleteChoiceClickEvent();
   setRhymeInputFieldListDragAndDropEvent();
+  setRhymeInputFieldListDeleteLinkClickEvent();
 };
 
 /**
@@ -156,30 +159,6 @@ const addChoiceInputField = () => {
   }
 };
 
-// const setSelectBoxOptions = (selectboxId) => {
-//   const selectBoxOptions = document.querySelector(
-//     SELECTBOX_SELECTOR_CHOICE_RHYME
-//   ).innerHTML;
-
-//   document.getElementById(selectboxId).innerHTML = selectBoxOptions;
-// };
-
-// const setLinkDeleteChoiceClickEvent = () => {
-//   const linkDeleteChoiceElementList = document.querySelectorAll(
-//     '.link_delete_choice'
-//   );
-
-//   linkDeleteChoiceElementList.forEach((linkDeleteChoiceElement) => {
-//     linkDeleteChoiceElement.addEventListener('click', (event) => {
-//       deleteChoiceField(event.target.id);
-//     });
-//   });
-// };
-
-// const deleteChoiceField = (id) => {
-//   document.getElementById(id).remove();
-// };
-
 /**
  * 選択肢入力欄を非表示にする
  */
@@ -236,5 +215,54 @@ const setInputFieldListItemDragAndDropEvent = (id) => {
 
   element.addEventListener('dragend', () => {
     element.classList.remove(INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS);
+  });
+};
+
+/**
+ * 母音の入力欄のListに削除リンククリック時のEventを設定する
+ */
+const setRhymeInputFieldListDeleteLinkClickEvent = () => {
+  const rhymeInputFieldListItemElementList = document.querySelectorAll(
+    `#${RHYME_INPUT_FIELD_LIST_CLASS} .${INPUT_FIELD_LIST_ITEM_CLASS}`
+  );
+  rhymeInputFieldListItemElementList.forEach(
+    (rhymeInputFieldListItemElement) => {
+      const rhymeInputFieldListItemDeleteLinkElement =
+        rhymeInputFieldListItemElement.querySelector(`.${LINK_DELETE_CLASS}`);
+      setDeleteClickEvent(
+        rhymeInputFieldListItemElement,
+        rhymeInputFieldListItemDeleteLinkElement
+      );
+    }
+  );
+};
+
+/**
+ * 母音の入力欄のに削除リンククリック時のEventを設定する
+ * @param  {object} itemElement 削除するElement
+ * @param  {object} DeleteElement 削除Element
+ */
+const setDeleteClickEvent = (itemElement, DeleteElement) => {
+  DeleteElement.addEventListener('click', () => {
+    itemElement.remove();
+
+    const rhymeInputFieldListItemElementList = document.querySelectorAll(
+      `#${RHYME_INPUT_FIELD_LIST_CLASS} .${INPUT_FIELD_LIST_ITEM_CLASS}`
+    );
+
+    if (
+      rhymeInputFieldListItemElementList.length >
+      RHYME_INPUT_FIELD_LIST_ITEM_MIN
+    ) {
+      return;
+    }
+
+    rhymeInputFieldListItemElementList.forEach(
+      (rhymeInputFieldListItemElement) => {
+        rhymeInputFieldListItemElement
+          .querySelector(`.${LINK_DELETE_CLASS}`)
+          .classList.add(CLASS_ELEMENT_DISPLAY_NONE);
+      }
+    );
   });
 };
