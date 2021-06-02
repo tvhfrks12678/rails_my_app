@@ -1,7 +1,7 @@
 <%= javascript_pack_tag 'quizzes/form' %>
 
 <% choice_num = 3 %>
-<% rhyme_word_num = 5 %>
+<% rhyme_word_num = 1 %>
 
 <%= form_with(model: @quiz, local: true) do |f| %>
 
@@ -52,7 +52,7 @@
                 <%= text_field_tag 'rhyme[][content]', '', id: "rhyme_id_#{n}", class: 'form-control txt_rhyme' %>
               </div>
               <div class="col-md-2">
-                <%= link_to "×", "javascript:void(0);", id: "link_delete_rhyme_#{n}", class: "link_delete" %>
+                <%= link_to "×", "javascript:void(0);", id: "link_delete_rhyme_#{n}", class: "link_delete element_display_none" %>
               </div>
             </li>
           <% end %>

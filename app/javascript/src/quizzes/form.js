@@ -10,6 +10,8 @@ const RHYME_INPUT_FIELD_LIST_ITEM_CLASS = 'rhyme_input_field_list_item';
 
 const DRAG_AND_DROP_ICON_CLASS = 'drag_and_drop_mark';
 
+const LINK_ADD_RHYME_ID = 'link_add_rhyme';
+
 window.addEventListener('DOMContentLoaded', (event) => {
   initializeQuizForm();
 });
@@ -21,6 +23,7 @@ const initializeQuizForm = () => {
   setLinkAddChoiceClickEvent();
   setRhymeInputFieldListDragAndDropEvent();
   setRhymeInputFieldListDeleteLinkClickEvent();
+  setLinkAddRhymeInputFieldListItemClickEvent();
 };
 
 /**
@@ -294,6 +297,9 @@ const setDeleteClickEvent = (itemElement, DeleteElement) => {
       `#${RHYME_INPUT_FIELD_LIST_ID} .${INPUT_FIELD_LIST_ITEM_CLASS}`
     );
 
+    const linkAddRhymeElement = document.getElementById(LINK_ADD_RHYME_ID);
+    linkAddRhymeElement.classList.remove(CLASS_ELEMENT_DISPLAY_NONE);
+
     if (
       rhymeInputFieldListItemElementList.length >
       RHYME_INPUT_FIELD_LIST_ITEM_MIN
@@ -309,4 +315,65 @@ const setDeleteClickEvent = (itemElement, DeleteElement) => {
       }
     );
   });
+};
+
+/**
+ * 母音の入力欄の追加リンククリック時のEventを設定する
+ */
+const setLinkAddRhymeInputFieldListItemClickEvent = () => {
+  const linkAddRhymeInputFieldListItem =
+    document.getElementById(LINK_ADD_RHYME_ID);
+  linkAddRhymeInputFieldListItem.addEventListener('click', () => {
+    addRhymeInputFieldListItem();
+  });
+};
+
+const RHYME_INPUT_FIELD_LIST_ITEM_MAX = 5;
+
+/**
+ * 母音の入力欄を追加する
+ */
+const addRhymeInputFieldListItem = () => {
+  const rhymeInputFieldListElement = document.querySelector(
+    `#${RHYME_INPUT_FIELD_LIST_ID}`
+  );
+
+  const rhymeInputFieldListItemElement = document.querySelector(
+    `.${INPUT_FIELD_LIST_ITEM_CLASS}`
+  );
+
+  rhymeInputFieldListItemElement
+    .querySelector(`.${LINK_DELETE_CLASS}`)
+    .classList.remove(CLASS_ELEMENT_DISPLAY_NONE);
+
+  const addElement = rhymeInputFieldListItemElement.cloneNode(true);
+
+  addElement.querySelector(TEXTBOX_SELECTOR_RHYME).value = '';
+
+  const num = new Date().getTime().toString();
+
+  addElement.id = addElement.id.replace(/_\d+$/, `_${num}`);
+
+  rhymeInputFieldListElement.insertAdjacentElement('beforeend', addElement);
+
+  setInputFieldListItemDragAndDropEvent(
+    addElement.id,
+    rhymeInputFieldListElement.id
+  );
+
+  setDeleteClickEvent(
+    addElement,
+    addElement.querySelector(`.${LINK_DELETE_CLASS}`)
+  );
+
+  const rhymeInputFieldListItemElementList = document.querySelectorAll(
+    `.${INPUT_FIELD_LIST_ITEM_CLASS}`
+  );
+
+  if (
+    rhymeInputFieldListItemElementList.length >= RHYME_INPUT_FIELD_LIST_ITEM_MAX
+  ) {
+    const linkAddRhymeElement = document.getElementById(LINK_ADD_RHYME_ID);
+    linkAddRhymeElement.classList.add(CLASS_ELEMENT_DISPLAY_NONE);
+  }
 };
