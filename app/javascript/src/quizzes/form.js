@@ -1,10 +1,14 @@
 const INPUT_FIELD_LIST_ITEM_CLASS = 'input_field_list_item';
-const RHYME_INPUT_FIELD_LIST_CLASS = 'rhyme_input_field_list';
+const RHYME_INPUT_FIELD_LIST_ID = 'rhyme_input_field_list';
 const INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS = 'input_field_list_item_dragstart';
 const INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS = 'input_field_list_item_dragover';
 
 const LINK_DELETE_CLASS = 'link_delete';
 const RHYME_INPUT_FIELD_LIST_ITEM_MIN = 1;
+
+const RHYME_INPUT_FIELD_LIST_ITEM_CLASS = 'rhyme_input_field_list_item';
+
+const DRAG_AND_DROP_ICON_CLASS = 'drag_and_drop_mark';
 
 window.addEventListener('DOMContentLoaded', (event) => {
   initializeQuizForm();
@@ -173,49 +177,89 @@ const hideLinkAddChiceInputField = () => {
  */
 const setRhymeInputFieldListDragAndDropEvent = () => {
   const rhymeInputFieldListItems = document.querySelectorAll(
-    `#${RHYME_INPUT_FIELD_LIST_CLASS} .${INPUT_FIELD_LIST_ITEM_CLASS}`
+    `#${RHYME_INPUT_FIELD_LIST_ID} .${INPUT_FIELD_LIST_ITEM_CLASS}`
   );
 
   rhymeInputFieldListItems.forEach((rhymeInputFieldListItem) => {
-    setInputFieldListItemDragAndDropEvent(rhymeInputFieldListItem.id);
+    setInputFieldListItemDragAndDropEvent(
+      rhymeInputFieldListItem.id,
+      RHYME_INPUT_FIELD_LIST_ID
+    );
   });
 };
 
 /**
  * 入力欄にドラッグ＆ドロップのEventを設定する
- * @param {string} id 入力欄のID
+ * @param {string} inputFieldListItemId 入力欄のリストのアイテムのID
+ * @param {string} inputFieldListId 入力欄のリストのID
  */
-const setInputFieldListItemDragAndDropEvent = (id) => {
-  const element = document.getElementById(id);
+const setInputFieldListItemDragAndDropEvent = (
+  inputFieldListItemId,
+  inputFieldListId
+) => {
+  const inputFieldListItemElement =
+    document.getElementById(inputFieldListItemId);
 
-  element.addEventListener('dragstart', (ev) => {
-    ev.dataTransfer.setData('text/plain', ev.target.id);
-    element.classList.add(INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS);
+  const inputFeildMoveIcon = inputFieldListItemElement.querySelector(
+    `.${DRAG_AND_DROP_ICON_CLASS}`
+  );
+
+  inputFeildMoveIcon.addEventListener('dragstart', (ev) => {
+    ev.dataTransfer.setData('text/plain', inputFieldListItemElement.id);
+    inputFieldListItemElement.classList.add(
+      INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS
+    );
+    ev.dataTransfer.effectAllowed = 'move';
   });
 
-  element.addEventListener('dragover', (ev) => {
+  inputFieldListItemElement.addEventListener('dragover', (ev) => {
     ev.preventDefault();
+    if (!isOnlyMoveAllowed(ev)) {
+      return;
+    }
+
     ev.currentTarget.classList.add(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
   });
 
-  element.addEventListener('dragleave', (ev) => {
+  inputFieldListItemElement.addEventListener('dragleave', (ev) => {
+    if (!isOnlyMoveAllowed(ev)) {
+      return;
+    }
+
     ev.currentTarget.classList.remove(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
   });
 
-  element.addEventListener('drop', (ev) => {
+  inputFieldListItemElement.addEventListener('drop', (ev) => {
     ev.preventDefault();
+
+    if (!isOnlyMoveAllowed(ev)) {
+      return;
+    }
 
     const dragElementId = ev.dataTransfer.getData('text/plain');
     const dragElement = document.getElementById(dragElementId);
-
     const dropElement = ev.currentTarget;
-    dropElement.parentNode.insertBefore(dragElement, dropElement);
+
+    const inputFieldListElement = document.getElementById(inputFieldListId);
+
+    inputFieldListElement.insertBefore(dragElement, dropElement);
     dropElement.classList.remove(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
   });
 
-  element.addEventListener('dragend', () => {
-    element.classList.remove(INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS);
+  inputFieldListItemElement.addEventListener('dragend', () => {
+    inputFieldListItemElement.classList.remove(
+      INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS
+    );
   });
+};
+
+/**
+ * 移動のみが許可されているか判定する
+ * @param  {object} ev drag&drop時のEvent
+ * @return {boolean} true:移動許可, false:移動不可
+ */
+const isOnlyMoveAllowed = (ev) => {
+  return ev.dataTransfer.effectAllowed === 'move';
 };
 
 /**
@@ -223,7 +267,7 @@ const setInputFieldListItemDragAndDropEvent = (id) => {
  */
 const setRhymeInputFieldListDeleteLinkClickEvent = () => {
   const rhymeInputFieldListItemElementList = document.querySelectorAll(
-    `#${RHYME_INPUT_FIELD_LIST_CLASS} .${INPUT_FIELD_LIST_ITEM_CLASS}`
+    `#${RHYME_INPUT_FIELD_LIST_ID} .${INPUT_FIELD_LIST_ITEM_CLASS}`
   );
   rhymeInputFieldListItemElementList.forEach(
     (rhymeInputFieldListItemElement) => {
@@ -247,7 +291,7 @@ const setDeleteClickEvent = (itemElement, DeleteElement) => {
     itemElement.remove();
 
     const rhymeInputFieldListItemElementList = document.querySelectorAll(
-      `#${RHYME_INPUT_FIELD_LIST_CLASS} .${INPUT_FIELD_LIST_ITEM_CLASS}`
+      `#${RHYME_INPUT_FIELD_LIST_ID} .${INPUT_FIELD_LIST_ITEM_CLASS}`
     );
 
     if (
