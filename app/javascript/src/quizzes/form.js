@@ -274,24 +274,25 @@ const setRhymeInputFieldListDeleteLinkClickEvent = () => {
   );
   rhymeInputFieldListItemElementList.forEach(
     (rhymeInputFieldListItemElement) => {
-      const rhymeInputFieldListItemDeleteLinkElement =
-        rhymeInputFieldListItemElement.querySelector(`.${LINK_DELETE_CLASS}`);
-      setDeleteClickEvent(
-        rhymeInputFieldListItemElement,
-        rhymeInputFieldListItemDeleteLinkElement
-      );
+      setLinkDeleteClickEvent(rhymeInputFieldListItemElement.id);
     }
   );
 };
 
 /**
- * 母音の入力欄のに削除リンククリック時のEventを設定する
- * @param  {object} itemElement 削除するElement
- * @param  {object} DeleteElement 削除Element
+ * 母音の入力欄の削除リンククリック時のEventを設定する
+ * @param  {string} inputFeildListItemId 入力欄のID
  */
-const setDeleteClickEvent = (itemElement, DeleteElement) => {
-  DeleteElement.addEventListener('click', () => {
-    itemElement.remove();
+const setLinkDeleteClickEvent = (inputFeildListItemId) => {
+  const inputFeildListItemElement =
+    document.getElementById(inputFeildListItemId);
+
+  const linkDeleteElement = inputFeildListItemElement.querySelector(
+    `.${LINK_DELETE_CLASS}`
+  );
+
+  linkDeleteElement.addEventListener('click', () => {
+    inputFeildListItemElement.remove();
 
     const rhymeInputFieldListItemElementList = document.querySelectorAll(
       `#${RHYME_INPUT_FIELD_LIST_ID} .${INPUT_FIELD_LIST_ITEM_CLASS}`
@@ -361,10 +362,7 @@ const addRhymeInputFieldListItem = () => {
     rhymeInputFieldListElement.id
   );
 
-  setDeleteClickEvent(
-    addElement,
-    addElement.querySelector(`.${LINK_DELETE_CLASS}`)
-  );
+  setLinkDeleteClickEvent(addElement.id);
 
   const rhymeInputFieldListItemElementList = document.querySelectorAll(
     `.${INPUT_FIELD_LIST_ITEM_CLASS}`
