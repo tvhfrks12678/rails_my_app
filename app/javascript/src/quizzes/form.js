@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 });
 
 const initializeQuizForm = () => {
-  setRhymeTextBoxChangeEvent();
+  // setRhymeTextBoxChangeEvent();
   setSelectBoxValueChoiceRhime();
   setChoiceInputFieldListDragAndDropEvent();
   setLinkAddChoiceClickEvent();
@@ -31,17 +31,17 @@ const initializeQuizForm = () => {
 /**
  * 母音の入力欄の値が変更された場合のイベントを設定する
  */
-const setRhymeTextBoxChangeEvent = () => {
-  const rhymeTextBoxElementList = document.querySelectorAll(
-    TEXTBOX_SELECTOR_RHYME
-  );
+// const setRhymeTextBoxChangeEvent = () => {
+//   const rhymeTextBoxElementList = document.querySelectorAll(
+//     TEXTBOX_SELECTOR_RHYME
+//   );
 
-  rhymeTextBoxElementList.forEach((rhymeTextBoxElement) => {
-    rhymeTextBoxElement.addEventListener('change', (event) => {
-      setSelectBoxValueChoiceRhime();
-    });
-  });
-};
+//   rhymeTextBoxElementList.forEach((rhymeTextBoxElement) => {
+//     rhymeTextBoxElement.addEventListener('change', (event) => {
+//       setSelectBoxValueChoiceRhime();
+//     });
+//   });
+// };
 
 /**
  * 母音の入力欄の値を選択肢の母音のセレクトボックスに設定する
@@ -186,12 +186,14 @@ const setRhymeInputFieldListEventListener = () => {
 
   rhymeInputFieldListItemElementList.forEach(
     (rhymeInputFieldListItemElement) => {
-      setInputFieldListItemDragAndDropEvent(
-        rhymeInputFieldListItemElement.id,
+      const rhymeInputFieldList = document.getElementById(
         RHYME_INPUT_FIELD_LIST_ID
       );
 
-      setLinkDeleteClickEvent(rhymeInputFieldListItemElement.id);
+      setInputFieldListItmEventListner(
+        rhymeInputFieldListItemElement,
+        rhymeInputFieldList
+      );
     }
   );
 };
@@ -331,12 +333,7 @@ const addRhymeInputFieldListItem = () => {
 
   rhymeInputFieldListElement.insertAdjacentElement('beforeend', addElement);
 
-  setInputFieldListItemDragAndDropEvent(
-    addElement.id,
-    rhymeInputFieldListElement.id
-  );
-
-  setLinkDeleteClickEvent(addElement.id);
+  setInputFieldListItmEventListner(addElement, rhymeInputFieldListElement);
 
   switchDisplayOfLinkAddRhyme();
 };
@@ -381,4 +378,27 @@ const switchDisplayOfLinkAddRhyme = () => {
     return;
   }
   linkAddRhymeElement.classList.remove(CLASS_ELEMENT_DISPLAY_NONE);
+};
+
+/**
+ * 入力欄のListのItemにEventListnerを設定する
+ */
+const setInputFieldListItmEventListner = (
+  inputFieldListItemElement,
+  inputFieldListElement
+) => {
+  setInputFieldListItemDragAndDropEvent(
+    inputFieldListItemElement.id,
+    inputFieldListElement.id
+  );
+
+  setLinkDeleteClickEvent(inputFieldListItemElement.id);
+
+  const rhymeTextBoxElement = inputFieldListItemElement.querySelector(
+    TEXTBOX_SELECTOR_RHYME
+  );
+
+  rhymeTextBoxElement.addEventListener('change', () => {
+    setSelectBoxValueChoiceRhime();
+  });
 };
