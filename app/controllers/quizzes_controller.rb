@@ -9,8 +9,8 @@ class QuizzesController < ApplicationController
 
   def create
     save_quiz(quiz_params)
-    rhyme_list = get_save_rhyme_list(rhyme_params)
-    save_choice(choice_params, rhyme_list)
+    rhyme_ids_by_rhyme_content = get_rhyme_ids_by_rhyme_content_and_save_rhyme(rhyme_params)
+    save_choice(choice_params, rhyme_ids_by_rhyme_content)
   end
 
   def save_quiz(quiz_params)
@@ -18,35 +18,26 @@ class QuizzesController < ApplicationController
     @quiz.save
   end
 
-  def get_save_rhyme_list(rhyme_params)
-    rhyme_list = []
+  def get_rhyme_ids_by_rhyme_content_and_save_rhyme(rhyme_params)
+    rhyme_ids_by_rhyme_content = {}
     rhyme_params.each do |rhyme_param|
+      next if rhyme_param.empty?
+
       rhyme = Rhyme.find_or_create_by(rhyme_param)
-      rhyme_list << rhyme unless rhyme.id.nil?
+      rhyme_ids_by_rhyme_content[rhyme_param[:content].to_sym] = rhyme.id
     end
-    rhyme_list
+    rhyme_ids_by_rhyme_content
   end
 
-  def save_choice(choice_params, rhyme_list)
-    choice_params.each_with_index do |choice_param, idx|
+  def save_choice(choice_params, rhyme_ids_by_rhyme_content)
+    choice_params.each do |choice_param|
       next if choice_param[:content].empty?
 
-      choice_rhyme = get_rhyme(idx, rhyme_list)
+      choice_rhyme_id = choice_param[:rhyme].empty? ? nil : rhyme_ids_by_rhyme_content[choice_param[:rhyme].to_sym]
 
-      choice = @quiz.choices.build(content: choice_param[:content], rhyme_id: choice_rhyme.id)
+      choice = @quiz.choices.build(content: choice_param[:content], rhyme_id: choice_rhyme_id)
       choice.save
     end
-  end
-
-  def get_rhyme(idx, rhyme_list)
-    rhyme_content = Rhyme.new
-    params[:answer][:"rhyme_0#{idx}"].each_with_index do |rhyme, rhyme_idx|
-      if rhyme[:check].present?
-        rhyme_content = rhyme_list[rhyme_idx]
-        break
-      end
-    end
-    rhyme_content
   end
 
   private
@@ -56,7 +47,7 @@ class QuizzesController < ApplicationController
   end
 
   def choice_params
-    params.require(:choice).map { |choice| choice.permit(:content) }
+    params.require(:choice).map { |choice| choice.permit(:content, :rhyme) }
   end
 
   def rhyme_params
