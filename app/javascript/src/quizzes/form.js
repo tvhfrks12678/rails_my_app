@@ -1,47 +1,408 @@
+const CHOICE_INPUT_FIELD_ID = 'choice_input_field';
+
+const CHOICE_INPUT_FIELD_LIST_ID = 'choice_input_field_list';
 const INPUT_FIELD_LIST_ITEM_CLASS = 'input_field_list_item';
-const RHYME_INPUT_FIELD_LIST_ID = 'rhyme_input_field_list';
+const INPUT_FIELD_LIST_CLASS = 'input_field_list';
+
+const DRAG_AND_DROP_ICON_CLASS = 'fa-sort';
+const DELETE_ICON_CLASS = 'fa-trash';
+const ICON_ADD_CLASS = 'fa-plus-circle';
+const ICON_CLICK_DISABLE_CLASS = 'icon_click_disable';
+
 const INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS = 'input_field_list_item_dragstart';
 const INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS = 'input_field_list_item_dragover';
 
-const LINK_DELETE_CLASS = 'link_delete';
+const CHOICE_INPUT_FIELD_LIST_ITEM_MAX = 10;
+const CHOICE_INPUT_FIELD_LIST_ITEM_MIN = 3;
+
 const RHYME_INPUT_FIELD_LIST_ITEM_MIN = 1;
-
-const RHYME_INPUT_FIELD_LIST_ITEM_CLASS = 'rhyme_input_field_list_item';
-
-const DRAG_AND_DROP_ICON_CLASS = 'drag_and_drop_mark';
-
-const LINK_ADD_RHYME_ID = 'link_add_rhyme';
-
 const RHYME_INPUT_FIELD_LIST_ITEM_MAX = 5;
+
+const ICON_ADD_CHOICE_INPUT_FIELD_LIST_ITEM =
+  'icon_add_choice_input_field_list_item';
+
+const RHYME_INPUT_FIELD_ID = 'rhyme_input_field';
+const RHYME_INPUT_FIELD_LIST_ID = 'rhyme_input_field_list';
+
+const CHOICE_INPUT_FIELD_LIST_ITEM_CONTENT_STRING_HTML = `
+  <div>
+    <i class="fa fa-sort fa-lg icon_action icon_sort_input_field_list_item" aria-hidden="true" draggable="true"></i>
+  </div>
+  <div class="input_field_list_item_box">
+    <input name="choice[][content]" class="form-control" type="text">
+  </div>
+  <div class="input_field_list_item_box">
+    <select name="choice[][rhyme]" class="form-control"><option selected="selected" value="">韻なし</option></select>
+  </div>
+  <div>
+    <i class="fa fa-trash fa-lg icon_action icon_delete_input_field_list_item" aria-hidden="true"></i>
+  </div>
+`;
+
+const CHOICE_INPUT_FIELD_LIST_ITEM_PREFIX_ID = 'choice_input_field_id_';
+
+const RHYME_INPUT_FIELD_LIST_ITEM_CONTENT_STRING_HTML = `
+  <div>
+  <i class="fa fa-sort fa-lg icon_action icon_sort_input_field_list_item" aria-hidden="true" draggable="true"></i>
+  </div>
+  <div class="input_field_list_item_box">
+    <input name="rhyme[][content]" class="form-control" type="text">
+  </div>
+  <div>
+  <i class="fa fa-trash fa-lg icon_action icon_delete_input_field_list_item" aria-hidden="true"></i>
+  </div>
+`;
+
+const RHYME_INPUT_FIELD_LIST_ITEM_PREFIX_ID = 'rhyme_input_field_id_';
+
+const TEXTBOX_SELECTOR_RHYME = "input[name='rhyme[][content]']";
+const SELECTBOX_SELECTOR_CHOICE_RHYME = 'select[name="choice[][rhyme]"]';
+const SELECTBOX_OPTION_INIT_ITEM = '韻なし';
+const SELECTBOX_FADE_IN_TIME = '1500';
 
 window.addEventListener('DOMContentLoaded', (event) => {
   initializeQuizForm();
 });
 
 const initializeQuizForm = () => {
-  // setRhymeTextBoxChangeEvent();
-  setSelectBoxValueChoiceRhime();
-  setChoiceInputFieldListDragAndDropEvent();
-  setLinkAddChoiceClickEvent();
+  setChoiceInputFieldEventListner();
 
-  setRhymeInputFieldListEventListener();
-  setLinkAddRhymeInputFieldListItemClickEvent();
+  setRhymeInputFieldEventListner();
+};
+
+const setChoiceInputFieldEventListner = () => {
+  const InputFieldElement = document.getElementById(CHOICE_INPUT_FIELD_ID);
+  setInputFieldListEventLister(
+    CHOICE_INPUT_FIELD_LIST_ID,
+    InputFieldElement,
+    CHOICE_INPUT_FIELD_LIST_ITEM_MIN
+  );
+
+  setIconAddInputFieldClickEvent(
+    InputFieldElement,
+    CHOICE_INPUT_FIELD_LIST_ITEM_PREFIX_ID,
+    CHOICE_INPUT_FIELD_LIST_ITEM_CONTENT_STRING_HTML,
+    CHOICE_INPUT_FIELD_LIST_ITEM_MAX,
+    CHOICE_INPUT_FIELD_LIST_ITEM_MIN
+  );
+  switchInputFieldListDeleteIconDisable(
+    InputFieldElement,
+    CHOICE_INPUT_FIELD_LIST_ITEM_MIN
+  );
+};
+
+const setRhymeInputFieldEventListner = () => {
+  const rhymeInputFieldElement = document.getElementById(RHYME_INPUT_FIELD_ID);
+  setInputFieldListEventLister(
+    RHYME_INPUT_FIELD_LIST_ID,
+    rhymeInputFieldElement,
+    RHYME_INPUT_FIELD_LIST_ITEM_MIN
+  );
+
+  setIconAddInputFieldClickEvent(
+    rhymeInputFieldElement,
+    RHYME_INPUT_FIELD_LIST_ITEM_PREFIX_ID,
+    RHYME_INPUT_FIELD_LIST_ITEM_CONTENT_STRING_HTML,
+    RHYME_INPUT_FIELD_LIST_ITEM_MAX,
+    RHYME_INPUT_FIELD_LIST_ITEM_MIN
+  );
+
+  switchInputFieldListDeleteIconDisable(
+    rhymeInputFieldElement,
+    RHYME_INPUT_FIELD_LIST_ITEM_MIN
+  );
+
+  setRhymeTextBoxChangeEvent();
+};
+
+/**
+ * 入力欄にEventを設定する
+ * @param  {string} inputFieldListId 入力欄のID
+ */
+const setInputFieldListEventLister = (
+  inputFieldListId,
+  inputFieldElement,
+  inputFieldListItemMin
+) => {
+  const inputFieldListElement = document.getElementById(inputFieldListId);
+  const inputFieldListItemElementList = inputFieldListElement.querySelectorAll(
+    `.${INPUT_FIELD_LIST_ITEM_CLASS}`
+  );
+  inputFieldListItemElementList.forEach((inputFieldListItemElement) => {
+    setInputFieldListItemDragAndDropEvent(
+      inputFieldListItemElement,
+      inputFieldListElement
+    );
+    setInputFieldListItemDeleteIconClickEvent(
+      inputFieldListItemElement,
+      inputFieldElement,
+      inputFieldListItemMin
+    );
+  });
+};
+
+/**
+ * 入力欄にドラッグ＆ドロップのEventを設定する
+ * @param {Object} inputFieldListItemElement 入力欄のリストのアイテムのElement
+ * @param {Object} inputFieldListElement 入力欄のリストのElement
+ */
+const setInputFieldListItemDragAndDropEvent = (
+  inputFieldListItemElement,
+  inputFieldListElement
+) => {
+  const inputFeildMoveIcon = inputFieldListItemElement.querySelector(
+    `.${DRAG_AND_DROP_ICON_CLASS}`
+  );
+
+  inputFeildMoveIcon.addEventListener('dragstart', (ev) => {
+    ev.dataTransfer.setData('text/plain', inputFieldListItemElement.id);
+    inputFieldListItemElement.classList.add(
+      INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS
+    );
+    // ev.dataTransfer.dropEffect = 'move';
+    //ev.dataTransfer.effectAllowed = 'move';
+  });
+
+  inputFieldListItemElement.addEventListener('dragover', (ev) => {
+    ev.preventDefault();
+
+    // if (!ev.dataTransfer.types.includes('text/plain')) {
+    //   return;
+    // }
+
+    // if (!inputFieldListElement.contains(ev.toElement)) {
+    //   return;
+    // }
+
+    // if (!inputFieldListElement.contains(ev.currentTarget)) {
+    //   return;
+    // }
+
+    // if (!ev.dataTransfer.dropEffect === 'move') {
+    //   return;
+    // }
+
+    ev.currentTarget.classList.add(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
+  });
+
+  inputFieldListItemElement.addEventListener('dragleave', (ev) => {
+    ev.currentTarget.classList.remove(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
+  });
+
+  inputFieldListItemElement.addEventListener('drop', (ev) => {
+    ev.preventDefault();
+    // if (!isOnlyMoveAllowed(ev)) {
+    //   return;
+    // }
+
+    const dragElementId = ev.dataTransfer.getData('text/plain');
+    const dragElement = document.getElementById(dragElementId);
+    const dropElement = ev.currentTarget;
+
+    dropElement.classList.remove(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
+
+    if (!inputFieldListElement.contains(dragElement)) {
+      return;
+    }
+
+    inputFieldListElement.insertBefore(dragElement, dropElement);
+  });
+
+  inputFieldListItemElement.addEventListener('dragend', () => {
+    inputFieldListItemElement.classList.remove(
+      INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS
+    );
+  });
+};
+
+/**
+ * 移動のみが許可されているか判定する
+ * @param  {Object} ev drag&drop時のEvent
+ * @return {boolean} true:移動許可, false:移動不可
+ */
+// const isOnlyMoveAllowed = (ev) => {
+//   return ev.dataTransfer.effectAllowed === 'move';
+// };
+
+/**
+ * 母音の入力欄の削除リンククリック時のEventを設定する
+ * @param  {Object} inputFeildListItemElement 入力欄のListのItemのElement
+ */
+const setInputFieldListItemDeleteIconClickEvent = (
+  inputFeildListItemElement,
+  inputFeildElement,
+  inputFeildListItemMin
+) => {
+  const deleteIconElement = inputFeildListItemElement.querySelector(
+    `.${DELETE_ICON_CLASS}`
+  );
+
+  deleteIconElement.addEventListener('click', () => {
+    inputFeildListItemElement.remove();
+
+    switchInputFieldListDeleteIconDisable(
+      inputFeildElement,
+      inputFeildListItemMin
+    );
+
+    const addIconElement = inputFeildElement.querySelector(
+      `.${ICON_ADD_CLASS}`
+    );
+
+    addIconElement.classList.remove(ICON_CLICK_DISABLE_CLASS);
+  });
+};
+
+/**
+ * 入力欄のListのItemの削除IconのDisableを切り替える
+ */
+const switchInputFieldListDeleteIconDisable = (
+  inputFieldElement,
+  inputFeildListItemMin
+) => {
+  const deleteIconElementList = inputFieldElement.querySelectorAll(
+    `.${DELETE_ICON_CLASS}`
+  );
+  if (deleteIconElementList.length <= inputFeildListItemMin) {
+    deleteIconElementList.forEach((deleteIconElement) => {
+      deleteIconElement.classList.add(ICON_CLICK_DISABLE_CLASS);
+    });
+    return;
+  }
+
+  deleteIconElementList.forEach((deleteIconElement) => {
+    deleteIconElement.classList.remove(ICON_CLICK_DISABLE_CLASS);
+  });
+};
+
+const setIconAddClickEvent = (inputFieldElement, inputFieldListItemMax) => {
+  iconAddElement = inputFieldElement.querySelector(`.${ICON_ADD_CLASS}`);
+
+  iconAddElement.addEventListener('click', () => {
+    addChoiceInputFieldListItem(inputFieldElement);
+
+    const inputFieldListItemCount = inputFieldElement.querySelectorAll(
+      `.${INPUT_FIELD_LIST_ITEM_CLASS}`
+    ).length;
+
+    if (inputFieldListItemCount >= inputFieldListItemMax) {
+      iconAddElement.classList.add(ICON_CLICK_DISABLE_CLASS);
+    }
+  });
+};
+
+const setIconAddInputFieldClickEvent = (
+  inputFieldElement,
+  inputfieldListItemPrefixId,
+  inputfieldListItemContent,
+  inputFieldListItemMax,
+  inputFieldListItemMin
+) => {
+  const iconAddElement = inputFieldElement.querySelector(`.${ICON_ADD_CLASS}`);
+  iconAddElement.addEventListener('click', () => {
+    const addInputFieldListItemElement = createAddInputFieldListItemElement(
+      inputfieldListItemPrefixId,
+      inputfieldListItemContent
+    );
+
+    addInputFieldListItem(
+      inputFieldElement,
+      addInputFieldListItemElement,
+      inputFieldListItemMin
+    );
+
+    const inputFieldListItemCount = inputFieldElement.querySelectorAll(
+      `.${INPUT_FIELD_LIST_ITEM_CLASS}`
+    ).length;
+
+    if (inputFieldListItemCount >= inputFieldListItemMax) {
+      iconAddElement.classList.add(ICON_CLICK_DISABLE_CLASS);
+    }
+
+    switchInputFieldListDeleteIconDisable(
+      inputFieldElement,
+      inputFieldListItemMin
+    );
+  });
+};
+
+const addInputFieldListItem = (
+  inputFieldElement,
+  addInputFieldListItemElement,
+  inputFieldListItemMin
+) => {
+  inputFieldListElement = inputFieldElement.querySelector(
+    `.${INPUT_FIELD_LIST_CLASS}`
+  );
+
+  inputFieldListElement.insertAdjacentElement(
+    'beforeend',
+    addInputFieldListItemElement
+  );
+
+  setInputFieldListItemEventLister(
+    addInputFieldListItemElement,
+    inputFieldListElement,
+    inputFieldElement,
+    inputFieldListItemMin
+  );
+};
+
+const createAddInputFieldListItemElement = (prefixId, listItemContent) => {
+  let addInputFieldListItemElement = document.createElement('li');
+  const num = new Date().getTime().toString();
+
+  const inputFieldId = prefixId + num;
+  addInputFieldListItemElement.id = inputFieldId;
+  addInputFieldListItemElement.classList.add(INPUT_FIELD_LIST_ITEM_CLASS);
+  addInputFieldListItemElement.insertAdjacentHTML(
+    'afterbegin',
+    listItemContent
+  );
+
+  const selectBoxElement = addInputFieldListItemElement.querySelector(
+    "input[name='rhyme[][content]']"
+  );
+
+  if (!(selectBoxElement === null)) {
+    selectBoxElement.addEventListener('change', () => {
+      setSelectBoxValueChoiceRhime();
+    });
+  }
+
+  return addInputFieldListItemElement;
+};
+
+const setInputFieldListItemEventLister = (
+  inputFieldListItemElement,
+  inputFieldListElement,
+  inputFieldElement,
+  inputFieldListItemMin
+) => {
+  setInputFieldListItemDragAndDropEvent(
+    inputFieldListItemElement,
+    inputFieldListElement
+  );
+  setInputFieldListItemDeleteIconClickEvent(
+    inputFieldListItemElement,
+    inputFieldElement,
+    inputFieldListItemMin
+  );
 };
 
 /**
  * 母音の入力欄の値が変更された場合のイベントを設定する
  */
-// const setRhymeTextBoxChangeEvent = () => {
-//   const rhymeTextBoxElementList = document.querySelectorAll(
-//     TEXTBOX_SELECTOR_RHYME
-//   );
-
-//   rhymeTextBoxElementList.forEach((rhymeTextBoxElement) => {
-//     rhymeTextBoxElement.addEventListener('change', (event) => {
-//       setSelectBoxValueChoiceRhime();
-//     });
-//   });
-// };
+const setRhymeTextBoxChangeEvent = () => {
+  const rhymeTextBoxElementList = document.querySelectorAll(
+    TEXTBOX_SELECTOR_RHYME
+  );
+  rhymeTextBoxElementList.forEach((rhymeTextBoxElement) => {
+    rhymeTextBoxElement.addEventListener('change', (event) => {
+      setSelectBoxValueChoiceRhime();
+    });
+  });
+};
 
 /**
  * 母音の入力欄の値を選択肢の母音のセレクトボックスに設定する
@@ -78,327 +439,5 @@ const setSelectBoxValueChoiceRhime = () => {
       [{ opacity: '0' }, { opacity: '1' }],
       SELECTBOX_FADE_IN_TIME
     );
-  });
-};
-
-/**
- * 選択肢の入力欄のリストにドラッグ＆ドロップのEventを設定する
- */
-const setChoiceInputFieldListDragAndDropEvent = () => {
-  document.querySelectorAll('.choice_input_field').forEach((elm) => {
-    setChoiceInputFieldDragAndDropEvent(elm.id);
-  });
-};
-
-/**
- * 選択肢の入力欄にドラッグ＆ドロップのEventを設定する
- */
-const setChoiceInputFieldDragAndDropEvent = (id) => {
-  const elm = document.getElementById(id);
-  elm.ondragstart = function () {
-    event.dataTransfer.setData('text/plain', event.target.id);
-    this.style.opacity = '0.4';
-  };
-  elm.ondragover = function () {
-    event.preventDefault();
-    this.style.borderTop = '2px solid #0074D9';
-  };
-  elm.ondragleave = function () {
-    this.style.borderTop = '';
-  };
-  elm.ondrop = function () {
-    event.preventDefault();
-    let id = event.dataTransfer.getData('text/plain');
-    let elm_drag = document.getElementById(id);
-    this.parentNode.insertBefore(elm_drag, this);
-    this.style.borderTop = '';
-    elm_drag.style.opacity = '1';
-  };
-};
-
-/**
- * 選択肢追加ボタンのクリック時の処理を設定する
- */
-const setLinkAddChoiceClickEvent = () => {
-  const linkAddChoiceElement = document.getElementById('link_add_choice');
-  linkAddChoiceElement.addEventListener('click', (event) => {
-    addChoiceInputField();
-  });
-};
-
-/**
- * 選択肢入力欄を追加する
- */
-const addChoiceInputField = () => {
-  const choiceInputFeildListElement = document.querySelector(
-    '#choice_input_field_list'
-  );
-
-  const num = new Date().getTime().toString();
-
-  const selectBoxOptions = document.querySelector(
-    SELECTBOX_SELECTOR_CHOICE_RHYME
-  ).innerHTML;
-
-  const element = `<li id="choice_input_field_id_${num}" class="row choice_input_field" draggable="true">
-    <div class="col-md-1 drag_and_drop_mark"quq></div>
-    <div class="col-md-5">
-    <input type="text" name="choice[][content]" id="txt_choice_id_${num}" value="" class="form-control">
-    </div>
-    <div class="col-md-5">
-    <select name="choice[][rhyme]" id="select_choice_rhyme_id_${num}" class="form-control">${selectBoxOptions}</select>
-    </div>
-    <div class="col-md-1">
-      <a onclick="deleteChoiceField('choice_input_field_id_${num}');" id="link_delete_choice_0" class="link_delete_choice link_delete" href="javascript:void(0);">×</a> 
-    </div>
-    </li>`;
-
-  choiceInputFeildListElement.insertAdjacentHTML('beforeend', element);
-
-  setChoiceInputFieldDragAndDropEvent(`choice_input_field_id_${num}`);
-
-  switchDisplayOfLinkDeleteChoice();
-
-  const choiceInputFieldCount = choiceInputFeildListElement.querySelectorAll(
-    '.choice_input_field'
-  ).length;
-
-  if (choiceInputFieldCount >= CHOICE_INPUT_FIELD_MAX) {
-    hideLinkAddChiceInputField();
-  }
-};
-
-/**
- * 選択肢入力欄を非表示にする
- */
-const hideLinkAddChiceInputField = () => {
-  document
-    .getElementById(SELECTOR_LINK_ADD_CHOICE_ID)
-    .classList.add(CLASS_ELEMENT_DISPLAY_NONE);
-};
-/**
- * 母音の入力欄のイベントリスナーを設定する
- */
-const setRhymeInputFieldListEventListener = () => {
-  const rhymeInputFieldListItemElementList = document.querySelectorAll(
-    `#${RHYME_INPUT_FIELD_LIST_ID} .${INPUT_FIELD_LIST_ITEM_CLASS}`
-  );
-
-  rhymeInputFieldListItemElementList.forEach(
-    (rhymeInputFieldListItemElement) => {
-      const rhymeInputFieldList = document.getElementById(
-        RHYME_INPUT_FIELD_LIST_ID
-      );
-
-      setInputFieldListItmEventListner(
-        rhymeInputFieldListItemElement,
-        rhymeInputFieldList
-      );
-    }
-  );
-};
-
-/**
- * 入力欄にドラッグ＆ドロップのEventを設定する
- * @param {string} inputFieldListItemId 入力欄のリストのアイテムのID
- * @param {string} inputFieldListId 入力欄のリストのID
- */
-const setInputFieldListItemDragAndDropEvent = (
-  inputFieldListItemId,
-  inputFieldListId
-) => {
-  const inputFieldListItemElement =
-    document.getElementById(inputFieldListItemId);
-
-  const inputFeildMoveIcon = inputFieldListItemElement.querySelector(
-    `.${DRAG_AND_DROP_ICON_CLASS}`
-  );
-
-  inputFeildMoveIcon.addEventListener('dragstart', (ev) => {
-    ev.dataTransfer.setData('text/plain', inputFieldListItemElement.id);
-    inputFieldListItemElement.classList.add(
-      INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS
-    );
-    ev.dataTransfer.effectAllowed = 'move';
-  });
-
-  inputFieldListItemElement.addEventListener('dragover', (ev) => {
-    ev.preventDefault();
-    if (!isOnlyMoveAllowed(ev)) {
-      return;
-    }
-
-    ev.currentTarget.classList.add(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
-  });
-
-  inputFieldListItemElement.addEventListener('dragleave', (ev) => {
-    if (!isOnlyMoveAllowed(ev)) {
-      return;
-    }
-
-    ev.currentTarget.classList.remove(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
-  });
-
-  inputFieldListItemElement.addEventListener('drop', (ev) => {
-    ev.preventDefault();
-
-    if (!isOnlyMoveAllowed(ev)) {
-      return;
-    }
-
-    const dragElementId = ev.dataTransfer.getData('text/plain');
-    const dragElement = document.getElementById(dragElementId);
-    const dropElement = ev.currentTarget;
-
-    const inputFieldListElement = document.getElementById(inputFieldListId);
-
-    inputFieldListElement.insertBefore(dragElement, dropElement);
-    dropElement.classList.remove(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
-  });
-
-  inputFieldListItemElement.addEventListener('dragend', () => {
-    inputFieldListItemElement.classList.remove(
-      INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS
-    );
-  });
-};
-
-/**
- * 移動のみが許可されているか判定する
- * @param  {object} ev drag&drop時のEvent
- * @return {boolean} true:移動許可, false:移動不可
- */
-const isOnlyMoveAllowed = (ev) => {
-  return ev.dataTransfer.effectAllowed === 'move';
-};
-
-/**
- * 母音の入力欄の削除リンククリック時のEventを設定する
- * @param  {string} inputFeildListItemId 入力欄のID
- */
-const setLinkDeleteClickEvent = (inputFeildListItemId) => {
-  const inputFeildListItemElement =
-    document.getElementById(inputFeildListItemId);
-
-  const linkDeleteElement = inputFeildListItemElement.querySelector(
-    `.${LINK_DELETE_CLASS}`
-  );
-
-  linkDeleteElement.addEventListener('click', () => {
-    inputFeildListItemElement.remove();
-
-    switchDisplayOfLinkAddRhyme();
-
-    const rhymeInputFieldListItemElementList = document.querySelectorAll(
-      `#${RHYME_INPUT_FIELD_LIST_ID} .${INPUT_FIELD_LIST_ITEM_CLASS}`
-    );
-
-    if (
-      rhymeInputFieldListItemElementList.length >
-      RHYME_INPUT_FIELD_LIST_ITEM_MIN
-    ) {
-      return;
-    }
-
-    rhymeInputFieldListItemElementList.forEach(
-      (rhymeInputFieldListItemElement) => {
-        rhymeInputFieldListItemElement
-          .querySelector(`.${LINK_DELETE_CLASS}`)
-          .classList.add(CLASS_ELEMENT_DISPLAY_NONE);
-      }
-    );
-  });
-};
-
-/**
- * 母音の入力欄の追加リンククリック時のEventを設定する
- */
-const setLinkAddRhymeInputFieldListItemClickEvent = () => {
-  const linkAddRhymeInputFieldListItem =
-    document.getElementById(LINK_ADD_RHYME_ID);
-  linkAddRhymeInputFieldListItem.addEventListener('click', () => {
-    addRhymeInputFieldListItem();
-  });
-};
-
-/**
- * 母音の入力欄を追加する
- */
-const addRhymeInputFieldListItem = () => {
-  const rhymeInputFieldListElement = document.querySelector(
-    `#${RHYME_INPUT_FIELD_LIST_ID}`
-  );
-
-  const addElement = createAddRhymeInputFieldListItemElement();
-
-  rhymeInputFieldListElement.insertAdjacentElement('beforeend', addElement);
-
-  setInputFieldListItmEventListner(addElement, rhymeInputFieldListElement);
-
-  switchDisplayOfLinkAddRhyme();
-};
-
-/**
- * 追加する母音の入力欄のElementを作成する
- */
-const createAddRhymeInputFieldListItemElement = () => {
-  const rhymeInputFieldListItemElement = document.querySelector(
-    `#${RHYME_INPUT_FIELD_LIST_ID} .${INPUT_FIELD_LIST_ITEM_CLASS}`
-  );
-
-  rhymeInputFieldListItemElement
-    .querySelector(`.${LINK_DELETE_CLASS}`)
-    .classList.remove(CLASS_ELEMENT_DISPLAY_NONE);
-
-  const addElement = rhymeInputFieldListItemElement.cloneNode(true);
-
-  addElement.querySelector(TEXTBOX_SELECTOR_RHYME).value = '';
-
-  const num = new Date().getTime().toString();
-
-  addElement.id = addElement.id.replace(/_\d+$/, `_${num}`);
-
-  return addElement;
-};
-
-/**
- * 母音の追加リンク
- */
-const switchDisplayOfLinkAddRhyme = () => {
-  const rhymeInputFieldListItemElementList = document.querySelectorAll(
-    `#${RHYME_INPUT_FIELD_LIST_ID} .${INPUT_FIELD_LIST_ITEM_CLASS}`
-  );
-
-  const linkAddRhymeElement = document.getElementById(LINK_ADD_RHYME_ID);
-
-  if (
-    rhymeInputFieldListItemElementList.length >= RHYME_INPUT_FIELD_LIST_ITEM_MAX
-  ) {
-    linkAddRhymeElement.classList.add(CLASS_ELEMENT_DISPLAY_NONE);
-    return;
-  }
-  linkAddRhymeElement.classList.remove(CLASS_ELEMENT_DISPLAY_NONE);
-};
-
-/**
- * 入力欄のListのItemにEventListnerを設定する
- */
-const setInputFieldListItmEventListner = (
-  inputFieldListItemElement,
-  inputFieldListElement
-) => {
-  setInputFieldListItemDragAndDropEvent(
-    inputFieldListItemElement.id,
-    inputFieldListElement.id
-  );
-
-  setLinkDeleteClickEvent(inputFieldListItemElement.id);
-
-  const rhymeTextBoxElement = inputFieldListItemElement.querySelector(
-    TEXTBOX_SELECTOR_RHYME
-  );
-
-  rhymeTextBoxElement.addEventListener('change', () => {
-    setSelectBoxValueChoiceRhime();
   });
 };

@@ -1,73 +1,87 @@
 <%= javascript_pack_tag 'quizzes/form' %>
 
-<% choice_num = 3 %>
-<% rhyme_word_num = 1 %>
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
 
 <%= form_with(model: @quiz, local: true) do |f| %>
 
-  <div class="input_item">
+  <%= render 'shared/error_messages', object: f.object %>
+
+  <div id="choice_input_field" class="input_field">
     <div class="item_title">
       <span>クイズの選択肢</span>
     </div>
 
-    <ul id="choice_input_field_list">
-      <li class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-5 item_name">選択肢</div>
-        <div class="col-md-5  item_name">母音</div>
-        <div class="col-md-1"></div>
+    <ul id="choice_input_field_list" class="input_field_list">
+      <li class="list_item_header">
+        <div>
+          <i class="fa fa-fire fa-lg icon_action visibility_hidden" aria-hidden="true"></i>
+        </div>
+
+        <div class="list_item_name input_field_list_item_box">選択肢</div>
+        <div class="list_item_name input_field_list_item_box">母音</div>
+
+        <div>
+          <i class="fa fa-fire fa-lg icon_action visibility_hidden" aria-hidden="true"></i>
+        </div>
       </li>
 
-      <% choice_num.times do |n| %>
-        <li id="choice_input_field_id_<%= n %>" class="row choice_input_field" draggable="true">
-          <div class="col-md-1 drag_and_drop_mark"></div>
-          <div class="col-md-5">
-            <%= text_field_tag 'choice[][content]', '', id: "txt_choice_id_#{n}", class: "form-control" %>
+      <% @choices.each_with_index do |choice, idx| %>
+        <li id="choice_input_field_id_<%= choice.id %>" class="input_field_list_item" >
+          <div>
+            <i class="fa fa-sort fa-lg icon_action icon_sort_input_field_list_item" aria-hidden="true" draggable="true"></i>
           </div>
-          <div class="col-md-5">
-            <%= select_tag "choice[][rhyme]", "", id: "select_choice_rhyme_id_#{n}", class: "form-control" %>
+
+          <div class="input_field_list_item_box">
+            <%= fields_for "choice[]" ,choice do |choice_form| %>
+              <%= choice_form.text_field :content, name: "choice[][content]" ,class: 'form-control ' %>
+              <%= render "shared/error_messages_for_attribute", object: choice, attribute: :content %>
+            <% end %>
           </div>
-          <div class="col-md-1">
-            <%= link_to "×", "javascript:void(0);", onclick: "deleteChoiceField('choice_input_field_id_#{n}');", id: "link_delete_choice_#{n}", class: "link_delete_choice element_display_none link_delete" %> 
+
+          <div class="input_field_list_item_box">
+            <%= select_tag "choice[][rhyme]", options_for_select(@select_box_choice_rhyme.map{|c|[c[:name], c[:id]]}, @choice_rhymes[idx]), id: "select_choice_rhyme_id_#{choice.id}", class: "form-control" %>
+          </div>
+
+          <div>
+            <i class="fa fa-trash fa-lg icon_action icon_delete_input_field_list_item" aria-hidden="true"></i>
           </div>
         </li>
       <% end %>
     </ul>
-    <%= link_to "＋選択肢の追加", "javascript:void(0);", id: "link_add_choice" %>
+
+    <div class="icon_add_potion">
+      <i class="fa fa-plus-circle fa-2x icon_action icon_add_input_field_list_item" aria-hidden="true">追加</i>
+    </div>
   </div>
 
-
-  <div class="input_item">
+  <div  id="rhyme_input_field" class="input_field">
     <div class="item_title">
       <span>韻の母音</span>
     </div>
 
-    <div class="row">
-      <div class="col-md-7">
-        <ul id="rhyme_input_field_list" class="input_field_list">
-          <% rhyme_word_num.times do |n| %>
-            <li id="rhyme_input_field_id_<%= n %>" class="row input_field_list_item rhyme_input_field_list_item">
-              <div class="col-md-2 drag_and_drop_mark" draggable="true"></div>
-              <div class="col-md-8">
-                <%= text_field_tag 'rhyme[][content]', '', id: "rhyme_id_#{n}", class: 'form-control txt_rhyme' %>
-              </div>
-              <div class="col-md-2">
-                <%= link_to "×", "javascript:void(0);", id: "link_delete_rhyme_#{n}", class: "link_delete element_display_none" %>
-              </div>
-            </li>
-          <% end %>
-        </ul>      
-      </div>
-      <div class="col-md-5"></div>
-    </div>
+    <ul id="rhyme_input_field_list" class="input_field_list">
+      <% @rhymes.each do |rhyme| %>
 
-    <div class="row">
-      <div class="col-md-7">
-        <%= link_to "javascript:void(0);", id: "link_add_rhyme", class: "link_add" do %>
-          <span class="link_add_mark">＋母音の追加</span>
-        <% end %>
-      </div>
-      <div class="col-md-5"></div>
+        <li id="rhyme_input_field_id_<%= rhyme.id %>" class="input_field_list_item">
+          <div>
+            <i class="fa fa-sort fa-lg icon_action icon_sort_input_field_list_item" aria-hidden="true" draggable="true"></i>
+          </div>
+
+          <div class="input_field_list_item_box">
+            <%= fields_for 'rhyme[]' ,rhyme do |rhyme_form| %>
+              <%= rhyme_form.text_field :content, name: "rhyme[][content]" ,class: 'form-control' %>
+              <%= render "shared/error_messages_for_attribute", object: rhyme, attribute: :content %>
+            <% end %>
+          </div>
+
+          <div>
+            <i class="fa fa-trash fa-lg icon_action icon_delete_input_field_list_item" aria-hidden="true"></i>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+    <div class="icon_add_potion">
+      <i class="fa fa-plus-circle fa-2x icon_action icon_add_input_field_list_item" aria-hidden="true">追加</i>
     </div>
   </div>
 
@@ -75,6 +89,7 @@
     <div class="item_title">
       <span>解説</span>
     </div>
+    <%= render "shared/error_messages_for_attribute", object: f.object, attribute: :commentary %>
     <%= f.text_area :commentary, class: 'form-control commentary' %>
 
     <div class="btn_quiz_post">
@@ -82,49 +97,3 @@
     </div>
   </div>
 <% end %>
-
-<script>
-
-  const SELECTOR_QUIZ_FORM = '.quiz_form';
-  const TEXTBOX_SELECTOR_RHYME = "input[name='rhyme[][content]']";
-  const SELECTBOX_SELECTOR_CHOICE_RHYME = 'select[name="choice[][rhyme]"]';
-  const SELECTBOX_OPTION_INIT_ITEM = '韻なし';
-  const SELECTBOX_FADE_IN_TIME = '1500';
-
-  const SELECTOR_LINK_ADD_CHOICE_ID = 'link_add_choice';
-  const CLASS_ELEMENT_DISPLAY_NONE = 'element_display_none';
-
-  const CHOICE_INPUT_FIELD_MAX = 10;
-  const CHOICE_INPUT_FIELD_MIN = 3;
-
-  const deleteChoiceField = (id) => {
-    document.getElementById(id).remove();
-    showLinkChiceInputField();
-    switchDisplayOfLinkDeleteChoice();
-  };
-
-  /**
-  * 選択肢入力欄を表示する
-  */
-  const showLinkChiceInputField = () => {
-    document
-      .getElementById(SELECTOR_LINK_ADD_CHOICE_ID)
-      .classList.remove(CLASS_ELEMENT_DISPLAY_NONE);
-  };
-
-  const switchDisplayOfLinkDeleteChoice = () => {
-    const linkDeleteChoiceElementList = document.querySelectorAll(
-      '.link_delete_choice'
-    );
-    if (linkDeleteChoiceElementList.length <= CHOICE_INPUT_FIELD_MIN) {
-      linkDeleteChoiceElementList.forEach((linkDeleteChoiceElement) => {
-        linkDeleteChoiceElement.classList.add(CLASS_ELEMENT_DISPLAY_NONE);
-      });
-      return;
-    }
-
-    linkDeleteChoiceElementList.forEach((linkDeleteChoiceElement) => {
-      linkDeleteChoiceElement.classList.remove(CLASS_ELEMENT_DISPLAY_NONE);
-    });
-  };
-</script>
