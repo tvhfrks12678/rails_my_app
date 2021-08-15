@@ -38,7 +38,7 @@ RSpec.describe 'UsersSignups', type: :system do
     expect(current_path).to eq users_path
     within '#error_explanation' do
       expect(page).to have_selector '.alert-danger', text: 'エラー'
-      user_input_items = %w[Name Email Password Password\ confirmation]
+      user_input_items = ['Name', 'Email', 'Password', 'Password confirmation']
       user_input_items.each do |user_input_item|
         expect(page).to have_content user_input_item
       end

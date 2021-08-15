@@ -38,7 +38,7 @@ RSpec.describe 'UsersLogins', type: :system do
     expect(current_path).to eq root_path
     within 'header > div > nav' do
       expect(page).to have_link 'Log in'
-      header_link_words = %w[投稿 Profile Setting Log\ out]
+      header_link_words = ['投稿', 'Profile', 'Setting', 'Log out']
       header_link_words.each do |header_link_word|
         expect(page).to_not have_link header_link_word
       end

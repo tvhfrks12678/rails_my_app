@@ -159,28 +159,10 @@ const setInputFieldListItemDragAndDropEvent = (
     inputFieldListItemElement.classList.add(
       INPUT_FIELD_LIST_ITEM_DRAGSTART_CLASS
     );
-    // ev.dataTransfer.dropEffect = 'move';
-    //ev.dataTransfer.effectAllowed = 'move';
   });
 
   inputFieldListItemElement.addEventListener('dragover', (ev) => {
     ev.preventDefault();
-
-    // if (!ev.dataTransfer.types.includes('text/plain')) {
-    //   return;
-    // }
-
-    // if (!inputFieldListElement.contains(ev.toElement)) {
-    //   return;
-    // }
-
-    // if (!inputFieldListElement.contains(ev.currentTarget)) {
-    //   return;
-    // }
-
-    // if (!ev.dataTransfer.dropEffect === 'move') {
-    //   return;
-    // }
 
     ev.currentTarget.classList.add(INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS);
   });
@@ -191,9 +173,6 @@ const setInputFieldListItemDragAndDropEvent = (
 
   inputFieldListItemElement.addEventListener('drop', (ev) => {
     ev.preventDefault();
-    // if (!isOnlyMoveAllowed(ev)) {
-    //   return;
-    // }
 
     const dragElementId = ev.dataTransfer.getData('text/plain');
     const dragElement = document.getElementById(dragElementId);
@@ -214,15 +193,6 @@ const setInputFieldListItemDragAndDropEvent = (
     );
   });
 };
-
-/**
- * 移動のみが許可されているか判定する
- * @param  {Object} ev drag&drop時のEvent
- * @return {boolean} true:移動許可, false:移動不可
- */
-// const isOnlyMoveAllowed = (ev) => {
-//   return ev.dataTransfer.effectAllowed === 'move';
-// };
 
 /**
  * 母音の入力欄の削除リンククリック時のEventを設定する

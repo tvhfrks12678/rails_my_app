@@ -2,9 +2,6 @@ class QuizzesController < ApplicationController
   MESSAGE_SUCCESS_QUIZ_POST = 'クイズを投稿しました'.freeze
   QUIZ_CHOICE_MIN = 3
 
-  SELECT_BOX_DEFAULT_NAME = '韻なし'.freeze
-  SELECT_BOX_DEFAULT_ID = ''.freeze
-
   def index
     @quizzes = Quiz.all.includes(:choices)
   end
@@ -18,6 +15,8 @@ class QuizzesController < ApplicationController
       @choices << choice
     end
 
+    @select_box_choice_rhyme = Rhyme.get_select_box_choice_rhyme(@rhymes)
+
     rhyme = Rhyme.new
     rhyme.id = SecureRandom.uuid
     @rhymes << rhyme
@@ -27,43 +26,63 @@ class QuizzesController < ApplicationController
     @quiz = Quiz.new
     @choices = []
     @rhymes = []
+
+    # 選択肢の入力欄の母音のSelectBoxに設定されている値の配列
     @choice_rhymes = []
-    @select_box_choice_rhyme = [{ id: SELECT_BOX_DEFAULT_ID, name: SELECT_BOX_DEFAULT_NAME }]
+
+    # 選択肢の入力欄の母音のSelectBoxの中身
+    @select_box_choice_rhyme = []
   end
 
   def create
     init_form
 
     ActiveRecord::Base.transaction do
-      isSavedQuiz = save_quiz?(quiz_params) && save_rhyme?(rhyme_params)
-      rhyme_ids_by_rhyme_content = get_rhyme_ids_by_rhyme_content
-      isSavedChoice = save_choice?(choice_params, rhyme_ids_by_rhyme_content)
-      isSavedQuiz &&= isSavedChoice
-      raise NotFoundException unless isSavedQuiz
+      unless save_input_quiz?
+        process_quiz_input_error
+        raise ActiveRecord::Rollback
+      end
+      flash[:success] = MESSAGE_SUCCESS_QUIZ_POST
+      redirect_to quizzes_path
     end
-    flash[:success] = MESSAGE_SUCCESS_QUIZ_POST
-    redirect_to quizzes_path
-  rescue StandardError => e
+  end
+
+  # クイズ情報に入力エラーがあった場合に行う処理
+  def process_quiz_input_error
+    @select_box_choice_rhyme = Rhyme.get_select_box_choice_rhyme(@rhymes)
+    @choice_rhymes = choice_params.pluck(:rhyme)
     render 'new'
   end
 
-  # TODO: 母音の入力チェックを実装する
-  # @quiz.errors.add(:choice_rhyme, '母音は２つ以上選択して下さい') unless @quiz.save
+  # 入力されたクイズ情報が保存できるか判定する
+  #
+  # @return [Boolean] true:入力エラーがない, false:入力エラーがある
+  def save_input_quiz?
+    is_saved_quiz = save_quiz?(quiz_params)
+    is_saved_rhyme = save_rhyme?(rhyme_params)
 
+    rhyme_ids_by_rhyme_content = Rhyme.get_rhyme_ids_by_rhyme_content(@rhymes)
+
+    is_saved_choice = save_choice?(choice_params, rhyme_ids_by_rhyme_content)
+    is_saved_quiz && is_saved_rhyme && is_saved_choice
+  end
+
+  # クイズを保存できるか判定する
+  #
+  # @param [ActionController::Parameters] quiz_params クイズの入力された値
+  # @return [Boolean] true:入力エラーがない, false:入力エラーがある
   def save_quiz?(quiz_params)
     @quiz = current_user.quizzes.build(quiz_params)
     @quiz.save
   end
 
+  # 母音を保存できるか判定する
+  #
+  # @param [ActionController::Parameters] rhyme_params 母音の入力欄の値
+  # @return [Boolean] true:入力エラーがない, false:入力エラーがある
   def save_rhyme?(rhyme_params)
     is_saved = true
     rhyme_params.each do |rhyme_param|
-      if rhyme_param[:content].empty?
-        rhyme = Rhyme.new(id: SecureRandom.random_number(64 << 64))
-        @rhymes << rhyme
-        next
-      end
-
       rhyme = Rhyme.find_or_initialize_by(rhyme_param)
 
       if rhyme.new_record? && !rhyme.save
@@ -76,37 +95,34 @@ class QuizzesController < ApplicationController
     is_saved
   end
 
-  def get_rhyme_ids_by_rhyme_content
-    rhyme_ids_by_rhyme_content = {}
-    @rhymes.each do |rhyme|
-      next if rhyme.content.nil?
-
-      rhyme_ids_by_rhyme_content[rhyme.content.to_sym] = rhyme.id
-
-      @select_box_choice_rhyme << { id: rhyme.content, name: rhyme.content }
-    end
-    rhyme_ids_by_rhyme_content
-  end
-
+  # 選択肢を保存できるか判定する
+  #
+  # @param [ActionController::Parameters] rhyme_params 選択肢の入力欄の値
+  # @return [Boolean] true:入力エラーがない, false:入力エラーがある
   def save_choice?(choice_params, rhyme_ids_by_rhyme_content)
     is_saved = true
     choice_params.each do |choice_param|
-      @choice_rhymes << choice_param[:rhyme]
+      choice = get_choice_by(choice_param, rhyme_ids_by_rhyme_content)
 
-      if choice_param[:content].empty?
-        choice = Choice.new(id: SecureRandom.random_number(64 << 64))
-        @choices << choice
-        next
-
+      unless choice.save
+        choice.id = SecureRandom.random_number(64 << 64)
+        is_saved = false
       end
-      choice_rhyme_id = choice_param[:rhyme].empty? ? nil : rhyme_ids_by_rhyme_content[choice_param[:rhyme].to_sym]
 
-      choice = @quiz.choices.build(content: choice_param[:content], rhyme_id: choice_rhyme_id)
-      is_saved = false unless choice.save
       @choices << choice
     end
 
     is_saved
+  end
+
+  # Choiceクラスを取得する
+  #
+  # @param [ActionController::Parameters] choice_param 選択肢の入力欄の値
+  # @param [Hash] rhyme_ids_by_rhyme_content 母音と母音のidの組み合わせ
+  # @return [Choice]
+  def get_choice_by(choice_param, rhyme_ids_by_rhyme_content)
+    choice_rhyme_id = rhyme_ids_by_rhyme_content[choice_param[:rhyme].to_sym]
+    @quiz.choices.build(content: choice_param[:content], rhyme_id: choice_rhyme_id)
   end
 
   private

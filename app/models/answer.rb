@@ -73,7 +73,7 @@ class Answer
     #
     # @param [Array<AnswerCombination>] answer_combinations
     # @param [Array<String>] select_choice_ids ChoiceモデルのidのArray
-    # @return [boolean] true:正解, false:不正解
+    # @return [Boolean] true:正解, false:不正解
     def correct?(answer_combinations, select_choice_ids)
       return false if select_choice_ids.nil?
 
