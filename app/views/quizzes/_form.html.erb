@@ -2,7 +2,7 @@
 
 <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
 
-<%= form_with(model: @quiz, local: true) do |f| %>
+<%= form_with(model: @quiz_input.quiz, local: true) do |f| %>
 
   <%= render 'shared/error_messages', object: f.object %>
 
@@ -25,7 +25,7 @@
         </div>
       </li>
 
-      <% @choices.each_with_index do |choice, idx| %>
+      <% @quiz_input.choices.each_with_index do |choice, idx| %>
         <li id="choice_input_field_id_<%= choice.id %>" class="input_field_list_item" >
           <div>
             <i class="fa fa-sort fa-lg icon_action icon_sort_input_field_list_item" aria-hidden="true" draggable="true"></i>
@@ -39,7 +39,7 @@
           </div>
 
           <div class="input_field_list_item_box">
-            <%= select_tag "choice[][rhyme]", options_for_select(@select_box_choice_rhyme.map{|c|[c[:name], c[:id]]}, @choice_rhymes[idx]), id: "select_choice_rhyme_id_#{choice.id}", class: "form-control" %>
+            <%= select_tag "choice[][rhyme]", options_for_select(@quiz_input.select_box_choice_rhyme.map{|c|[c[:name], c[:id]]}, @quiz_input.choice_rhymes[idx]), id: "select_choice_rhyme_id_#{choice.id}", class: "form-control" %>
           </div>
 
           <div>
@@ -60,7 +60,7 @@
     </div>
 
     <ul id="rhyme_input_field_list" class="input_field_list">
-      <% @rhymes.each do |rhyme| %>
+      <% @quiz_input.rhymes.each do |rhyme| %>
 
         <li id="rhyme_input_field_id_<%= rhyme.id %>" class="input_field_list_item">
           <div>

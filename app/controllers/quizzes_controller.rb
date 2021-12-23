@@ -1,41 +1,16 @@
 class QuizzesController < ApplicationController
   MESSAGE_SUCCESS_QUIZ_POST = 'クイズを投稿しました'.freeze
-  QUIZ_CHOICE_MIN = 3
 
   def index
     @quizzes = Quiz.all.includes(:choices)
   end
 
   def new
-    init_form
-
-    QUIZ_CHOICE_MIN.times do
-      choice = @quiz.choices.build
-      choice.id = SecureRandom.uuid
-      @choices << choice
-    end
-
-    @select_box_choice_rhyme = Rhyme.get_select_box_choice_rhyme(@rhymes)
-
-    rhyme = Rhyme.new
-    rhyme.id = SecureRandom.uuid
-    @rhymes << rhyme
-  end
-
-  def init_form
-    @quiz = Quiz.new
-    @choices = []
-    @rhymes = []
-
-    # 選択肢の入力欄の母音のSelectBoxに設定されている値の配列
-    @choice_rhymes = []
-
-    # 選択肢の入力欄の母音のSelectBoxの中身
-    @select_box_choice_rhyme = []
+    @quiz_input = QuizInput.new.init
   end
 
   def create
-    init_form
+    @quiz_input = QuizInput.new
 
     ActiveRecord::Base.transaction do
       unless save_input_quiz?
@@ -49,8 +24,8 @@ class QuizzesController < ApplicationController
 
   # クイズ情報に入力エラーがあった場合に行う処理
   def process_quiz_input_error
-    @select_box_choice_rhyme = Rhyme.get_select_box_choice_rhyme(@rhymes)
-    @choice_rhymes = choice_params.pluck(:rhyme)
+    @quiz_input.select_box_choice_rhyme = Rhyme.get_select_box_choice_rhyme(@quiz_input.rhymes)
+    @quiz_input.choice_rhymes = choice_params.pluck(:rhyme)
     render 'new'
   end
 
@@ -61,7 +36,7 @@ class QuizzesController < ApplicationController
     is_saved_quiz = save_quiz?(quiz_params)
     is_saved_rhyme = save_rhyme?(rhyme_params)
 
-    rhyme_ids_by_rhyme_content = Rhyme.get_rhyme_ids_by_rhyme_content(@rhymes)
+    rhyme_ids_by_rhyme_content = Rhyme.get_rhyme_ids_by_rhyme_content(@quiz_input.rhymes)
 
     is_saved_choice = save_choice?(choice_params, rhyme_ids_by_rhyme_content)
     is_saved_quiz && is_saved_rhyme && is_saved_choice
@@ -72,8 +47,8 @@ class QuizzesController < ApplicationController
   # @param [ActionController::Parameters] quiz_params クイズの入力された値
   # @return [Boolean] true:入力エラーがない, false:入力エラーがある
   def save_quiz?(quiz_params)
-    @quiz = current_user.quizzes.build(quiz_params)
-    @quiz.save
+    @quiz_input.quiz = current_user.quizzes.build(quiz_params)
+    @quiz_input.quiz.save
   end
 
   # 母音を保存できるか判定する
@@ -90,7 +65,7 @@ class QuizzesController < ApplicationController
         is_saved = false
       end
 
-      @rhymes << rhyme
+      @quiz_input.rhymes << rhyme
     end
     is_saved
   end
@@ -109,7 +84,7 @@ class QuizzesController < ApplicationController
         is_saved = false
       end
 
-      @choices << choice
+      @quiz_input.choices << choice
     end
 
     is_saved
@@ -122,7 +97,7 @@ class QuizzesController < ApplicationController
   # @return [Choice]
   def get_choice_by(choice_param, rhyme_ids_by_rhyme_content)
     choice_rhyme_id = rhyme_ids_by_rhyme_content[choice_param[:rhyme].to_sym]
-    @quiz.choices.build(content: choice_param[:content], rhyme_id: choice_rhyme_id)
+    @quiz_input.quiz.choices.build(content: choice_param[:content], rhyme_id: choice_rhyme_id)
   end
 
   private
