@@ -1,1 +1,1 @@
-import 'src/quizzes/form';
+import 'src/quizzes/forms/form';

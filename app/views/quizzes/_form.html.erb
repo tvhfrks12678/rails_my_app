@@ -2,10 +2,7 @@
 
 <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
 
-<%= form_with(model: @quiz_input.quiz, local: true) do |f| %>
-
-  <%= render 'shared/error_messages', object: f.object %>
-
+<%= form_with(model: @quiz_form, local: true) do |quiz_form| %>
   <div id="choice_input_field" class="input_field">
     <div class="item_title">
       <span>クイズの選択肢</span>
@@ -25,61 +22,35 @@
         </div>
       </li>
 
-      <% @quiz_input.choices.each_with_index do |choice, idx| %>
-        <li id="choice_input_field_id_<%= choice.id %>" class="input_field_list_item" >
+      <% quiz_form.object.choices.each_with_index do |choice, idx| %>
+        <li id="choice_input_field_id_<%= idx %>" class="input_field_list_item" >
           <div>
             <i class="fa fa-sort fa-lg icon_action icon_sort_input_field_list_item" aria-hidden="true" draggable="true"></i>
           </div>
 
-          <div class="input_field_list_item_box">
-            <%= fields_for "choice[]" ,choice do |choice_form| %>
-              <%= choice_form.text_field :content, name: "choice[][content]" ,class: 'form-control ' %>
+          <%= fields_for choice do |choice_field| %>
+            <div class="input_field_list_item_box">
+              <%= choice_field.text_field :content, id: "choice_content_#{idx}", name: "choices[][content]", class: 'form-control' %>
               <%= render "shared/error_messages_for_attribute", object: choice, attribute: :content %>
-            <% end %>
-          </div>
+            </div>
 
-          <div class="input_field_list_item_box">
-            <%= select_tag "choice[][rhyme]", options_for_select(@quiz_input.select_box_choice_rhyme.map{|c|[c[:name], c[:id]]}, @quiz_input.choice_rhymes[idx]), id: "select_choice_rhyme_id_#{choice.id}", class: "form-control" %>
-          </div>
-
+            <div class="input_field_list_item_box">
+              <%= choice_field.text_field :rhyme, id: "choice_rhyme_#{idx}", name: "choices[][rhyme]", class: "form-control",  list: "list_choice_rhyme" %>
+              <%= render "shared/error_messages_for_attribute", object: choice, attribute: :rhyme %>
+            </div>
+          <% end %>
           <div>
             <i class="fa fa-trash fa-lg icon_action icon_delete_input_field_list_item" aria-hidden="true"></i>
           </div>
         </li>
+
       <% end %>
     </ul>
 
-    <div class="icon_add_potion">
-      <i class="fa fa-plus-circle fa-2x icon_action icon_add_input_field_list_item" aria-hidden="true">追加</i>
-    </div>
-  </div>
+    <datalist id="list_choice_rhyme">
+      <%= options_for_select(@quiz_form.select_list_of_rhyme_of_choice) %>
+    </datalist>
 
-  <div  id="rhyme_input_field" class="input_field">
-    <div class="item_title">
-      <span>韻の母音</span>
-    </div>
-
-    <ul id="rhyme_input_field_list" class="input_field_list">
-      <% @quiz_input.rhymes.each do |rhyme| %>
-
-        <li id="rhyme_input_field_id_<%= rhyme.id %>" class="input_field_list_item">
-          <div>
-            <i class="fa fa-sort fa-lg icon_action icon_sort_input_field_list_item" aria-hidden="true" draggable="true"></i>
-          </div>
-
-          <div class="input_field_list_item_box">
-            <%= fields_for 'rhyme[]' ,rhyme do |rhyme_form| %>
-              <%= rhyme_form.text_field :content, name: "rhyme[][content]" ,class: 'form-control' %>
-              <%= render "shared/error_messages_for_attribute", object: rhyme, attribute: :content %>
-            <% end %>
-          </div>
-
-          <div>
-            <i class="fa fa-trash fa-lg icon_action icon_delete_input_field_list_item" aria-hidden="true"></i>
-          </div>
-        </li>
-      <% end %>
-    </ul>
     <div class="icon_add_potion">
       <i class="fa fa-plus-circle fa-2x icon_action icon_add_input_field_list_item" aria-hidden="true">追加</i>
     </div>
@@ -89,11 +60,11 @@
     <div class="item_title">
       <span>解説</span>
     </div>
-    <%= render "shared/error_messages_for_attribute", object: f.object, attribute: :commentary %>
-    <%= f.text_area :commentary, class: 'form-control commentary' %>
-
+    <%= quiz_form.text_area :commentary, class: 'form-control commentary' %>
+    <%= render "shared/error_messages_for_attribute", object: quiz_form.object, attribute: :commentary %>
     <div class="btn_quiz_post">
-      <%= f.button "投稿", type: 'button', onclick: 'submit();', class: "btn btn-primary btn-lg" %>
+      <%= quiz_form.button "投稿", type: 'button', onclick: 'submit();', class: "btn btn-primary btn-lg" %>
     </div>
   </div>
 <% end %>
+
