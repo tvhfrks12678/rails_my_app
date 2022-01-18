@@ -2,14 +2,14 @@ var LBL_CHOICE_BACKGROUND_COLOR = ['#D3EDFB', '#FADBDA', '#D5EAD8', '#FFF9C9', '
 var LBL_CHOICE_ID_PREFIX = "lbl_choice_id_";
 var RHYME_CHOICE_ID_PREFIX = "rhyme_choice_id_";
 
-var quizId = <%= @answer.quiz.id %>;
+var quizId = <%= @answer.quiz_id %>;
 changeChoicesDisplayForAnswer(quizId);
 hideBtnAnswer(quizId);
 displayAnswerResult(quizId, <%= @answer.is_correct %>)
 
 scrollQuizTop(quizId);
 
-document.getElementById("main_answer_quiz_id_<%= @answer.quiz.id %>").innerHTML = "<%= escape_javascript(render('answers/info')) %>"
+document.getElementById("main_answer_quiz_id_<%= @answer.quiz_id %>").innerHTML = "<%= escape_javascript(render('answers/info')) %>"
 
 <% @answer.combinations.each_with_index do |answer_combination, idx| %>
   var rhymeWord = "<%= answer_combination.rhyme %>"

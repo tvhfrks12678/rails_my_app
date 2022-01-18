@@ -22,9 +22,10 @@ Bundler.require(*Rails.groups)
 module RailsMyApp
   class Application < Rails::Application
     root_path = Rails.root.to_s
-    require_folders = ["#{root_path}/app/forms/**/*.rb"]
+    require_folders = ['/app/forms/**/*.rb', '/app/view_models/**/*.rb']
+
     require_folders.each do |folder|
-      Dir[folder].sort.each { |file| require file }
+      Dir["#{root_path}#{folder}"].sort.each { |file| require file }
     end
 
     # Initialize configuration defaults for originally generated Rails version.
