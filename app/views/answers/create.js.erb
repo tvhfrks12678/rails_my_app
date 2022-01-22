@@ -12,7 +12,7 @@ scrollQuizTop(quizId);
 document.getElementById("main_answer_quiz_id_<%= @answer.quiz_id %>").innerHTML = "<%= escape_javascript(render('answers/info')) %>"
 
 <% @answer.combinations.each_with_index do |answer_combination, idx| %>
-  var rhymeWord = "<%= answer_combination.rhyme %>"
+  var rhymeWord = "<%= answer_combination.romaji_rhyme %>"
   var changeColorCode = LBL_CHOICE_BACKGROUND_COLOR[<%= idx %>];
 
   <% answer_combination.choice_ids.each do |choice_id| %>
