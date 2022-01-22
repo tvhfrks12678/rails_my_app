@@ -2,6 +2,6 @@
   <div class="answer_commentary text-left">
     <label class="lbl_answer_commentary_title">解説</label>
     <br>
-    <label><%= @answer.commentary %></label>
+    <label><%= simple_format(@answer.commentary) %></label>
   </div>
 <div>
