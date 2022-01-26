@@ -3,7 +3,7 @@ class QuizzesController < ApplicationController
   MESSAGE_FALSE_QUIZ_POST = 'システムエラーが発生しました'.freeze
 
   def index
-    @quizzes = Quiz.all.includes(:choices)
+    @quizzes = Quiz.all.preload(%i[choices youtube])
   end
 
   def new
@@ -33,7 +33,7 @@ class QuizzesController < ApplicationController
   end
 
   def quiz_params
-    params.require(:quiz).permit(:commentary)
+    params.require(:quiz).permit(:commentary, :youtube_url, :youtube_start_time)
   end
 
   def choice_params

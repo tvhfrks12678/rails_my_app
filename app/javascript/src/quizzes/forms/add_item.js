@@ -43,11 +43,12 @@ export const AddItem = class {
   static addInputFieldListItem() {
     const addInputFieldListItemElement =
       this.createAddInputFieldListItemElement();
-    const inputFieldListElement = document.querySelector(
-      `.${Setting.CLASS.INPUT_FIELD.LIST}`
+
+    const choiceInputFieldListElement = document.getElementById(
+      Setting.ID.CHOICE.INPUT_FIELD.LIST
     );
 
-    inputFieldListElement.insertAdjacentElement(
+    choiceInputFieldListElement.insertAdjacentElement(
       'beforeend',
       addInputFieldListItemElement
     );
@@ -57,7 +58,7 @@ export const AddItem = class {
 
     DropAndDrag.setInputFieldListItemDragAndDropEvent(
       addInputFieldListItemElement,
-      inputFieldListElement
+      choiceInputFieldListElement
     );
   }
 

@@ -11,4 +11,12 @@ export const Setting = class {
       LIST_ITEM: 'input_field_list_item',
     },
   };
+
+  static ID = {
+    CHOICE: {
+      INPUT_FIELD: {
+        LIST: 'choice_input_field_list',
+      },
+    },
+  };
 };

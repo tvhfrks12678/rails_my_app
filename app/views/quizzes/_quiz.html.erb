@@ -1,10 +1,15 @@
-<% question_sentence = '韻を踏んでいる組み合わせは？' %>
+<% question_sentence = quiz.msg_to_display_in_question %>
 
 <li class="card_quiz" id="card_quiz_<%= quiz.id %>">
-
   <div class="lbl_quiz_question text-left">
     <span class="mark_symbol">Q.</span><span class=lbl_question_sentence><%= question_sentence %></span>
   </div>
+
+  <% unless quiz.youtube.blank? %>
+    <div class="embed-responsive embed-responsive-16by9 quiz_youtube">
+      <iframe class="embed-responsive-item" src=<%= quiz.youtube.url %> allowfullscreen></iframe>
+    </div>
+  <% end %>
 
   <%= form_with(url: answers_path, scope: :answer, local: false) do |f| %>
     <%= hidden_field_tag "quiz[id]", quiz.id, {id: "hidden_quiz_id*#{quiz.id}"} %>
@@ -23,8 +28,5 @@
     </div>
 
   <% end %>
-
   <div id="main_answer_quiz_id_<%= quiz.id %>"></div>
 </li>
-
-

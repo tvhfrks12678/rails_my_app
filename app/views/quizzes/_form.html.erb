@@ -54,12 +54,49 @@
     <div class="icon_add_potion">
       <i class="fa fa-plus-circle fa-2x icon_action icon_add_input_field_list_item" aria-hidden="true">追加</i>
     </div>
+
+    <div class="item_title">
+      <span>Youtube</span>
+    </div>
+    <ul id="choice_input_field_list" class="input_field_list">
+      <li class="list_item_header">
+        <div>
+          <i class="fa fa-fire fa-lg icon_action visibility_hidden" aria-hidden="true"></i>
+        </div>
+        <div class="list_item_name input_field_list_item_box">URL</div>
+        <div class="list_item_name input_field_list_item_box">開始時間</div>
+        <div>
+          <i class="fa fa-fire fa-lg icon_action visibility_hidden" aria-hidden="true"></i>
+        </div>
+      </li>
+
+      <li id="choice_input_field_id_" class="input_field_list_item" >
+        <div>
+          <i class="fa fa-fire fa-lg icon_action visibility_hidden" aria-hidden="true"></i>
+        </div>
+
+        <div class="input_field_list_item_box">
+          <%= quiz_form.text_field :youtube_url, class: 'form-control' %>
+          <%= render "shared/error_messages_for_attribute", object: quiz_form.object, attribute: :youtube_url %>
+        </div>
+
+        <div class="input_field_list_item_box">
+          <%= quiz_form.time_field :youtube_start_time, class: 'form-control', step: '1', value: '00:00:00' %>
+          <%= render "shared/error_messages_for_attribute", object: quiz_form.object, attribute: :youtube_start_time %>
+        </div>
+
+        <div>
+          <i class="fa fa-fire fa-lg icon_action visibility_hidden" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
   </div>
 
   <div class="input_field">
     <div class="item_title">
       <span>解説</span>
     </div>
+
     <%= quiz_form.text_area :commentary, class: 'form-control commentary' %>
     <%= render "shared/error_messages_for_attribute", object: quiz_form.object, attribute: :commentary %>
     <div class="btn_quiz_post">
@@ -67,4 +104,3 @@
     </div>
   </div>
 <% end %>
-

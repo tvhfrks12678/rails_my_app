@@ -38,15 +38,6 @@ textarea {
 
 /* typography */
 
-// h1,
-// h2,
-// h3,
-// h4,
-// h5,
-// h6 {
-//   line-height: 1;
-// }
-
 h1 {
   line-height: 1;
   font-size: 3em;
@@ -54,20 +45,6 @@ h1 {
   margin-bottom: 30px;
   text-align: center;
 }
-
-// h2 {
-//   font-size: 1.2em;
-//   letter-spacing: -1px;
-//   margin-bottom: 30px;
-//   text-align: center;
-//   font-weight: normal;
-//   color: $gray-light;
-// }
-
-// p {
-//   font-size: 1.1em;
-//   line-height: 1.7em;
-// }
 
 /* header */
 
@@ -197,21 +174,13 @@ aside {
   display: block;
   list-style: none;
 
-  // .col-md-8 {
-  //   padding-left: 0px;
-  //   padding-right: 0px;
-  // }
-
   .card_quiz {
-    // display: inline-block;
     border: $quiz-card-border;
     border-radius: 1.5em;
     margin-bottom: 30px;
 
     .lbl_quiz_question {
-      margin-bottom: 30px;
-      border-bottom: $quiz-card-border;
-      padding: 20px 30px;
+      padding: 20px 30px 0px 30px;
       display: flex;
 
       .mark_symbol {
@@ -231,6 +200,12 @@ aside {
         color: #ff4136;
         padding-left: 10px;
       }
+    }
+
+    .quiz_youtube {
+      margin: 10px 40px 40px 40px;
+      border-bottom: 3px solid #273746;
+      border-radius: 20px;
     }
 
     .answer_commentary {
@@ -322,7 +297,6 @@ aside {
       .input_field_list_item {
         border-top: 1px solid #dddddd;
         display: flex;
-        // align-items: center;
         padding: 10px 0px;
 
         .input_field_list_item_box {
@@ -358,26 +332,9 @@ aside {
       padding: 10px;
     }
 
-    .icon_add_input_field_list_item {
-      // padding: 10px;
-    }
-
     .icon_add_potion {
       text-align: right;
     }
-  }
-
-  #choice_input_field_list {
-    // list-style: none;
-    // .choice_input_field {
-    //   border-top: 1px solid #aaaaaa;
-    //   display: flex;
-    //   align-items: center;
-    //   padding: 10px 0px;
-    // }
-    // .choice_input_field:last-child {
-    //   border-bottom: 1px solid #aaaaaa;
-    // }
   }
 
   *[draggable='true'] {

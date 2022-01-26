@@ -18,6 +18,7 @@ quiz.choices.create!(content: '西高東低', rhyme_id: rhyme.id)
 quiz.choices.create!(content: 'また来いや')
 quiz.choices.create!(content: '誰かの')
 quiz.choices.create!(content: 'セコンドで', rhyme_id: rhyme.id)
+quiz.create_youtube!(video_id: '9L5WHY8PAo0', start_time: 119)
 
 # 選択肢: 6 母音: 2
 quiz_second = user.quizzes.create!(commentary: '正解が二つある')
@@ -33,13 +34,16 @@ quiz_second.choices.create!(content: 'ゴリ', rhyme_id: rhyme_third.id)
 # その他のユーザーの作成
 other_user = User.create!(name: 'z', email: 'z@z.z', password: 'foobar', password_confirmation: 'foobar')
 
-# 選択肢: 4 母音: 1
+# 選択肢: 6 母音: 1
 other_quiz = other_user.quizzes.create!(commentary: '')
 other_rhyme = Rhyme.create(content: 'いいあいあお')
 other_quiz.choices.create!(content: '臭すぎる')
+other_quiz.choices.create!(content: 'like a')
 other_quiz.choices.create!(content: 'ひきわり納豆', rhyme_id: other_rhyme.id)
+other_quiz.choices.create!(content: 'ぶちかます')
 other_quiz.choices.create!(content: 'こいつにくらわす')
 other_quiz.choices.create!(content: '右ラリアット', rhyme_id: other_rhyme.id)
+other_quiz.create_youtube!(video_id: '77HccF9q7Lk', start_time: 374)
 
 # 選択肢: 10 母音: 5
 quiz_tird = user.quizzes.create!(commentary: '韻を踏んだ文章は不自然さを気にしたら負けだって、ばっちゃんが言ってた。')

@@ -5,16 +5,18 @@ const INPUT_FIELD_LIST_ITEM_DRAGOVER_CLASS = 'input_field_list_item_dragover';
 
 export const DropAndDrag = class {
   static setDragAndDrop() {
-    const inputFieldListElement = document.querySelector(
-      `.${Setting.CLASS.INPUT_FIELD.LIST}`
+    const choiceInputFieldListElement = document.getElementById(
+      Setting.ID.CHOICE.INPUT_FIELD.LIST
     );
-    const inputFieldListItemElementList = document.querySelectorAll(
-      `.${Setting.CLASS.INPUT_FIELD.LIST_ITEM}`
-    );
+
+    const inputFieldListItemElementList =
+      choiceInputFieldListElement.querySelectorAll(
+        `.${Setting.CLASS.INPUT_FIELD.LIST_ITEM}`
+      );
     inputFieldListItemElementList.forEach((inputFieldListItemElement) => {
       DropAndDrag.setInputFieldListItemDragAndDropEvent(
         inputFieldListItemElement,
-        inputFieldListElement
+        choiceInputFieldListElement
       );
     });
   }

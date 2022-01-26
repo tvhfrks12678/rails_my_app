@@ -1,6 +1,6 @@
 import { Setting } from './setting.js';
 
-const CHOICE_INPUT_FIELD_LIST_ITEM_MAX = 10;
+const CHOICE_INPUT_FIELD_LIST_ITEM_MAX = 15;
 const CHOICE_INPUT_FIELD_LIST_ITEM_MIN = 3;
 
 export const Display = class {

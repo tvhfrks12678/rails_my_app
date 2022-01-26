@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_12_004530) do
+ActiveRecord::Schema.define(version: 2022_01_23_060559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,7 +51,18 @@ ActiveRecord::Schema.define(version: 2021_05_12_004530) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "youtubes", force: :cascade do |t|
+    t.string "video_id"
+    t.integer "start_time"
+    t.bigint "quiz_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["quiz_id"], name: "index_youtubes_on_quiz_id"
+    t.index ["video_id", "start_time"], name: "index_youtubes_on_video_id_and_start_time", unique: true
+  end
+
   add_foreign_key "choices", "quizzes"
   add_foreign_key "choices", "rhymes"
   add_foreign_key "quizzes", "users"
+  add_foreign_key "youtubes", "quizzes"
 end
