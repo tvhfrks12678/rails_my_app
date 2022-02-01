@@ -22,10 +22,17 @@ Bundler.require(*Rails.groups)
 module RailsMyApp
   class Application < Rails::Application
     root_path = Rails.root.to_s
-    require_folders = ['/app/forms/**/*.rb', '/app/view_models/**/*.rb']
+    add_folders = ['/app/forms', '/app/view_models']
 
-    require_folders.each do |folder|
-      Dir["#{root_path}#{folder}"].sort.each { |file| require file }
+    add_folders.each do |add_folder|
+      require_parent_folder = "#{root_path}#{add_folder}"
+      require_folders = Dir.glob("#{require_parent_folder}/*")
+
+      require_folders.each do |require_folder|
+        config.autoload_paths << require_folder
+        require_files = Dir["#{require_folder}/*.rb"]
+        require_files.sort.each { |require_file| require require_file }
+      end
     end
 
     # Initialize configuration defaults for originally generated Rails version.
