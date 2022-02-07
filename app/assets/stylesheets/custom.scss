@@ -180,7 +180,7 @@ aside {
     margin-bottom: 30px;
 
     .lbl_quiz_question {
-      padding: 20px 30px 0px 30px;
+      padding-top: 20px;
       display: flex;
 
       .mark_symbol {
@@ -191,7 +191,7 @@ aside {
       .lbl_question_sentence {
         font-size: 2.5em;
         display: flex;
-        // justify-content: center;
+        margin: 15px 0px 15px 0px;
         align-items: center;
         font-weight: bold;
       }
@@ -202,8 +202,11 @@ aside {
       }
     }
 
+    .row_quiz_youtube {
+      margin: 0px 20px 30px 5px;
+    }
+
     .quiz_youtube {
-      margin: 10px 40px 40px 40px;
       border-bottom: 3px solid #273746;
       border-radius: 20px;
     }
@@ -218,7 +221,6 @@ aside {
 
     .choices {
       text-align: left;
-      margin-bottom: 10px;
       white-space: nowrap;
       list-style: none;
 
@@ -234,6 +236,7 @@ aside {
       .choice_sentence {
         font-size: xx-large;
         font-weight: 100;
+        white-space: normal;
       }
 
       input[type='checkbox'] {
@@ -254,7 +257,7 @@ aside {
 
     .btn_quiz_answer {
       text-align: right;
-      margin: 30px;
+      margin: 30px 0px;
 
       .btn_quiz_answer_font {
         font-size: xx-large;

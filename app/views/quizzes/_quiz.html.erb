@@ -1,13 +1,21 @@
 <% question_sentence = quiz.msg_to_display_in_question %>
 
 <li class="card_quiz" id="card_quiz_<%= quiz.id %>">
-  <div class="lbl_quiz_question text-left">
-    <span class="mark_symbol">Q.</span><span class=lbl_question_sentence><%= question_sentence %></span>
+  <div class="row">
+    <div class="col-md-1"></div> 
+    <div class="lbl_quiz_question text-left col-md-10">
+      <span class="mark_symbol">Q.</span><span class=lbl_question_sentence><%= question_sentence %></span>
+    </div>
+    <div class="col-md-1"></div>
   </div>
 
   <% unless quiz.youtube.blank? %>
-    <div class="embed-responsive embed-responsive-16by9 quiz_youtube">
-      <iframe class="embed-responsive-item" src=<%= quiz.youtube.url %> allowfullscreen></iframe>
+    <div class="row row_quiz_youtube">
+      <div class="col-md-1"></div> 
+        <div class="embed-responsive embed-responsive-16by9 quiz_youtube col-md-10">
+          <iframe class="embed-responsive-item" src=<%= quiz.youtube.url %> allowfullscreen></iframe>
+        </div>
+      <div class="col-md-1"></div>
     </div>
   <% end %>
 
@@ -15,18 +23,22 @@
     <%= hidden_field_tag "quiz[id]", quiz.id, {id: "hidden_quiz_id*#{quiz.id}"} %>
 
     <div class="row">
-      <div class="col-md-2"></div>
+      <div class="col-md-1"></div>
       <ol class="choices col-md-10">
         <% quiz.choices.each do |choice| %>
           <%= render partial: 'choice', object: choice %>
         <% end %>
       </ol>
+      <div class="col-md-1"></div>
     </div>
 
-    <div class="btn_quiz_answer">
-      <%= f.submit "回答", id:"btn_quiz_id_#{quiz.id}", class: "btn btn-primary btn-lg btn_quiz_answer_font" %>
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="btn_quiz_answer col-md-10">
+        <%= f.submit "回答", id:"btn_quiz_id_#{quiz.id}", class: "btn btn-primary btn-lg btn_quiz_answer_font" %>
+      </div>
+      <div class="col-md-1"></div>
     </div>
-
   <% end %>
   <div id="main_answer_quiz_id_<%= quiz.id %>"></div>
 </li>
