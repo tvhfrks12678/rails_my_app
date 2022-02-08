@@ -1,6 +1,7 @@
 var LBL_CHOICE_BACKGROUND_COLOR = ['#D3EDFB', '#FADBDA', '#D5EAD8', '#FFF9C9', '#D2CCE6']
 var LBL_CHOICE_ID_PREFIX = "lbl_choice_id_";
 var RHYME_CHOICE_ID_PREFIX = "rhyme_choice_id_";
+var LBL_QUESTION_SENTENCE_CLASS = 'lbl_question_sentence';
 
 var quizId = <%= @answer.quiz_id %>;
 changeChoicesDisplayForAnswer(quizId);
@@ -104,10 +105,11 @@ function displayAnswerResult(quizId, is_correct) {
 
   container.querySelector('.mark_symbol').textContent = resultSymbol;
 
-  const lblQuestionSentenceElement = container.querySelector('.lbl_question_sentence');
+  const lblQuestionSentenceElement = container.querySelector(`.${LBL_QUESTION_SENTENCE_CLASS}`);
   lblQuestionSentenceElement.textContent = resultWord;
   lblQuestionSentenceElement.style.fontSize = "60px"
   lblQuestionSentenceElement.classList.add('answer_result_display');
+  lblQuestionSentenceElement.classList.remove(LBL_QUESTION_SENTENCE_CLASS);
 }
 
 /**

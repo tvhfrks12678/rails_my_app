@@ -23,13 +23,13 @@
     <%= hidden_field_tag "quiz[id]", quiz.id, {id: "hidden_quiz_id*#{quiz.id}"} %>
 
     <div class="row">
-      <div class="col-md-1"></div>
-      <ol class="choices col-md-10">
+      <div class="col-md-2"></div>
+      <ol class="choices col-md-8">
         <% quiz.choices.each do |choice| %>
           <%= render partial: 'choice', object: choice %>
         <% end %>
       </ol>
-      <div class="col-md-1"></div>
+      <div class="col-md-2"></div>
     </div>
 
     <div class="row">

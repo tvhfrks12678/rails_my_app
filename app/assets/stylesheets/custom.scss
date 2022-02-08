@@ -203,7 +203,7 @@ aside {
     }
 
     .row_quiz_youtube {
-      margin: 0px 20px 30px 5px;
+      margin: 5px 10px 30px 10px;
     }
 
     .quiz_youtube {
@@ -211,11 +211,18 @@ aside {
       border-radius: 20px;
     }
 
-    .answer_commentary {
+    .quiz_answer_info {
       border-top: $quiz-card-border;
-      padding: 20px 30px;
-      .lbl_answer_commentary_title {
-        font-size: xxx-large;
+      margin-top: 30px;
+      padding-top: 10px;
+      .answer_commentary {
+        .lbl_answer_commentary_title {
+          font-size: xxx-large;
+        }
+        .answer_commentary_content {
+          font-size: xx-large;
+          white-space: normal;
+        }
       }
     }
 
@@ -235,7 +242,7 @@ aside {
 
       .choice_sentence {
         font-size: xx-large;
-        font-weight: 100;
+        font-weight: lighter;
         white-space: normal;
       }
 
@@ -257,15 +264,10 @@ aside {
 
     .btn_quiz_answer {
       text-align: right;
-      margin: 30px 0px;
-
       .btn_quiz_answer_font {
+        margin: 30px 0px;
         font-size: xx-large;
       }
-    }
-
-    .quiz_answer_info {
-      font-size: xx-large;
     }
   }
 }
