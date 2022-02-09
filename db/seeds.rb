@@ -10,7 +10,7 @@
 user = User.create!(name: 'q', email: 'q@q.q', password: 'foobar', password_confirmation: 'foobar')
 
 # 選択肢: 6 母音: 1
-quiz = user.quizzes.create!(commentary: '西高東低で気圧とスキルでダブルミーングになっている')
+quiz = user.quizzes.create!(commentary: '　西高東低で気圧とスキルでダブルミーングになっている')
 rhyme = Rhyme.create(content: 'えおおえ')
 quiz.choices.create!(content: '今日は')
 quiz.choices.create!(content: 'スキルも気圧も')
@@ -21,7 +21,7 @@ quiz.choices.create!(content: 'セコンドで', rhyme_id: rhyme.id)
 quiz.create_youtube!(video_id: '9L5WHY8PAo0', start_time: 119)
 
 # 選択肢: 6 母音: 2
-quiz_second = user.quizzes.create!(commentary: '正解が二つある')
+quiz_second = user.quizzes.create!(commentary: '　正解が二つある')
 rhyme_second = Rhyme.create(content: 'あああ')
 rhyme_third = Rhyme.create(content: 'おい')
 quiz_second.choices.create!(content: '頭', rhyme_id: rhyme_second.id)
@@ -46,7 +46,7 @@ other_quiz.choices.create!(content: '右ラリアット', rhyme_id: other_rhyme.
 other_quiz.create_youtube!(video_id: '77HccF9q7Lk', start_time: 374)
 
 # 選択肢: 10 母音: 5
-quiz_tird = user.quizzes.create!(commentary: '韻を踏んだ文章は不自然さを気にしたら負けだって、ばっちゃんが言ってた。')
+quiz_tird = user.quizzes.create!(commentary: '　韻を踏んだ文章は不自然さを気にしたら負けだって、ばっちゃんが言ってた。')
 rhyme_words = %w[oie uiu aee ioi eoi]
 rhyme = []
 rhyme_words.each do |rhyme_word|
@@ -65,7 +65,7 @@ quiz_tird.choices.create!(content: 'にこり', rhyme_id: rhyme[3].id)
 
 # 選択肢: 6 母音: 3
 quizzes = []
-quizzes << user.quizzes.create!(commentary: '図書館のんは無声音と言って、無視していい。')
+quizzes << user.quizzes.create!(commentary: '　図書館のんは無声音と言って、無視していい。')
 rhyme_word_list = %w[ooa iio iai]
 rhymes = []
 rhyme_word_list.each do |rhyme_word|
@@ -77,3 +77,19 @@ words_rhyme = [rhymes[0], rhymes[0], rhymes[1], rhymes[1], rhymes[2], rhymes[2]]
 words.each_with_index do |word, idx|
   quizzes[0].choices.create!(content: word, rhyme_id: words_rhyme[idx].id)
 end
+
+# 選択肢: 11 母音: 1
+quiz = user.quizzes.create!(commentary: "　Novel Coreが一本目で野球用語を出した。\r\n　それに対して、CHICOが野球選手の大谷翔平とNovel Coreが出ていた番組のオオカミ少年で韻を踏んで返したのがうまい!\r\n")
+rhyme = Rhyme.create(content: 'ooaioe')
+quiz.choices.create!(content: 'イヤイヤ')
+quiz.choices.create!(content: 'レフトライトセンター')
+quiz.choices.create!(content: 'じゃない')
+quiz.choices.create!(content: '俺はぶっ飛ばす')
+quiz.choices.create!(content: '大谷翔平', rhyme_id: rhyme.id)
+quiz.choices.create!(content: 'え、Abemaに')
+quiz.choices.create!(content: '出ていたあなたは')
+quiz.choices.create!(content: 'オオカミ少年', rhyme_id: rhyme.id)
+quiz.choices.create!(content: 'はぁー')
+quiz.choices.create!(content: 'ブランディング忘れて')
+quiz.choices.create!(content: 'どっか行こうぜ', rhyme_id: rhyme.id)
+quiz.create_youtube!(video_id: 'e67-dC8_d3k', start_time: 81)
