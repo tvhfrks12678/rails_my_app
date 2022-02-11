@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  MSG_SIGNUP_SUCCESS = '韻クイズへようこそ!'.freeze
+  MSG_AFTER_SIGNUP_SUCCESS = 'へようこそ!'.freeze
 
   def show
     @user = User.find(params[:id])
@@ -14,7 +14,8 @@ class UsersController < ApplicationController
     return render 'new' unless @user.save
 
     log_in @user
-    flash[:success] = MSG_SIGNUP_SUCCESS
+    msg_signup_success = "#{Constants::SITE_TITLE}#{MSG_AFTER_SIGNUP_SUCCESS}"
+    flash[:success] = msg_signup_success
     redirect_to @user
   end
 
