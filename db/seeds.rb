@@ -10,7 +10,16 @@
 user = User.create!(name: 'q', email: 'q@q.q', password: 'foobar', password_confirmation: 'foobar')
 
 # 選択肢: 6 母音: 1
-quiz = user.quizzes.create!(commentary: '　西高東低で気圧とスキルでダブルミーングになっている')
+
+commentary = <<~COMMENTARY
+  　「西高東低」が以下の意味でダブル・ミーニングになっている\r
+  　①年末に開かれた大会なので、「冬の気圧配置」という意味\r
+  　②R指定(Youtubeトップ画像の左)は関西のラッパー、DOTAMA(トップ画像の右)は関東のラッパーなので、「西と東のラッパーのスキルの差」という意味\r
+  　うまい!\r
+COMMENTARY
+
+quiz = user.quizzes.create!(commentary: commentary)
+
 rhyme = Rhyme.create(content: 'えおおえ')
 quiz.choices.create!(content: '今日は')
 quiz.choices.create!(content: 'スキルも気圧も')
@@ -79,7 +88,13 @@ words.each_with_index do |word, idx|
 end
 
 # 選択肢: 11 母音: 1
-quiz = user.quizzes.create!(commentary: "　Novel Coreが一本目で野球用語を出した。\r\n　それに対して、CHICOが野球選手の大谷翔平とNovel Coreが出ていた番組のオオカミ少年で韻を踏んで返したのがうまい!\r\n")
+commentary = <<~COMMENTARY
+  　Novel Core(Youtubeトップ画像の右)が1:16で「ベストバ」ウ「トメーカー」と「レフトラ」イ「トセンター」で野球用語で韻(euoa、oea)を踏んだ。\r
+  　CHICO(トップ画像の左)が相手が野球用語を出したので、即興で「大谷翔平」、対戦相手のNovel Coreが出演していた番組の「オオカミ少年」と「どっか行こうぜ」で韻を3つ踏んで返した。\r
+  　うまい!\r
+COMMENTARY
+
+quiz = user.quizzes.create!(commentary: commentary)
 rhyme = Rhyme.create(content: 'ooaioe')
 quiz.choices.create!(content: 'イヤイヤ')
 quiz.choices.create!(content: 'レフトライトセンター')
