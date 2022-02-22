@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Forms
   module Quizzes
     class QuizForm
@@ -12,14 +14,23 @@ module Forms
       SECONDS_PER_MINUTES = 60
       MINUTES_PER_HOUR = 60
 
+      INITIAL_VALUE_OF_YOUTUBE_START_TIME = '00:00:00'
+
+      YOUTUBE_START_TIME_FORMAT = '%X'
+
       delegate :persisted?, to: :quiz
 
       def initialize(attributes = nil, quiz: Quiz.new)
         @quiz = quiz
 
-        attributes ||= default_attributes
+        if attributes.nil?
+          attributes = default_attributes
+          super(attributes)
+          return
+        end
+
         super(attributes)
-        @choices = set_choices
+        @choices = set_choice_for_update
       end
 
       def input_valid?
@@ -30,9 +41,10 @@ module Forms
 
       def save(current_user)
         ActiveRecord::Base.transaction do
-          quiz_item = current_user.quizzes.create!(commentary: commentary)
-          save_choices(quiz_item)
-          save_youtube(quiz_item)
+          quiz.update!(user: current_user, commentary: commentary)
+          save_choices
+          save_youtube
+          true
         rescue ActiveRecord::RecordInvalid
           false
         end
@@ -58,27 +70,45 @@ module Forms
       def default_attributes
         {
           commentary: quiz.commentary,
+          youtube_url: set_youtube_url,
+          youtube_start_time: set_youtube_start_time,
           choices: set_init_choices
         }
+      end
+
+      def set_youtube_url
+        return '' if quiz.youtube.blank?
+
+        "#{YOUTUBE_URL_BEFORE_LIST[1]}#{quiz.youtube&.video_id}"
+      end
+
+      def set_youtube_start_time
+        return INITIAL_VALUE_OF_YOUTUBE_START_TIME if quiz.youtube.blank?
+
+        Time.at(quiz.youtube.start_time).utc.strftime(YOUTUBE_START_TIME_FORMAT)
       end
 
       def check_choices_errors
         choices.map(&:valid?).all? { |c| c }
       end
 
-      def save_choices(quiz_item)
+      def save_choices
+        quiz.choices.delete_all
         choices.map do |choice|
-          next quiz_item.choices.create!(content: choice.content) if choice.rhyme.blank?
+          choice_content = choice.content
+          choice_rhyme = choice.rhyme
+          next quiz.choices.create!(content: choice_content) if choice_rhyme.blank?
 
-          rhyme = Rhyme.find_or_create_by!(content: choice.rhyme)
-          quiz_item.choices.create!(content: choice.content, rhyme_id: rhyme.id)
+          rhyme = Rhyme.find_or_create_by!(content: choice_rhyme)
+          quiz.choices.create!(content: choice_content, rhyme_id: rhyme.id)
         end
       end
 
-      def save_youtube(quiz_item)
+      def save_youtube
+        quiz.youtube&.delete
         return if youtube_url.blank?
 
-        quiz_item.create_youtube!(video_id: youtube_id, start_time: youtube_start_time_seconds)
+        quiz.create_youtube!(video_id: youtube_id, start_time: youtube_start_time_seconds)
       end
 
       def youtube_id
@@ -99,10 +129,20 @@ module Forms
       end
 
       def set_init_choices
-        QUIZ_CHOICE_MIN.times.map { { content: '', rhyme: '' } }
+        return set_choice_for_edit if quiz.choices.present?
+
+        QUIZ_CHOICE_MIN.times.map do
+          Forms::Quizzes::ChoiceForm.new(content: '', rhyme: '')
+        end
       end
 
-      def set_choices
+      def set_choice_for_edit
+        quiz.choices.map do |choice|
+          Forms::Quizzes::ChoiceForm.new(content: choice.content, rhyme: choice.rhyme&.content)
+        end
+      end
+
+      def set_choice_for_update
         choices.map do |choice|
           Forms::Quizzes::ChoiceForm.new(content: choice[:content], rhyme: choice[:rhyme])
         end

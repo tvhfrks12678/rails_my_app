@@ -81,7 +81,7 @@
         </div>
 
         <div class="input_field_list_item_box">
-          <%= quiz_form.time_field :youtube_start_time, class: 'form-control', step: '1', value: '00:00:00' %>
+          <%= quiz_form.time_field :youtube_start_time, class: 'form-control', step: '1', value: quiz_form.object.youtube_start_time %>
           <%= render "shared/error_messages_for_attribute", object: quiz_form.object, attribute: :youtube_start_time %>
         </div>
 

@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
   resources :users
-  resources :quizzes
+  resources :quizzes do
+    collection do
+      get 'edit_index'
+    end
+  end
   resources :answers, only: [:create]
 end
