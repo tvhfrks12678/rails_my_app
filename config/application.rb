@@ -22,11 +22,12 @@ Bundler.require(*Rails.groups)
 module RailsMyApp
   class Application < Rails::Application
     root_path = Rails.root.to_s
-    add_folders = ['/app/forms', '/app/view_models']
+    APP_PATH = '/app/'.freeze
+    add_folders = %w[forms view_models services]
 
     add_folders.each do |add_folder|
-      require_parent_folder = "#{root_path}#{add_folder}"
-      require_folders = Dir.glob("#{require_parent_folder}/*")
+      require_parent_folder = "#{root_path}#{APP_PATH}#{add_folder}"
+      require_folders = Dir.glob([require_parent_folder, "#{require_parent_folder}/*"])
 
       require_folders.each do |require_folder|
         config.autoload_paths << require_folder
