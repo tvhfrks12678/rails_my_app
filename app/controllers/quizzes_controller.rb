@@ -3,6 +3,7 @@
 class QuizzesController < ApplicationController
   MESSAGE_SUCCESS_QUIZ_POST = 'クイズを投稿しました'
   MESSAGE_FALSE_QUIZ_POST = 'システムエラーが発生しました'
+  MESSAGE_SUCCESS_QUIZ_DELETE = '削除しました'
 
   def index
     @quizzes = Quiz.all.preload(%i[choices youtube])
@@ -33,6 +34,13 @@ class QuizzesController < ApplicationController
     @quiz_form = Forms::Quizzes::QuizForm.new(quiz_form_params, quiz: quiz)
 
     save_quiz_form
+  end
+
+  def destroy
+    quiz = quiz_to_edit
+    quiz.destroy
+    flash.now[:success] = MESSAGE_SUCCESS_QUIZ_DELETE
+    redirect_to action: 'edit_index'
   end
 
   private

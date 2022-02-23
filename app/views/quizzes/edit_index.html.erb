@@ -6,7 +6,8 @@
     <ul class="">
       <% @quiz_edits.each do |quiz_edit| %>
         <li>
-				<%= link_to '編集', edit_quiz_path(quiz_edit.quiz_id) %>
+				  <%= link_to '編集', edit_quiz_path(quiz_edit.quiz_id) %>
+          <%= link_to "削除", "/quizzes/#{quiz_edit.quiz_id}", method: :delete, data: { confirm: "削除しますか?" }  %>
 					<%= quiz_edit.question %>
 					<%= quiz_edit.created_at %>
         </li>
