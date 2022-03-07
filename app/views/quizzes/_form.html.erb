@@ -8,6 +8,8 @@
       <span>クイズの選択肢</span>
     </div>
 
+    <%= render "shared/error_messages_for_attribute", object: quiz_form.object, attribute: :choices %>
+
     <ul id="choice_input_field_list" class="input_field_list">
       <li class="list_item_header">
         <div>
@@ -33,7 +35,7 @@
               <%= choice_field.text_field :content, id: "choice_content_#{idx}", name: "choices[][content]", class: 'form-control' %>
               <%= render "shared/error_messages_for_attribute", object: choice, attribute: :content %>
             </div>
-
+            
             <div class="input_field_list_item_box">
               <%= choice_field.text_field :rhyme, id: "choice_rhyme_#{idx}", name: "choices[][rhyme]", class: "form-control",  list: "list_choice_rhyme" %>
               <%= render "shared/error_messages_for_attribute", object: choice, attribute: :rhyme %>

@@ -8,10 +8,13 @@ module Forms
       attr_accessor :quiz, :commentary, :youtube_url, :youtube_start_time, :choices
 
       validates :commentary, length: { maximum: 255 }
+      validate :check_choices_min
 
       QUIZ_CHOICE_MIN = 3
       INITIAL_VALUE_OF_YOUTUBE_START_TIME = '00:00:00'
       YOUTUBE_START_TIME_FORMAT = '%X'
+
+      MESSAGE_ERROR_MIN_CHOICE = "は#{QUIZ_CHOICE_MIN}つ以上入力してください"
 
       delegate :persisted?, to: :quiz
 
@@ -89,6 +92,10 @@ module Forms
 
       def check_choices_errors
         choices.map(&:valid?).all? { |c| c }
+      end
+
+      def check_choices_min
+        errors.add :choices, MESSAGE_ERROR_MIN_CHOICE unless choices.length >= QUIZ_CHOICE_MIN
       end
 
       def set_choice_for_edit
