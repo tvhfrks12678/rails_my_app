@@ -5,27 +5,28 @@ module ViewModels
     class QuizEditIndexViewModel
       include ActiveModel::Model
 
-      attr_reader :quiz_id, :question, :created_at
+      attr_reader :quiz_id, :question, :commentary, :created_at
 
       validates :quiz_id, presence: true
       validates :question, presence: true
+      validates :commentary, presence: true
       validates :created_at, presence: true
 
       DELIMITER = ', '
       DATE_TO_DISPLAY_FORMAT = '%Y/%m/%d %H:%M:%S'
 
-      # @param [Integer] quiz_id
-      # @param [Array<Choice>] choices
-      # @param [Time] created_at
-      def initialize(quiz_id:, choices:, created_at:)
-        @quiz_id = quiz_id
-        @question = combine(choices)
-        @created_at = created_at
+      # @param [Quiz] quiz
+      def initialize(quiz:)
+        @quiz_id = quiz.id
+        @question = combine(quiz.choices)
+        @commentary = quiz.commentary
+        @created_at = quiz.created_at.strftime(DATE_TO_DISPLAY_FORMAT)
       end
 
       private
 
       # @param [Array<Choice>] choices
+      # @return [String] question
       def combine(choices)
         question = ''.dup
         choices_last_array_number = choices.length - 1
@@ -39,12 +40,15 @@ module ViewModels
       end
 
       class << self
+        # 投稿したクイズを検索する
+
         # @param [User] current_user
-        def get_list(current_user)
-          quizzes = Quiz.where(user: current_user).preload([choices: :rhyme], :youtube)
+        # @param [String] search_word
+        # @return [Array<QuizEditIndexViewModel>]
+        def get_search_list_by(current_user:, search_word:)
+          quizzes = Quiz.search_by(current_user: current_user, search_word: search_word)
           quizzes.map do |quiz|
-            created_at = quiz.created_at.strftime(DATE_TO_DISPLAY_FORMAT)
-            new(quiz_id: quiz.id, choices: quiz.choices, created_at: created_at)
+            new(quiz: quiz)
           end
         end
       end

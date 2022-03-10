@@ -356,6 +356,15 @@ aside {
   }
 }
 
+/* Quiz Edit Index Page */
+.main_quiz_edit_index {
+  .btn_search {
+    display: flex;
+    justify-content: flex-end;
+    margin: 5px 0px 10px 0px;
+  }
+}
+
 .sort_icon {
   margin: 10px 10px 0px 0px;
 }

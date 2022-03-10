@@ -23,7 +23,7 @@ module RailsMyApp
   class Application < Rails::Application
     root_path = Rails.root.to_s
     APP_PATH = '/app/'.freeze
-    add_folders = %w[forms view_models services]
+    add_folders = %w[forms view_models services queries]
 
     add_folders.each do |add_folder|
       require_parent_folder = "#{root_path}#{APP_PATH}#{add_folder}"

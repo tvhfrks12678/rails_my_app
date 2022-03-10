@@ -10,7 +10,9 @@ class QuizzesController < ApplicationController
   end
 
   def edit_index
-    @quiz_edits = ViewModels::Quizzes::QuizEditIndexViewModel.get_list(current_user)
+    @search_word = params[:search_word]
+    @quiz_edits = ViewModels::Quizzes::QuizEditIndexViewModel.get_search_list_by(current_user: current_user,
+                                                                                 search_word: @search_word)
   end
 
   def new

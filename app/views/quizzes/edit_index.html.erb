@@ -1,17 +1,34 @@
 <% provide(:title, '投稿一覧') %>
 <h1><%= yield(:title) %></h1>
 
-<div class="row">
-  <div class="col-md-8">
-    <ul class="">
-      <% @quiz_edits.each do |quiz_edit| %>
-        <li>
-				  <%= link_to '編集', edit_quiz_path(quiz_edit.quiz_id) %>
-          <%= link_to "削除", "/quizzes/#{quiz_edit.quiz_id}", method: :delete, data: { confirm: "削除しますか?" }  %>
-					<%= quiz_edit.question %>
-					<%= quiz_edit.created_at %>
-        </li>
-      <% end %>
-    </ul>
+<div class="main_quiz_edit_index">
+  <div class='row'>
+    <div class='col-md-1'></div>
+    <div class='col-md-7'></div>
+    <div class='col-md-3'>
+      <%= form_with url: edit_index_quizzes_path, method: :get, local: true do |f| %>
+        <%= f.text_field :search_word, value: @search_word, class: 'form-control' %>
+        <div class='btn_search'>
+          <%= f.submit "検索", class: 'btn btn-default' %>
+        </div>
+      <% end %> 
+    </div>
+    <div class='col-md-1'></div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <ul class="">
+        <% @quiz_edits.each do |quiz_edit| %>
+          <li>
+            <%= link_to '編集', edit_quiz_path(quiz_edit.quiz_id) %>
+            <%= link_to "削除", "/quizzes/#{quiz_edit.quiz_id}", method: :delete, data: { confirm: "削除しますか?" }  %>
+            <%= quiz_edit.question %>
+            <%= quiz_edit.commentary %>
+            <%= quiz_edit.created_at %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </div>
