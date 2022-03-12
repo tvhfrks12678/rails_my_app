@@ -10,9 +10,15 @@ class QuizzesController < ApplicationController
   end
 
   def edit_index
-    @search_word = params[:search_word]
-    @quiz_edits = ViewModels::Quizzes::QuizEditIndexViewModel.get_search_list_by(current_user: current_user,
-                                                                                 search_word: @search_word)
+    @quiz_posts_search_form = Forms::Quizzes::QuizSearchForEditIndexForm.new
+    @quiz_edits = @quiz_posts_search_form.search(current_user)
+  end
+
+  def edit_index_search
+    @quiz_posts_search_form = Forms::Quizzes::QuizSearchForEditIndexForm.new(quiz_posts_search_params)
+    @quiz_edits = @quiz_posts_search_form.search(current_user)
+
+    render 'edit_index'
   end
 
   def new
@@ -75,5 +81,10 @@ class QuizzesController < ApplicationController
 
   def choice_params
     params.require(:choices).map { |choice| choice.permit(:content, :rhyme) }
+  end
+
+  def quiz_posts_search_params
+    params.require(:forms_quizzes_quiz_search_for_edit_index_form).permit(:search_word, :from_rhyme_characters,
+                                                                          :to_rhyme_characters, :from_date, :to_date)
   end
 end

@@ -5,10 +5,10 @@ module ViewModels
     class QuizEditIndexViewModel
       include ActiveModel::Model
 
-      attr_reader :quiz_id, :question, :commentary, :created_at
+      attr_reader :quiz_id, :choices, :commentary, :rhymes, :created_at
 
       validates :quiz_id, presence: true
-      validates :question, presence: true
+      validates :choices, presence: true
       validates :commentary, presence: true
       validates :created_at, presence: true
 
@@ -18,39 +18,52 @@ module ViewModels
       # @param [Quiz] quiz
       def initialize(quiz:)
         @quiz_id = quiz.id
-        @question = combine(quiz.choices)
+        @choices = combine(quiz.choices)
         @commentary = quiz.commentary
+        @rhymes = combine_rhymes(quiz.choices)
         @created_at = quiz.created_at.strftime(DATE_TO_DISPLAY_FORMAT)
       end
 
       private
 
-      # @param [Array<Choice>] choices
-      # @return [String] question
-      def combine(choices)
-        question = ''.dup
-        choices_last_array_number = choices.length - 1
-        choices.each_with_index do |choice, index|
-          question << choice.content
+      # @param [Array<Choice>] quiz_choices
+      # @return [String] choices
+      def combine(quiz_choices)
+        choices = ''.dup
+        choices_last_array_number = quiz_choices.length - 1
+        quiz_choices.each_with_index do |choice, index|
+          choices << choice.content
           next if choices_last_array_number == index
 
-          question << DELIMITER
+          choices << DELIMITER
         end
-        question
+        choices
       end
 
-      class << self
-        # 投稿したクイズを検索する
+      def combine_display(quiz_choices)
+        choices = ''.dup
+        choices_last_array_number = quiz_choices.length - 1
+        quiz_choices.each_with_index do |choice, index|
+          choices << choice
+          next if choices_last_array_number == index
 
-        # @param [User] current_user
-        # @param [String] search_word
-        # @return [Array<QuizEditIndexViewModel>]
-        def get_search_list_by(current_user:, search_word:)
-          quizzes = Quiz.search_by(current_user: current_user, search_word: search_word)
-          quizzes.map do |quiz|
-            new(quiz: quiz)
-          end
+          choices << DELIMITER
         end
+        choices
+      end
+
+      def combine_rhymes(choices)
+        rhymes = []
+        choices.each do |choice|
+          next if choice.rhyme.blank?
+
+          rhyme = choice.rhyme.content
+          next if rhymes.include?(rhyme)
+
+          rhymes << rhyme
+        end
+
+        rhymes.join(DELIMITER)
       end
     end
   end

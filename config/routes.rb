@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :quizzes do
     collection do
       get 'edit_index'
+      get 'edit_index_search'
     end
   end
   resources :answers, only: [:create]

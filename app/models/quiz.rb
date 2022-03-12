@@ -5,7 +5,7 @@ class Quiz < ApplicationRecord
   default_scope -> { order(created_at: :desc) }
   validates :user_id, presence: true
 
-  scope :search_by, Queries::Quizzes::SearchByConditionsQuery
+  scope :search_by, Queries::Quizzes::SearchForEditIndexQuery
 
   SENTENCE_AFTER_TO_DISPLAY_IN_QUESTION  = '韻を踏んでいる組み合わせは？'.freeze
   SENTENCE_MIDLE_TO_DISPLAY_IN_QUESTION  = '付近から'.freeze

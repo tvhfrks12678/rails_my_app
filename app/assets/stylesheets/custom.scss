@@ -363,6 +363,16 @@ aside {
     justify-content: flex-end;
     margin: 5px 0px 10px 0px;
   }
+  .search_conditions_field {
+    .search_conditions_field_item {
+      display: flex;
+      align-items: center;
+    }
+    .search_conditions_field_input_lbl {
+      text-align: right;
+      margin-bottom: 0px;
+    }
+  }
 }
 
 .sort_icon {
