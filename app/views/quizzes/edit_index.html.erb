@@ -52,18 +52,32 @@
 
   <div class="row">
     <div class="col-md-10 col-md-offset-1">
-      <ul class="">
-        <% @quiz_edits.each do |quiz_edit| %>
-          <li>
-            <%= link_to '編集', edit_quiz_path(quiz_edit.quiz_id) %>
-            <%= link_to "削除", "/quizzes/#{quiz_edit.quiz_id}", method: :delete, data: { confirm: "削除しますか?" }  %>
-            <%= quiz_edit.choices %>
-            <%= quiz_edit.commentary %>
-            <%= quiz_edit.rhymes %>
-            <%= quiz_edit.created_at %>
-          </li>
-        <% end %>
-      </ul>
+      <div class="row edit_index_field"> 
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col" class="col-md-1">編集</th>
+              <th scope="col" class="col-md-3">選択肢</th>
+              <th scope="col" class="col-md-5">解説</th>
+              <th scope="col" class="col-md-1">母音</th>
+              <th scope="col" class="col-md-1">投稿日</th>
+              <th scope="col" class="col-md-1">削除</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @quiz_edits.each do |quiz_edit| %>
+              <tr>
+                <td class="col-md-1"><%= link_to '編集', edit_quiz_path(quiz_edit.quiz_id) %></th>
+                <td class="col-md-3"><%= quiz_edit.choices %></th>
+                <td class="col-md-5"><%= quiz_edit.commentary %></th>
+                <td class="col-md-1"><%= quiz_edit.rhymes %></th>
+                <td class="col-md-1"><%= quiz_edit.created_at %></th>
+                <td class="col-md-1"><%= link_to "削除", "/quizzes/#{quiz_edit.quiz_id}", method: :delete, data: { confirm: "削除しますか?" }  %></th>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
