@@ -5,6 +5,8 @@ class QuizzesController < ApplicationController
   MESSAGE_FALSE_QUIZ_POST = 'システムエラーが発生しました'
   MESSAGE_SUCCESS_QUIZ_DELETE = '削除しました'
 
+  PAGINATION_NUM_EDIT_INDEX = 10
+
   def index
     @quizzes = Quiz.all.preload(%i[choices youtube])
   end
@@ -12,11 +14,13 @@ class QuizzesController < ApplicationController
   def edit_index
     @quiz_posts_search_form = Forms::Quizzes::QuizSearchForEditIndexForm.new
     @quiz_edits = @quiz_posts_search_form.search(current_user)
+    @quiz_edits = Kaminari.paginate_array(@quiz_edits).page(params[:page]).per(PAGINATION_NUM_EDIT_INDEX)
   end
 
   def edit_index_search
     @quiz_posts_search_form = Forms::Quizzes::QuizSearchForEditIndexForm.new(quiz_posts_search_params)
     @quiz_edits = @quiz_posts_search_form.search(current_user)
+    @quiz_edits = Kaminari.paginate_array(@quiz_edits).page(params[:page]).per(PAGINATION_NUM_EDIT_INDEX)
 
     render 'edit_index'
   end

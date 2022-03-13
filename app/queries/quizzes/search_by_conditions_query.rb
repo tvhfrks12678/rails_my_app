@@ -3,8 +3,6 @@
 module Queries
   module Quizzes
     class SearchForEditIndexQuery < Query
-      DATE_TO_DISPLAY_FORMAT = '%Y/%m/%d %H:%M:%S'
-
       SQL_WHERE_SEARCH_WORD_LIKE = 'commentary LIKE ? or choices.content LIKE ? or rhymes.content like ?'
 
       SQL_WHERE_RHYME_CHARACTORS_BETWEEN = 'CHAR_LENGTH(rhymes.content) BETWEEN ? AND ?'

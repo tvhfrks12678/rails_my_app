@@ -385,6 +385,15 @@ aside {
     padding: 30px;
     margin-bottom: 30px;
     border-radius: 30px;
+
+    .youtube_column {
+      text-align: center;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+    }
   }
 }
 
