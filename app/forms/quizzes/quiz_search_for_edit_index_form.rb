@@ -6,14 +6,16 @@ module Forms
       include ActiveModel::Model
 
       attr_accessor :search_word, :from_rhyme_characters, :to_rhyme_characters, :from_date, :to_date,
-                    :rhyme_select_box_choices, :rhyme_select_box_init_msg
+                    :rhyme_select_box_choices, :select_box_init_msg, :existing_youtube, :no_youtube,
+                    :sort_order, :sort_order_select_box_choices
 
-      MESSAGE_SELECT_BOX_INIT = '選択してください'
+      MESSAGE_SELECT_BOX_INIT = ' '
 
       def initialize(attributes = nil)
         attributes ||= default_attributes
         super(attributes)
 
+        @select_box_init_msg = MESSAGE_SELECT_BOX_INIT
         set_rhyme_select_box
       end
 
@@ -37,8 +39,6 @@ module Forms
       end
 
       def set_rhyme_select_box
-        @rhyme_select_box_init_msg = MESSAGE_SELECT_BOX_INIT
-
         constants_rhyme = Constants::Quizzes::Choices::Rhymes
         @rhyme_select_box_choices =
           constants_rhyme::MINIMUM_NUMBER_OF_CHARACTERS..constants_rhyme::MAXIMUM_NUMBER_OF_CHARACTERS

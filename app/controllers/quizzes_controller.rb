@@ -89,6 +89,7 @@ class QuizzesController < ApplicationController
 
   def quiz_posts_search_params
     params.require(:forms_quizzes_quiz_search_for_edit_index_form).permit(:search_word, :from_rhyme_characters,
-                                                                          :to_rhyme_characters, :from_date, :to_date)
+                                                                          :to_rhyme_characters, :from_date, :to_date,
+                                                                          :existing_youtube, :no_youtube, :sort_order)
   end
 end
