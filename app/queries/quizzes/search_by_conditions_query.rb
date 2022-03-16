@@ -44,7 +44,7 @@ module Queries
         from_date_blank = from_date.blank?
         to_date_blank = to_date.blank?
 
-        return relation.pluck(:id) if from_date_blank && to_date_blank
+        return relation if from_date_blank && to_date_blank
 
         return relation.where(created_at: from_date..) if to_date_blank
 
