@@ -25,6 +25,7 @@ module Queries
         relation = search_by_youtube(relation,
                                      quiz_posts_search_form.existing_youtube, quiz_posts_search_form.no_youtube)
 
+        relation = sort(relation, quiz_posts_search_form.sort_order)
         relation.preload([choices: :rhyme], :youtube)
       end
 
@@ -76,6 +77,27 @@ module Queries
         return relation.joins(:youtube) if existing_youtube
 
         relation.left_outer_joins(:youtube).where(youtube: { id: nil })
+      end
+
+      def sort(relation, sort_order)
+        select_box_order_sort = Constants::Forms::QuizEditIndex::SELECT_BOX_ORDER_SORT
+        case sort_order
+        when select_box_order_sort[:DATE][:ASC][:VALUE]
+          relation.unscope(:order).order(created_at: 'ASC')
+        when select_box_order_sort[:RHYNE_LENGTH][:DESC][:VALUE]
+          sort_rhymes_length(relation, 'DESC')
+        when select_box_order_sort[:RHYNE_LENGTH][:ASC][:VALUE]
+          sort_rhymes_length(relation, 'ASC')
+        else
+          relation
+        end
+      end
+
+      def sort_rhymes_length(relation, order)
+        relation.joins(choices: :rhyme).group(:id)
+                .select(:id, :commentary, :created_at,
+                        'MAX(CHAR_LENGTH(rhymes.content)) AS max_rhyme_length')
+                .unscope(:order).order("max_rhyme_length #{order}")
       end
     end
   end

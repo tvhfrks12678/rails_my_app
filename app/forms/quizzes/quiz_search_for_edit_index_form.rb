@@ -15,8 +15,7 @@ module Forms
         attributes ||= default_attributes
         super(attributes)
 
-        @select_box_init_msg = MESSAGE_SELECT_BOX_INIT
-        set_rhyme_select_box
+        set_select_box
       end
 
       def search(current_user)
@@ -38,10 +37,27 @@ module Forms
         }
       end
 
+      def set_select_box
+        @select_box_init_msg = MESSAGE_SELECT_BOX_INIT
+        set_order_sort_select_box
+        set_rhyme_select_box
+      end
+
       def set_rhyme_select_box
         constants_rhyme = Constants::Quizzes::Choices::Rhymes
         @rhyme_select_box_choices =
           constants_rhyme::MINIMUM_NUMBER_OF_CHARACTERS..constants_rhyme::MAXIMUM_NUMBER_OF_CHARACTERS
+      end
+
+      def set_order_sort_select_box
+        @sort_order_select_box_choices = {}
+        select_box_order_sort = Constants::Forms::QuizEditIndex::SELECT_BOX_ORDER_SORT
+
+        select_box_order_sort.each do |_key, value|
+          value.each do |_order_sort_key, select_box_choices|
+            @sort_order_select_box_choices[(select_box_choices[:OPTION]).to_sym] = select_box_choices[:VALUE]
+          end
+        end
       end
     end
   end

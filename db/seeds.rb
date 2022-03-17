@@ -20,7 +20,7 @@ COMMENTARY
 
 quiz = user.quizzes.create!(commentary: commentary)
 
-rhyme = Rhyme.create(content: 'えおおえ')
+rhyme = Rhyme.create(content: 'eooe')
 quiz.choices.create!(content: '今日は')
 quiz.choices.create!(content: 'スキルも気圧も')
 quiz.choices.create!(content: '西高東低', rhyme_id: rhyme.id)
@@ -56,7 +56,7 @@ other_quiz.create_youtube!(video_id: '77HccF9q7Lk', start_time: 374)
 
 # 選択肢: 10 母音: 5
 quiz_tird = user.quizzes.create!(commentary: '　韻を踏んだ文章は不自然さを気にしたら負けだって、ばっちゃんが言ってた。')
-rhyme_words = %w[oie uiu aee ioi eoi]
+rhyme_words = %w[おいえ uiu aee ioi eoi]
 rhyme = []
 rhyme_words.each do |rhyme_word|
   rhyme << Rhyme.create!(content: rhyme_word)

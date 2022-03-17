@@ -13,14 +13,12 @@ class QuizzesController < ApplicationController
 
   def edit_index
     @quiz_posts_search_form = Forms::Quizzes::QuizSearchForEditIndexForm.new
-    @quiz_edits = @quiz_posts_search_form.search(current_user)
-    @quiz_edits = Kaminari.paginate_array(@quiz_edits).page(params[:page]).per(PAGINATION_NUM_EDIT_INDEX)
+    @quiz_edits = get_quiz_edits(@quiz_posts_search_form)
   end
 
   def edit_index_search
     @quiz_posts_search_form = Forms::Quizzes::QuizSearchForEditIndexForm.new(quiz_posts_search_params)
-    @quiz_edits = @quiz_posts_search_form.search(current_user)
-    @quiz_edits = Kaminari.paginate_array(@quiz_edits).page(params[:page]).per(PAGINATION_NUM_EDIT_INDEX)
+    @quiz_edits = get_quiz_edits(@quiz_posts_search_form)
 
     render 'edit_index'
   end
@@ -71,6 +69,11 @@ class QuizzesController < ApplicationController
 
     flash.now[:danger] = MESSAGE_FALSE_QUIZ_POST
     render 'new'
+  end
+
+  def get_quiz_edits(quiz_posts_search_form)
+    quiz_edits = quiz_posts_search_form.search(current_user)
+    Kaminari.paginate_array(quiz_edits).page(params[:page]).per(PAGINATION_NUM_EDIT_INDEX)
   end
 
   def quiz_form_params

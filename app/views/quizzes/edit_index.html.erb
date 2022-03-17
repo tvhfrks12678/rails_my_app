@@ -5,8 +5,7 @@
 
 <div class="main_quiz_edit_index">
   <div class='row'>
-    <div class='col-md-3'></div>
-    <div class='col-md-6'>
+    <div class='col-md-6 col-md-offset-3'>
       <%= form_with(model: @quiz_posts_search_form, url: edit_index_search_quizzes_path, method: :get, local: true, class: 'search_conditions_field') do |f| %>
         
         <div class="form-group row search_conditions_field_item">
@@ -21,7 +20,7 @@
           <div class='col-md-4'>        
             <%= f.date_field :from_date, class: 'form-control', value: f.object.from_date %>
           </div>
-          <label class='col-md-1 col-form-label'>〜</label>
+          <label class='col-md-1 col-form-label search_conditions_field_item_from_to_symbol'>〜</label>
           <div class='col-md-4'>
             <%= f.date_field :to_date, class: 'form-control', value: f.object.to_date %>
           </div>
@@ -32,7 +31,7 @@
           <div class='col-md-4'>        
             <%= f.select(:from_rhyme_characters, f.object.rhyme_select_box_choices, { include_blank: f.object.select_box_init_msg }, class: 'form-control') %>
           </div>
-          <label class='col-md-1 col-form-label'>〜</label>
+          <label class='col-md-1 col-form-label search_conditions_field_item_from_to_symbol'>〜</label>
           <div class='col-md-4'>
             <%= f.select(:to_rhyme_characters, f.object.rhyme_select_box_choices, { include_blank: f.object.select_box_init_msg }, class: 'form-control') %>
           </div>
@@ -52,7 +51,7 @@
         <div class="form-group row search_conditions_field_item">
           <label class='col-md-3 col-form-label search_conditions_field_input_lbl'>並び順:</label>
           <div class='col-md-5'>
-            <%= f.select(:sort_order, {"投稿日が新しい": 1, "投稿日が古い": 2, "母音字数が多い": 3, "母音字数が少ない": 4}, { include_blank: f.object.select_box_init_msg }, class: 'form-control') %>
+            <%= f.select(:sort_order, f.object.sort_order_select_box_choices, { include_blank: f.object.select_box_init_msg }, class: 'form-control') %>
           </div>
           <div class='col-md-4'></div>
         </div>
@@ -62,7 +61,6 @@
         </div>
       <% end %>
     </div>
-    <div class='col-md-3'></div>
   </div>
 
   <div class="row">

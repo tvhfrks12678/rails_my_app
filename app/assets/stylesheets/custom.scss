@@ -361,18 +361,22 @@ aside {
   .search_conditions_field {
     border-color: #ddd;
     border-style: solid;
-    padding: 30px;
+    padding: 20px;
     margin-bottom: 30px;
-    border-radius: 30px;
+    border-radius: 20px;
 
     .search_conditions_field_item {
       display: flex;
       align-items: center;
+      .search_conditions_field_input_lbl {
+        text-align: right;
+        margin-bottom: 0px;
+      }
+      .search_conditions_field_item_from_to_symbol {
+        text-align: center;
+      }
     }
-    .search_conditions_field_input_lbl {
-      text-align: right;
-      margin-bottom: 0px;
-    }
+
     .btn_search {
       display: flex;
       justify-content: flex-end;
@@ -382,12 +386,14 @@ aside {
   .edit_index_field {
     border-color: #ddd;
     border-style: solid;
-    padding: 30px;
+    padding: 20px;
     margin-bottom: 30px;
-    border-radius: 30px;
+    border-radius: 20px;
 
     .youtube_column {
       text-align: center;
+      font-size: x-large;
+      padding-top: 0px;
     }
 
     .pagination {
