@@ -1,0 +1,43 @@
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+		<div class="row edit_index_field"> 
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col" class="col-md-1">編集</th>
+						<th scope="col" class="col-md-4">選択肢</th>
+						<th scope="col" class="col-md-1">母音</th>
+						<th scope="col" class="col-md-3">解説</th>
+						<th scope="col" class="col-md-1">YouTube</th>
+						<th scope="col" class="col-md-1">投稿日</th>
+						<th scope="col" class="col-md-1">削除</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @quiz_edits.each do |quiz_edit| %>
+						<tr>
+							<td class="col-md-1">
+								<%= link_to(edit_quiz_path(quiz_edit.quiz_id)) do %>
+									<i class="fa fa-edit fa-lg" aria-hidden="true"></i>
+								<% end %>
+							</th>
+							<td class="col-md-4"><%= quiz_edit.choices %></th>
+							<td class="col-md-1"><%= quiz_edit.rhymes %></th>
+							<td class="col-md-3"><%= quiz_edit.commentary %></th>
+							<td class="col-md-1 youtube_column"><%= quiz_edit.with_or_without_youtube %></th>
+							<td class="col-md-1"><%= quiz_edit.created_at %></th>
+							<td class="col-md-1">
+								<%= link_to(quiz_path(quiz_edit.quiz_id), method: :delete, data: { confirm: "削除しますか?" }) do %>
+									<i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+								<% end %>
+							</th>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+			<%= paginate(@quiz_edits) %>
+		</div>
+	</div>
+</div>
