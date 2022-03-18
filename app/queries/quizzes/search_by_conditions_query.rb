@@ -34,11 +34,17 @@ module Queries
       def search_by_word(relation, search_word)
         return relation if search_word.nil?
 
-        partial_match_word = "%#{search_word}%"
+        words = search_word.split(/[[:blank:]]+/)
 
-        ids = relation.left_outer_joins(choices: :rhyme).where(SQL_WHERE_SEARCH_WORD_LIKE, partial_match_word,
-                                                               partial_match_word, partial_match_word).pluck(:id).uniq
-        relation.where(id: ids)
+        words.each do |word|
+          partial_match_word = "%#{word}%"
+
+          ids = relation.left_outer_joins(choices: :rhyme).where(SQL_WHERE_SEARCH_WORD_LIKE, partial_match_word,
+                                                                 partial_match_word, partial_match_word).pluck(:id).uniq
+          relation = relation.where(id: ids)
+        end
+
+        relation
       end
 
       def search_by_date(relation, from_date, to_date)
