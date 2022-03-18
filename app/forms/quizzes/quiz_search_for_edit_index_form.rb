@@ -53,8 +53,8 @@ module Forms
         @sort_order_select_box_choices = {}
         select_box_order_sort = Constants::Forms::QuizEditIndex::SELECT_BOX_ORDER_SORT
 
-        select_box_order_sort.each do |_key, value|
-          value.each do |_order_sort_key, select_box_choices|
+        select_box_order_sort.each do |_key, content|
+          content.each do |_order_sort_key, select_box_choices|
             @sort_order_select_box_choices[(select_box_choices[:OPTION]).to_sym] = select_box_choices[:VALUE]
           end
         end

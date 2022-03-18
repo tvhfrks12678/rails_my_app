@@ -7,6 +7,9 @@ module Queries
 
       SQL_WHERE_RHYME_CHARACTORS_BETWEEN = 'CHAR_LENGTH(rhymes.content) BETWEEN ? AND ?'
 
+      SORT_ORDER = { SQL_MAX_RHYME_LENGTH: 'MAX(CHAR_LENGTH(rhymes.content)) AS',
+                     MAX_RHYME_LENGTH_COLUMN: 'max_rhyme_length' }.freeze
+
       def initialize(relation = Quiz.all)
         @relation = relation
       end
@@ -87,23 +90,24 @@ module Queries
 
       def sort(relation, sort_order)
         select_box_order_sort = Constants::Forms::QuizEditIndex::SELECT_BOX_ORDER_SORT
-        case sort_order
-        when select_box_order_sort[:DATE][:ASC][:VALUE]
-          relation.unscope(:order).order(created_at: 'ASC')
-        when select_box_order_sort[:RHYNE_LENGTH][:DESC][:VALUE]
-          sort_rhymes_length(relation, 'DESC')
-        when select_box_order_sort[:RHYNE_LENGTH][:ASC][:VALUE]
-          sort_rhymes_length(relation, 'ASC')
-        else
-          relation
+
+        if sort_order == select_box_order_sort[:DATE][:ASC][:VALUE]
+          return relation.unscope(:order).order(created_at: 'ASC')
         end
+
+        return sort_rhymes_length(relation, 'DESC') if sort_order == select_box_order_sort[:RHYNE_LENGTH][:DESC][:VALUE]
+
+        return sort_rhymes_length(relation, 'ASC') if sort_order == select_box_order_sort[:RHYNE_LENGTH][:ASC][:VALUE]
+
+        relation
       end
 
       def sort_rhymes_length(relation, order)
+        max_rhyme_length_col = SORT_ORDER[:MAX_RHYME_LENGTH_COLUMN]
         relation.joins(choices: :rhyme).group(:id)
                 .select(:id, :commentary, :created_at,
-                        'MAX(CHAR_LENGTH(rhymes.content)) AS max_rhyme_length')
-                .unscope(:order).order("max_rhyme_length #{order}")
+                        "#{SORT_ORDER[:SQL_MAX_RHYME_LENGTH]} #{max_rhyme_length_col}")
+                .unscope(:order).order("#{max_rhyme_length_col} #{order}")
       end
     end
   end
